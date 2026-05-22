@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thessa Chats</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <header class="brand">
+        <div>
+          <h1>Thessa</h1>
+          <p>Chats en tiempo real</p>
+        </div>
+        <span id="status" class="status">Conectando</span>
+      </header>
+      <div class="search">
+        <input id="search" type="search" placeholder="Buscar por nombre o telefono">
+      </div>
+      <section id="chatList" class="chat-list"></section>
+    </aside>
+
+    <section class="conversation">
+      <header class="conversation-header">
+        <div>
+          <h2 id="chatName">Selecciona un chat</h2>
+          <p id="chatPhone">Los mensajes nuevos apareceran aqui.</p>
+        </div>
+        <span id="chatMode" class="chat-mode">Sin chat</span>
+      </header>
+      <div id="messages" class="messages empty">
+        <p>Cuando llegue un WhatsApp, lo veras en tiempo real.</p>
+      </div>
+      <form id="composer" class="composer">
+        <textarea id="replyText" rows="1" placeholder="Escribe una respuesta..." disabled></textarea>
+        <button id="sendButton" type="submit" disabled>Enviar</button>
+      </form>
+    </section>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>
