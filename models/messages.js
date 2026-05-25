@@ -4,11 +4,24 @@ const Whatsapp = require('../config/whatsapp');
 const ChatStore = require('./chatStore');
 const stepsResponses = require('../helpers/thessaResponses.json');
 
-const sendTextMessage = async (text, phoneNumber) => {
+const getGraphErrorMessage = (error) => {
+    const graphError = error?.response?.data?.error;
+    if(graphError) {
+        return [
+            graphError.message,
+            graphError.code ? `code ${graphError.code}` : '',
+            graphError.error_subcode ? `subcode ${graphError.error_subcode}` : ''
+        ].filter(Boolean).join(' | ');
+    }
+    return error?.message || 'No se pudo enviar el mensaje';
+}
+
+const sendTextMessage = async (text, phoneNumber, options = {}) => {
     return sendMessage({
         text,
         phoneNumber,
-        type: 'text'
+        type: 'text',
+        source: options.source
     });
 }
 
@@ -34,7 +47,7 @@ const sendReplyTextMessage = async (text, phoneNumber, messageId) => {
         return result 
     } catch (error) {
         console.log('error', error?.response?.data);
-        throw new Error(error?.response?.data?.error?.message)
+        throw new Error(getGraphErrorMessage(error))
     }
     
 }
@@ -58,7 +71,7 @@ const sendReactionMessage = async (phoneNumber, messageId) => {
         return result 
     } catch (error) {
         console.log('error', error?.response?.data);
-        throw new Error(error?.response?.data?.error?.message)
+        throw new Error(getGraphErrorMessage(error))
     }
 }
 
@@ -68,7 +81,7 @@ const getPublicMediaUrl = (filename) => {
     return `${baseUrl.replace(/\/$/, '')}/mediaFiles/${filename}`;
 }
 
-const sendLocalMedia = async (filename, phoneNumber) => {
+const sendLocalMedia = async (filename, phoneNumber, options = {}) => {
     const url = getPublicMediaUrl(filename);
     if(!url) {
         console.log(`PUBLIC_BASE_URL no configurado. No se envio media local: ${filename}`);
@@ -78,7 +91,8 @@ const sendLocalMedia = async (filename, phoneNumber) => {
     return sendMessage({
         text: url,
         phoneNumber,
-        type: 'image'
+        type: 'image',
+        source: options.source
     });
 }
 
@@ -104,7 +118,8 @@ const sendMessage = async (options) => {
         contact,
         location,
         listPayload,
-        buttonPayload
+        buttonPayload,
+        source = 'bot'
     } = options;
     try {
         const url = Whatsapp.getMessagesUrl();
@@ -216,12 +231,13 @@ const sendMessage = async (options) => {
             direction: 'out',
             type: body.type,
             text: getDashboardMessageText(body, text),
-            messageId: result.data?.messages?.[0]?.id
+            messageId: result.data?.messages?.[0]?.id,
+            source
         });
         return result
     } catch (error) {
         console.log('error', error?.response?.data);
-        throw new Error(error?.response?.data?.error?.message)
+        throw new Error(getGraphErrorMessage(error))
     }
 }
 
@@ -308,7 +324,7 @@ const sendMessageSteps = async (message, phoneNumber, messageId) => {
         await sendMessage(options)
         return true
     } catch (error) {
-        throw new Error(error?.response?.data?.error?.message)
+        throw new Error(getGraphErrorMessage(error))
     }
 }
 

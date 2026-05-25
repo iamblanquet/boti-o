@@ -5,6 +5,27 @@ const pad = (value) => String(value).padStart(2, '0');
 const formatDate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 const formatTime = (date) => `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 
+const WEEKDAYS = {
+    domingo: 0,
+    lunes: 1,
+    martes: 2,
+    miercoles: 3,
+    jueves: 4,
+    viernes: 5,
+    sabado: 6
+};
+
+const getNextWeekday = (targetDay, now) => {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const currentDay = today.getDay();
+    let diff = targetDay - currentDay;
+    if(diff <= 0) diff += 7;
+
+    const date = new Date(today);
+    date.setDate(date.getDate() + diff);
+    return date;
+}
+
 const parseDateText = (text, now = new Date()) => {
     const value = normalizeText(text);
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -14,6 +35,12 @@ const parseDateText = (text, now = new Date()) => {
         const date = new Date(today);
         date.setDate(date.getDate() + 1);
         return formatDate(date);
+    }
+
+    for(const [weekday, day] of Object.entries(WEEKDAYS)) {
+        if(value.includes(weekday)) {
+            return formatDate(getNextWeekday(day, now));
+        }
     }
 
     const isoMatch = value.match(/\b(20\d{2})[-/](\d{1,2})[-/](\d{1,2})\b/);

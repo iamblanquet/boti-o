@@ -13,6 +13,9 @@ const getConversation = (phoneNumber, name = '') => {
             messages: [],
             lastMessage: '',
             lastAt: null,
+            lastDirection: null,
+            incomingCount: 0,
+            outgoingCount: 0,
             unread: 0
         });
     }
@@ -33,7 +36,7 @@ const broadcast = (event, payload) => {
     });
 }
 
-const addMessage = ({ phoneNumber, name = '', direction, type = 'text', text = '', messageId = null }) => {
+const addMessage = ({ phoneNumber, name = '', direction, type = 'text', text = '', messageId = null, source = null }) => {
     if(!phoneNumber || (!text && type === 'text')) return null;
 
     const conversation = getConversation(phoneNumber, name);
@@ -41,6 +44,7 @@ const addMessage = ({ phoneNumber, name = '', direction, type = 'text', text = '
         id: messageId || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         phoneNumber,
         direction,
+        source: source || (direction === 'in' ? 'client' : 'bot'),
         type,
         text,
         createdAt: new Date().toISOString()
@@ -50,7 +54,12 @@ const addMessage = ({ phoneNumber, name = '', direction, type = 'text', text = '
     if(conversation.messages.length > MAX_MESSAGES_PER_CHAT) conversation.messages.shift();
     conversation.lastMessage = text;
     conversation.lastAt = message.createdAt;
-    if(direction === 'in') conversation.unread += 1;
+    conversation.lastDirection = direction;
+    if(direction === 'in') {
+        conversation.incomingCount += 1;
+        conversation.unread += 1;
+    }
+    if(direction === 'out') conversation.outgoingCount += 1;
 
     broadcast('message', {
         conversation: summarizeConversation(conversation),
@@ -65,6 +74,10 @@ const summarizeConversation = (conversation) => ({
     name: conversation.name,
     lastMessage: conversation.lastMessage,
     lastAt: conversation.lastAt,
+    lastDirection: conversation.lastDirection,
+    incomingCount: conversation.incomingCount,
+    outgoingCount: conversation.outgoingCount,
+    messageCount: conversation.messages.length,
     unread: conversation.unread
 });
 

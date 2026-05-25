@@ -208,7 +208,7 @@ const askWithFallback = async (payload) => {
 const sendMediaMatches = async (number, message) => {
     const mediaFiles = findMediaForText(message);
     for(const file of mediaFiles) {
-        await Messages.sendLocalMedia(file, number);
+        await Messages.sendLocalMedia(file, number, { source: 'ia' });
     }
 }
 
@@ -216,7 +216,7 @@ const geminiProccess = async (message, number) => {
     try {
         const localAnswer = getLocalKnowledgeAnswer(message);
         if(localAnswer) {
-            await Messages.sendTextMessage(localAnswer, number);
+            await Messages.sendTextMessage(localAnswer, number, { source: 'ia' });
             await sendMediaMatches(number, message);
             return null;
         }
@@ -233,14 +233,14 @@ const geminiProccess = async (message, number) => {
             { role: 'asistente', content: answer }
         ]);
 
-        await Messages.sendTextMessage(answer, number);
+        await Messages.sendTextMessage(answer, number, { source: 'ia' });
         await sendMediaMatches(number, message);
     } catch (error) {
         console.error('AI fallback error:', error.status || error.code || '', error.message);
         const text = error.allProvidersFailed
             ? 'Dame un momentito, por ahora no puedo consultar esa informacion automaticamente. Si gustas, el equipo puede ayudarte a confirmarlo 🤍'
             : 'Dame un momentito, no pude revisar esa informacion ahora. Lo podemos confirmar con el equipo con gusto 🤍';
-        await Messages.sendTextMessage(text, number);
+        await Messages.sendTextMessage(text, number, { source: 'ia' });
     }
 
     return null;

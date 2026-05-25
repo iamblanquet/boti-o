@@ -22,11 +22,19 @@ const sendMessage = async (req, res) => {
     }
 
     try {
-        await Messages.sendTextMessage(String(text).trim(), phoneNumber);
+        await Messages.sendTextMessage(String(text).trim(), phoneNumber, { source: 'human' });
         return res.json({ ok: true });
     } catch (error) {
         console.log('Error enviando desde dashboard', error);
-        return res.status(500).json({ error: error.message || 'No se pudo enviar el mensaje' });
+        const message = error.message || 'No se pudo enviar el mensaje';
+        const isAuthError = /authentication error|access token|oauth|session has expired|validating access token|code 190/i.test(message);
+        if(isAuthError) {
+            return res.status(401).json({
+                error: 'El token de WhatsApp expiró. Actualiza WHATSAPP_TOKEN en .env y reinicia el servidor.',
+                detail: message
+            });
+        }
+        return res.status(500).json({ error: message });
     }
 }
 

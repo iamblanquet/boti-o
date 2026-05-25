@@ -3,42 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Thessa Chats</title>
+  <title>Thessa Recepcion</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <main class="app">
-    <aside class="sidebar">
-      <header class="brand">
-        <div>
-          <h1>Thessa</h1>
-          <p>Chats en tiempo real</p>
-        </div>
-        <span id="status" class="status">Conectando</span>
+  <div class="app-shell">
+    <header id="appNavbar" class="app-navbar"></header>
+    <main id="desk" class="desk no-chat">
+      <aside class="inbox">
+      <header class="inbox-header">
+        <h1>Bandeja</h1>
+        <span id="status" class="counter">0</span>
       </header>
       <div class="search">
-        <input id="search" type="search" placeholder="Buscar por nombre o telefono">
+        <input id="search" type="search" placeholder="Buscar chat">
+      </div>
+      <div class="inbox-filters">
+        <button class="scope-pill active" type="button">Todos</button>
+        <div id="phaseFilter" class="status-filter"></div>
       </div>
       <section id="chatList" class="chat-list"></section>
-    </aside>
+      </aside>
 
-    <section class="conversation">
-      <header class="conversation-header">
+      <section class="workspace">
+      <header class="topbar">
         <div>
-          <h2 id="chatName">Selecciona un chat</h2>
-          <p id="chatPhone">Los mensajes nuevos apareceran aqui.</p>
+          <h2 id="chatName">Bandeja de atención</h2>
+          <p id="chatPhone">Conversaciones de WhatsApp en tiempo real</p>
         </div>
-        <span id="chatMode" class="chat-mode">Sin chat</span>
+        <nav id="messageTabs" class="tabs" aria-label="Modo de atencion"></nav>
       </header>
-      <div id="messages" class="messages empty">
-        <p>Cuando llegue un WhatsApp, lo veras en tiempo real.</p>
-      </div>
+
+      <section id="messages" class="messages empty">
+        <p class="empty-message">Seleccione un chat para comenzar a enviar mensajes</p>
+      </section>
+
       <form id="composer" class="composer">
-        <textarea id="replyText" rows="1" placeholder="Escribe una respuesta..." disabled></textarea>
-        <button id="sendButton" type="submit" disabled>Enviar</button>
+        <div class="composer-title">Enviar un mensaje</div>
+        <div class="composer-box">
+          <textarea id="replyText" rows="2" placeholder="Mensaje..." disabled></textarea>
+          <div class="composer-tools" aria-hidden="true">
+            <span>☺</span>
+            <span>⌕</span>
+            <span>/</span>
+          </div>
+          <button id="sendButton" class="send-button" type="submit" disabled>Enviar</button>
+        </div>
       </form>
-    </section>
-  </main>
+      </section>
+
+      <aside class="context">
+      <section class="context-block">
+        <h2>Contexto</h2>
+      </section>
+      <section class="context-block">
+        <h3>Agenda disponible</h3>
+        <div class="slot">
+          <strong>Jue 5:30</strong>
+          <span>Limpieza facial | Cabina 2</span>
+        </div>
+        <div class="slot">
+          <strong>Vie 6:00</strong>
+          <span>Valoracion inicial | Cabina 1</span>
+        </div>
+        <div class="slot">
+          <strong>Sab 12:00</strong>
+          <span>Espacio corto | Confirmar duracion</span>
+        </div>
+      </section>
+      <section class="context-block">
+        <h3>CRM</h3>
+        <dl>
+          <dt>Lead</dt>
+          <dd id="leadValue">Sin lead</dd>
+          <dt>Interes</dt>
+          <dd id="interestValue">Pendiente</dd>
+          <dt>Responsable</dt>
+          <dd>Frontdesk THESSA</dd>
+          <dt>Automatizacion</dt>
+          <dd>Crear oportunidad al confirmar cita</dd>
+        </dl>
+      </section>
+      </aside>
+    </main>
+  </div>
   <script src="./app.js"></script>
 </body>
 </html>

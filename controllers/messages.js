@@ -110,6 +110,25 @@ const messageInfo = async (req, res) => {
             activeTool = await redis.get(activeToolKey);
         } 
         console.log('activeTool',activeTool)
+        const isMenuCommand = formatMessage === 'menu' || formatMessage.startsWith('menu_');
+        const isServiceButton = formatMessage.startsWith('service_');
+        const shouldCheckAppointmentFirst = formatMessage !== 'menu' && !isServiceButton;
+        const handledByAppointment = shouldCheckAppointmentFirst
+            ? await Appointments.handleAppointmentMessage(whatsappNumber, messageText)
+            : false;
+        const shouldUseGuidedFlow = isMenuCommand || isServiceButton || !activeTool;
+
+        if(handledByAppointment) {
+            return res.status(200).send();
+        }
+
+        if(shouldUseGuidedFlow) {
+            const handledByFlow = await Messages.sendMessageSteps(formatMessage, whatsappNumber, messageId);
+            if(handledByFlow) {
+                return res.status(200).send();
+            }
+        }
+
         if(activeTool === 'dialogflow') {
             await Dialogflow.dialogflowProccess(messageText, whatsappNumber, messageId)
         } else if (activeTool === 'chatgpt'){
@@ -117,18 +136,8 @@ const messageInfo = async (req, res) => {
         } else if (activeTool === 'gemini'){
             await Gemini.geminiProccess(messageText, whatsappNumber);
         } else {
-            const shouldCheckAppointmentFirst = formatMessage !== 'menu' && !formatMessage.startsWith('menu_') && !formatMessage.startsWith('service_');
-            const handledByAppointment = shouldCheckAppointmentFirst
-                ? await Appointments.handleAppointmentMessage(whatsappNumber, messageText)
-                : false;
-
-            if(!handledByAppointment) {
-                const handledByFlow = await Messages.sendMessageSteps(formatMessage, whatsappNumber, messageId);
-                if(!handledByFlow) {
-                    const handledByGuidedResponse = await GuidedResponses.handleGuidedResponse(whatsappNumber, messageText);
-                    if(!handledByGuidedResponse) await Gemini.geminiProccess(messageText, whatsappNumber);
-                }
-            }
+            const handledByGuidedResponse = await GuidedResponses.handleGuidedResponse(whatsappNumber, messageText);
+            if(!handledByGuidedResponse) await Gemini.geminiProccess(messageText, whatsappNumber);
         }
 
         return res.status(200).send()
