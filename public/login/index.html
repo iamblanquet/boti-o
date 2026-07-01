@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thessa - Iniciar Sesión</title>
+  
+  <!-- Font integration: Cormorant Garamond for luxurious serif, Inter for UI -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="m-0 p-0 overflow-hidden w-screen h-screen flex items-center justify-center font-sans select-none">
+
+  <!-- Background Video Wrapper -->
+  <div class="video-background-container absolute inset-0 z-0 overflow-hidden pointer-events-none">
+    <iframe src="https://www.youtube.com/embed/wULx0Mse5Yg?autoplay=1&amp;mute=1&amp;loop=1&amp;controls=0&amp;showinfo=0&amp;rel=0&amp;playsinline=1&amp;playlist=wULx0Mse5Yg" 
+            title="YouTube video background" 
+            class="video-iframe" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen="" 
+            tabindex="-1">
+    </iframe>
+  </div>
+
+  <!-- Warm/Goldish Spa Tone Overlay -->
+  <div class="spa-overlay absolute inset-0 z-10"></div>
+
+  <!-- Login Card Centered -->
+  <main class="login-card z-20 w-full max-w-md p-8 md:p-10 rounded-2xl flex flex-col text-white opacity-0 transform translate-y-4 transition-all duration-700">
+    <!-- Brand Logo header (Using the official Logo image) -->
+    <header class="brand-header text-center mb-8 flex flex-col items-center">
+      <img src="/mediaFiles/Logo_Thessa.png" alt="Thessa Logo" class="brand-logo mb-2">
+    </header>
+
+    <!-- Error Alert Message -->
+    <div id="errorAlert" class="error-alert hidden mb-6 p-4 rounded-xl text-sm flex items-center gap-3 bg-red-900/30 border border-red-500/30 text-red-200">
+      <svg class="w-5 h-5 shrink-0 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+      </svg>
+      <span id="errorMessage">Error de acceso</span>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="flex flex-col gap-5">
+      <div class="form-group flex flex-col">
+        <label for="username" class="text-xs font-semibold tracking-wider text-slate-300 uppercase mb-2">Usuario</label>
+        <input type="text" id="username" name="username" autocomplete="username" required placeholder="Ingresa tu usuario" 
+               class="input-field py-3.5 px-4 rounded-xl border border-white/10 bg-white/5 outline-none text-white text-sm transition-all focus:border-amber-400/50 focus:bg-white/10 placeholder-white/30">
+      </div>
+
+      <div class="form-group flex flex-col">
+        <label for="password" class="text-xs font-semibold tracking-wider text-slate-300 uppercase mb-2">Contraseña</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="Ingresa tu contraseña" 
+               class="input-field py-3.5 px-4 rounded-xl border border-white/10 bg-white/5 outline-none text-white text-sm transition-all focus:border-amber-400/50 focus:bg-white/10 placeholder-white/30">
+      </div>
+
+      <button type="submit" id="submitBtn" class="submit-btn py-3.5 px-6 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer mt-4">
+        <span id="btnText">Iniciar Sesión</span>
+        <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+        </svg>
+      </button>
+    </form>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

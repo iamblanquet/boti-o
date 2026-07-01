@@ -1,8 +1,9 @@
 const axios = require('axios');
-const Redis = require('../config/redis');
+const StateStore = require('./stateStore');
 const Whatsapp = require('../config/whatsapp');
 const ChatStore = require('./chatStore');
-const stepsResponses = require('../helpers/thessaResponses.json');
+const CustomerProfile = require('./customerProfile');
+const CampaignFunnel = require('./campaigns/funnelService');
 
 const getGraphErrorMessage = (error) => {
     const graphError = error?.response?.data?.error;
@@ -21,59 +22,15 @@ const sendTextMessage = async (text, phoneNumber, options = {}) => {
         text,
         phoneNumber,
         type: 'text',
-        source: options.source
+        source: options.source,
+        personalize: options.personalize,
+        hasUrl: options.hasUrl
     });
 }
 
-const sendReplyTextMessage = async (text, phoneNumber, messageId) => {
-    try {
-        const url = Whatsapp.getMessagesUrl();
-        const body = {
-            messaging_product: 'whatsapp',
-            recipient_type: 'individual',
-            to: phoneNumber,
-            context: {
-                message_id: messageId
-            },
-            type: 'text',
-            text: {
-                preview_url: false,
-                body: text
-            }
-        }
-        const config = { headers: Whatsapp.getHeaders() };
-        const result = await axios.post(url, body, config);
-        console.log('result',result.data);
-        return result 
-    } catch (error) {
-        console.log('error', error?.response?.data);
-        throw new Error(getGraphErrorMessage(error))
-    }
-    
-}
 
-const sendReactionMessage = async (phoneNumber, messageId) => {
-    try {
-        const url = Whatsapp.getMessagesUrl();
-        const body = {
-            messaging_product: 'whatsapp',
-            recipient_type: 'individual',
-            to: phoneNumber,
-            type: 'reaction',
-            reaction: {
-                message_id: messageId,
-                emoji: '✅'
-            }
-        }
-        const config = { headers: Whatsapp.getHeaders() };
-        const result = await axios.post(url, body, config);
-        console.log('result',result.data);
-        return result 
-    } catch (error) {
-        console.log('error', error?.response?.data);
-        throw new Error(getGraphErrorMessage(error))
-    }
-}
+
+
 
 const getPublicMediaUrl = (filename) => {
     const baseUrl = process.env.PUBLIC_BASE_URL;
@@ -97,13 +54,25 @@ const sendLocalMedia = async (filename, phoneNumber, options = {}) => {
 }
 
 const useTool = async (phoneNumber, tool) => {
-    const redis = await Redis();
     const activeToolKey = `${phoneNumber}:tool`;
     const stepsKey = `${phoneNumber}:steps`;
-    await redis.set(activeToolKey, tool);
-    await redis.expire(activeToolKey, 86400);
-    await redis.del(stepsKey);
+    await StateStore.set(activeToolKey, tool, 86400);
+    await StateStore.del(stepsKey);
     return null
+}
+
+const personalizeInteractivePayload = async (payload, phoneNumber, shouldPersonalize) => {
+    if(!payload || !shouldPersonalize) return payload;
+    const clonedPayload = JSON.parse(JSON.stringify(payload));
+
+    if(clonedPayload.body?.text) {
+        clonedPayload.body.text = await CustomerProfile.personalizeText(phoneNumber, clonedPayload.body.text);
+    }
+    if(clonedPayload.header?.text) {
+        clonedPayload.header.text = await CustomerProfile.personalizeText(phoneNumber, clonedPayload.header.text);
+    }
+
+    return clonedPayload;
 }
 
 const sendMessage = async (options) => {
@@ -119,10 +88,16 @@ const sendMessage = async (options) => {
         location,
         listPayload,
         buttonPayload,
+        mediaId,
+        voice = false,
         source = 'bot'
     } = options;
     try {
         const url = Whatsapp.getMessagesUrl();
+        const shouldPersonalize = source !== 'human' && options.personalize !== false;
+        const outboundText = shouldPersonalize
+            ? await CustomerProfile.personalizeText(phoneNumber, text)
+            : text;
         const body = {
             messaging_product: 'whatsapp',
             recipient_type: 'individual',
@@ -138,7 +113,7 @@ const sendMessage = async (options) => {
                 body.type = 'text';
                 body.text = {
                     preview_url: hasUrl,
-                    body: text
+                    body: outboundText
                 }
                 break;
             case 'reaction':
@@ -151,26 +126,21 @@ const sendMessage = async (options) => {
             case 'image':
                 body.type = 'image';
                 body.image = {
-                    link: text
+                    link: outboundText
                 }
                 break;
             case 'audio':
                 body.type = 'audio';
-                body.audio = {
-                    link: text
-                }
+                body.audio = mediaId
+                    ? { id: mediaId, ...(voice ? { voice: true } : {}) }
+                    : { link: outboundText };
                 break;
             case 'document':
                 body.type = 'document';
                 body.document = document;
                 document.caption = text;
                 break;
-            case 'sticker':
-                body.type = 'sticker',
-                body.sticker = {
-                    id: text
-                }
-                break;
+
             case 'video':
                 body.type = 'video';
                 body.video = {
@@ -187,52 +157,44 @@ const sendMessage = async (options) => {
                 break;
             case 'list':
                 body.type = 'interactive';
-                body.interactive = listPayload;
+                body.interactive = await personalizeInteractivePayload(listPayload, phoneNumber, shouldPersonalize);
                 break;
             case 'button':
                 body.type = 'interactive';
-                body.interactive = buttonPayload;
+                body.interactive = await personalizeInteractivePayload(buttonPayload, phoneNumber, shouldPersonalize);
                 break;
-            case 'dialogflow': 
-                await useTool(phoneNumber, 'dialogflow');
-                body.type = 'text';
-                body.text = {
-                    body: text
-                }
-                break;
+
             case 'chatgpt':
                 await useTool(phoneNumber, 'chatgpt');
                 body.type = 'text';
                 body.text = {
-                    body: text
+                    body: outboundText
                 }
                 break;
             case 'gemini':
                 await useTool(phoneNumber, 'gemini');
                 body.type = 'text';
                 body.text = {
-                    body: text
+                    body: outboundText
                 }
                 break;
-            case 'appointment':
-                body.type = 'text';
-                body.text = {
-                    body: text
-                }
-                break;
+
             default:
                 break;
         }
         const config = { headers: Whatsapp.getHeaders() };
         const result = await axios.post(url, body, config);
         console.log('result',result.data);
-        ChatStore.addMessage({
+        await ChatStore.addMessage({
             phoneNumber,
             direction: 'out',
             type: body.type,
-            text: getDashboardMessageText(body, text),
+            text: getDashboardMessageText(body, outboundText),
             messageId: result.data?.messages?.[0]?.id,
             source
+        });
+        CampaignFunnel.markContacted(phoneNumber).catch((error) => {
+            console.log('No se pudo registrar contacto de campana:', error.message);
         });
         return result
     } catch (error) {
@@ -250,89 +212,13 @@ const getDashboardMessageText = (body, fallbackText) => {
         return 'Mensaje interactivo';
     }
     if(body.type === 'image') return body.image?.link || 'Imagen';
-    if(body.type === 'document') return body.document?.caption || body.document?.filename || 'Documento';
+    if(body.type === 'document') return body.document?.link || body.document?.filename || 'Documento';
     return fallbackText || body.type || 'Mensaje';
-}
-
-const sendMessageSteps = async (message, phoneNumber, messageId) => {
-    const redis = await Redis();
-    
-    const inactiveClientKey = `${phoneNumber}:inactive`;
-    const inactiveClientRedis = await redis.get(inactiveClientKey);
-    if(inactiveClientRedis) return "Client inactive"
-    const stepsKey = `${phoneNumber}:steps`;
-    let step = 0;
-    if(message === 'menu'){
-        await redis.del(stepsKey);
-    } else {
-        step = await redis.get(stepsKey) || 0;
-    } 
-    try {
-        const key = stepsResponses.find(items => {
-            const previousStep = items.previousStep ?? items.previusStep;
-            return items.keywords.includes(message) && Number(previousStep) === Number(step);
-        });
-        if(!key) return false
-        const {
-            response,
-            type,
-            document,
-            location,
-            buttonPayload,
-            listPayload,
-            localFile
-        } = key
-
-        if(key.function === 'gemini') {
-            await useTool(phoneNumber, 'gemini');
-            await sendTextMessage(response.join(''), phoneNumber);
-            return true;
-        }
-
-        if(key.function === 'appointment') {
-            const Appointments = require('./appointments');
-            await redis.del(stepsKey);
-            if(message === 'menu_appointment') {
-                await Appointments.prepareAppointmentFlow(phoneNumber);
-                await sendTextMessage(response.join(''), phoneNumber);
-            } else {
-                await Appointments.startAppointmentFlow(phoneNumber, message);
-            }
-            return true;
-        }
-
-        if(localFile) {
-            const files = Array.isArray(localFile) ? localFile : [localFile];
-            for(const file of files) {
-                await sendLocalMedia(file, phoneNumber);
-            }
-        }
-
-        await redis.set(stepsKey, key.step);
-        await redis.expire(stepsKey, 86400);
-
-        const options = {
-            text: response.join(''),
-            type: type || 'text',
-            phoneNumber,
-            messageId,
-            document,
-            location,
-            buttonPayload,
-            listPayload
-        }
-        await sendMessage(options)
-        return true
-    } catch (error) {
-        throw new Error(getGraphErrorMessage(error))
-    }
 }
 
 module.exports = {
     sendTextMessage,
-    sendReplyTextMessage,
-    sendReactionMessage,
+
     sendMessage,
-    sendMessageSteps,
     sendLocalMedia
 }

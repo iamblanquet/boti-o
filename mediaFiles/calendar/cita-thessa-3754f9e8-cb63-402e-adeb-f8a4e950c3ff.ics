@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-3754f9e8-cb63-402e-adeb-f8a4e950c3ff@thessa
+DTSTAMP:20260613T180552Z
+DTSTART:20260613T190000Z
+DTEND:20260613T200000Z
+SUMMARY:Cita Thessa - Maderoterapia Corporal
+DESCRIPTION:Servicio: Maderoterapia Corporal\nNombre: Mauricio Blanquet\nP
+ ersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

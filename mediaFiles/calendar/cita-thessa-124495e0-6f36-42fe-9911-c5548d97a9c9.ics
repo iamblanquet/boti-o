@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-124495e0-6f36-42fe-9911-c5548d97a9c9@thessa
+DTSTAMP:20260701T182016Z
+DTSTART:20260701T190000Z
+DTEND:20260701T200000Z
+SUMMARY:Cita Thessa - Depilación Láser - Espalda Baja
+DESCRIPTION:Servicio: Depilación Láser - Espalda Baja\nNombre: mauri y\nPe
+ rsonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

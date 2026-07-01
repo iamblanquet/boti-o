@@ -1,29 +1,36 @@
-const fs = require('fs');
-const path = require('path');
-const { GoogleGenAI } = require('@google/genai');
+﻿const { GoogleGenAI } = require('@google/genai');
 const { OpenAI } = require('openai');
-const Redis = require('../config/redis');
+const StateStore = require('./stateStore');
 const Messages = require('./messages');
+const CustomerProfile = require('./customerProfile');
+const ChatStore = require('./chatStore');
 const { findMediaForText } = require('../utils/serviceMedia');
-const { findService, normalizeText } = require('../utils/appointmentsConfig');
+const { normalizeText } = require('../utils/configCitas');
+const { buildSpaExpertToneInstructions, cleanWhatsappText } = require('./aiResponseStyle');
+const ServicesRepository = require('./servicesRepository');
 
-const BASE_PATH = path.join(__dirname, '..', 'utils', 'base.txt');
 
-const getKnowledgeBase = () => {
-    if(!fs.existsSync(BASE_PATH)) return '';
-    return fs.readFileSync(BASE_PATH, 'utf8');
-}
 
-const cleanKnowledgeAnswer = (answer) => String(answer || '')
-    .replace(/\[cite:\s*\d+(?:,\s*\d+)*\]/g, '')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
 
-const getRelevantKnowledgeBase = (message) => {
-    const knowledgeBase = getKnowledgeBase();
+const getRelevantKnowledgeBase = async (message) => {
+    const knowledgeBase = await ServicesRepository.buildKnowledgeBase();
     const normalizedMessage = normalizeText(message);
     const blocks = knowledgeBase.split(/\n\s*\n(?=P:)/);
-    const serviceKeywords = ['thessa', 'servicios', 'lumi piel', 'chocolaterapia', 'royal skin', 'seda effect', 'soft harmony'];
+    const serviceKeywords = [
+        'thessa',
+        'servicios',
+        'facial',
+        'faciales',
+        'masaje',
+        'masajes',
+        'corporal',
+        'corporales',
+        'depilacion',
+        'depilaciones',
+        'laser',
+        'medicina estetica',
+        'fisioterapia'
+    ];
     const matchedKeywords = serviceKeywords.filter((keyword) => normalizedMessage.includes(normalizeText(keyword)));
 
     if(!matchedKeywords.length) return blocks.slice(0, 2).join('\n\n');
@@ -36,46 +43,12 @@ const getRelevantKnowledgeBase = (message) => {
     return (selected.length ? selected : blocks.slice(0, 2)).join('\n\n');
 }
 
-const getLocalKnowledgeAnswer = (message) => {
-    const knowledgeBase = getKnowledgeBase();
-    const normalizedMessage = normalizeText(message);
-    const blocks = knowledgeBase.split(/\n\s*\n(?=P:)/);
-
-    if(normalizedMessage.includes('servicios') || normalizedMessage.includes('tratamientos')) {
-        const block = blocks.find((item) => normalizeText(item).includes('que servicios ofrecen'));
-        const answer = block && block.split(/\nR:\s*/)[1];
-        return cleanKnowledgeAnswer(answer);
-    }
-
-    const service = findService(message);
-    if(!service) return null;
-
-    const serviceBlocks = blocks.filter((item) => normalizeText(item).includes(normalizeText(service.name)));
-    const serviceBlock = serviceBlocks.find((item) => {
-        const normalizedBlock = normalizeText(item);
-        return normalizedBlock.includes('cuanto cuesta') ||
-            normalizedBlock.includes('precio') ||
-            normalizedBlock.includes('incluye');
-    }) || serviceBlocks[0];
-    const answer = serviceBlock && serviceBlock.split(/\nR:\s*/)[1];
-    return cleanKnowledgeAnswer(answer);
-}
-
-const buildInstructions = (knowledgeBase) => [
-    'Responde como una persona del equipo de atencion de Thessa escribiendo por WhatsApp.',
-    'Habla en primera persona plural cuando sea natural, por ejemplo "te podemos ayudar" o "con gusto te comparto".',
-    'Usa un tono calido, cercano y humano, como si estuvieras atendiendo a una clienta real por WhatsApp.',
-    'Suena natural y conversacional: puedes usar frases como "claro", "con gusto", "te cuento", "por lo que me comentas" o "si te late".',
-    'Usa emojis con moderacion cuando ayuden a dar calidez o claridad, por ejemplo ✨, 🍃, 💆‍♀️, 🤍 o 📅. No uses mas de 1 o 2 emojis por respuesta.',
-    'Responde en espanol, de forma clara, breve y con ritmo de WhatsApp.',
-    'Evita respuestas demasiado formales o acartonadas. No repitas siempre la misma estructura.',
-    'Cuando sea natural, haz una pequena recomendacion o siguiente paso, sin presionar.',
+const buildInstructions = (knowledgeBase, customerName = null) => [
+    buildSpaExpertToneInstructions(customerName),
     'Usa exclusivamente la informacion de la base de conocimiento para responder sobre servicios, precios e inclusiones.',
-    'Si no tienes la informacion, di de forma amable que necesitas confirmarlo con el equipo.',
-    'No inventes precios, promociones, horarios ni ubicaciones.',
-    'Si el cliente pregunta por disponibilidad, horarios para cita, agendar, reagendar o cancelar, no digas que no tienes acceso al calendario. Pidele de forma natural servicio, dia, hora, nombre y numero de personas para que el flujo de citas lo atienda.',
+    'Si el cliente pregunta por disponibilidad, horarios para cita, agendar, reagendar o cancelar, no digas que no tienes acceso al calendario ni que no puedes consultarlo. Guialo a tocar "Agendar cita" en el menu para que el flujo de botones revise disponibilidad.',
+    'Si el cliente menciona una fecha relativa como "manana", "hoy" o un dia de la semana, reconoce el dia con naturalidad y dile que el flujo de citas puede mostrarle dias y horarios disponibles por botones.',
     'No incluyas etiquetas como [cite: 1] en la respuesta final.',
-    'Evita frases como "soy el asistente", "como IA", "segun la base de conocimiento" o similares.',
     '',
     'Base de conocimiento:',
     knowledgeBase
@@ -116,23 +89,20 @@ const isQuotaError = (error) => {
 }
 
 const getConversationHistory = async (number) => {
-    const redis = await Redis();
-    const rawHistory = await redis.get(`${number}:gemini:history`);
+    const rawHistory = await StateStore.get(`${number}:gemini:history`);
     if(!rawHistory) return [];
 
     try {
         return JSON.parse(rawHistory);
     } catch (error) {
-        await redis.del(`${number}:gemini:history`);
+        await StateStore.del(`${number}:gemini:history`);
         return [];
     }
 }
 
 const saveConversationHistory = async (number, history) => {
-    const redis = await Redis();
     const recentHistory = history.slice(-4);
-    await redis.set(`${number}:gemini:history`, JSON.stringify(recentHistory));
-    await redis.expire(`${number}:gemini:history`, 86400);
+    await StateStore.set(`${number}:gemini:history`, JSON.stringify(recentHistory), 86400);
 }
 
 const askGemini = async ({ instructions, history, message }) => {
@@ -214,18 +184,12 @@ const sendMediaMatches = async (number, message) => {
 
 const geminiProccess = async (message, number) => {
     try {
-        const localAnswer = getLocalKnowledgeAnswer(message);
-        if(localAnswer) {
-            await Messages.sendTextMessage(localAnswer, number, { source: 'ia' });
-            await sendMediaMatches(number, message);
-            return null;
-        }
-
-        const knowledgeBase = getRelevantKnowledgeBase(message);
+        const customerName = await CustomerProfile.getFirstName(number);
+        const knowledgeBase = await getRelevantKnowledgeBase(message);
         const history = await getConversationHistory(number);
-        const instructions = buildInstructions(knowledgeBase);
+        const instructions = buildInstructions(knowledgeBase, customerName);
         const result = await askWithFallback({ instructions, history, message });
-        const answer = result.answer;
+        const answer = cleanWhatsappText(result.answer);
 
         await saveConversationHistory(number, [
             ...history,
@@ -234,16 +198,26 @@ const geminiProccess = async (message, number) => {
         ]);
 
         await Messages.sendTextMessage(answer, number, { source: 'ia' });
+        ChatStore.clearAlert(number, 'ai_unavailable');
         await sendMediaMatches(number, message);
+        return { answer, provider: result.provider };
     } catch (error) {
         console.error('AI fallback error:', error.status || error.code || '', error.message);
-        const text = error.allProvidersFailed
-            ? 'Dame un momentito, por ahora no puedo consultar esa informacion automaticamente. Si gustas, el equipo puede ayudarte a confirmarlo 🤍'
-            : 'Dame un momentito, no pude revisar esa informacion ahora. Lo podemos confirmar con el equipo con gusto 🤍';
-        await Messages.sendTextMessage(text, number, { source: 'ia' });
-    }
+        const alertState = ChatStore.setAlert(number, {
+            type: 'ai_unavailable',
+            severity: 'critical',
+            title: error.allProvidersFailed ? 'IA sin disponibilidad' : 'IA requiere revision',
+            message: error.allProvidersFailed
+                ? 'Se agotaron los proveedores/tokens de IA o no estan disponibles. Toma este chat manualmente.'
+                : 'La IA fallo al responder. Revisa este chat manualmente antes de continuar.'
+        });
 
-    return null;
+        if(alertState?.isNew) {
+            await Messages.sendTextMessage('Permitenos revisarlo con el equipo para confirmarte bien. En un momento te apoyamos por aqui.', number, { source: 'ia' });
+        }
+
+        return { error };
+    }
 }
 
 module.exports = { geminiProccess, askWithFallback }

@@ -1,97 +1,63 @@
-◇ injected env (21) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+> wsp-bot@1.0.0 start
+> node index.js
+
+◇ injected env (23) from .env // tip: ⌘ override existing { override: true }
 MySQL no configurado. El bot funcionara sin guardar clientes.
 Servidor listo en el puerto 3000
-Redis error Error: getaddrinfo ENOTFOUND redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com
-    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
-  errno: -3008,
-  code: 'ENOTFOUND',
-  syscall: 'getaddrinfo',
-  hostname: 'redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com'
-}
-No se pudo conectar a Redis. Usando memoria temporal. getaddrinfo ENOTFOUND redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com
-body [{"id":"993019463203564","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556654392","phone_number_id":"1119155287950418"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQzMEJFMjI4NkVBQzczRkMyQQA=","status":"sent","timestamp":"1779559225","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"utility","type":"free_customer_service"}}]},"field":"messages"}]}]
-Redis error Error: getaddrinfo ENOTFOUND redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com
-    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
-  errno: -3008,
-  code: 'ENOTFOUND',
-  syscall: 'getaddrinfo',
-  hostname: 'redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com'
-}
-No se pudo conectar a Redis. Usando memoria temporal. getaddrinfo ENOTFOUND redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com
-body [{"id":"993019463203564","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556654392","phone_number_id":"1119155287950418"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQzMEJFMjI4NkVBQzczRkMyQQA=","status":"delivered","timestamp":"1779559225","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"utility","type":"free_customer_service"}}]},"field":"messages"}]}]
-Redis error Error: getaddrinfo ENOTFOUND redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com
-    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
-  errno: -3008,
-  code: 'ENOTFOUND',
-  syscall: 'getaddrinfo',
-  hostname: 'redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com'
-}
-No se pudo conectar a Redis. Usando memoria temporal. getaddrinfo ENOTFOUND redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com
-body [{"id":"993019463203564","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556654392","phone_number_id":"1119155287950418"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQzMEJFMjI4NkVBQzczRkMyQQA=","status":"delivered","timestamp":"1779559225","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"utility","type":"free_customer_service"}}]},"field":"messages"}]}]
-body [{"id":"993019463203564","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556654392","phone_number_id":"1119155287950418"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQzMEJFMjI4NkVBQzczRkMyQQA=","status":"read","timestamp":"1779559339","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"utility","type":"free_customer_service"}}]},"field":"messages"}]}]
-body [{"id":"993019463203564","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556654392","phone_number_id":"1119155287950418"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjAwOTY1NTdBNTAxMjlCQTNBMjYA","timestamp":"1779559342","text":{"body":"hol"},"type":"text"}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Adrian"},"wa_id":"5219811589328","user_id":"MX.4284256651836141"}],"messages":[{"from":"5219811589328","from_user_id":"MX.4284256651836141","id":"wamid.HBgNNTIxOTgxMTU4OTMyOBUCABIYFjNFQjA2QTE3Q0IxOTc4RTJCQjNENTEA","timestamp":"1780421416","text":{"body":"adios"},"type":"text"}]},"field":"messages"}]}]
 messageInfo {
-  from: '5219811695579',
-  waId: '5219811695579',
-  to: '529811695579',
+  from: '5219811589328',
+  waId: '5219811589328',
+  to: '529811589328',
   type: 'text',
-  messageText: 'hol'
+  messageText: 'adios'
+}
+Redis error Error: getaddrinfo ENOTFOUND redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+  errno: -3008,
+  code: 'ENOTFOUND',
+  syscall: 'getaddrinfo',
+  hostname: 'redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com'
+}
+No se pudo conectar a Redis. Usando memoria temporal. getaddrinfo ENOTFOUND redis-19744.c267.us-east-1-4.ec2.cloud.redislabs.com
+activeTool null
+Supabase upsertConversation error: TypeError: fetch failed
+Supabase insertMessage error: TypeError: fetch failed
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811589328', wa_id: '5219811589328' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTU4OTMyOBUCABEYEjM4MzAwOUM4NTBEN0YxMEZBRQA='
+    }
+  ]
+}
+Supabase upsertConversation error: TypeError: fetch failed
+Supabase insertMessage error: TypeError: fetch failed
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811589328","user_id":"MX.4284256651836141"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTU4OTMyOBUCABEYEjM4MzAwOUM4NTBEN0YxMEZBRQA=","status":"sent","timestamp":"1780421431","recipient_id":"5219811589328","recipient_user_id":"MX.4284256651836141","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811589328","user_id":"MX.4284256651836141"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTU4OTMyOBUCABEYEjM4MzAwOUM4NTBEN0YxMEZBRQA=","status":"delivered","timestamp":"1780421431","recipient_id":"5219811589328","recipient_user_id":"MX.4284256651836141","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811589328","user_id":"MX.4284256651836141"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTU4OTMyOBUCABEYEjM4MzAwOUM4NTBEN0YxMEZBRQA=","status":"read","timestamp":"1780421456","recipient_id":"5219811589328","recipient_user_id":"MX.4284256651836141","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Adrian"},"wa_id":"5219811589328","user_id":"MX.4284256651836141"}],"messages":[{"from":"5219811589328","from_user_id":"MX.4284256651836141","id":"wamid.HBgNNTIxOTgxMTU4OTMyOBUCABIYFjNFQjBEQkMwNjc5NkI1ODgwNTRBNDMA","timestamp":"1780421464","text":{"body":"patata"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811589328',
+  waId: '5219811589328',
+  to: '529811589328',
+  type: 'text',
+  messageText: 'patata'
 }
 activeTool null
-error {
-  error: {
-    message: 'Authentication Error',
-    code: 190,
-    type: 'OAuthException',
-    fbtrace_id: 'AsZwxf4jjQ5NSFjfnDUY3ju'
-  }
+Supabase upsertConversation error: TypeError: fetch failed
+Supabase insertMessage error: TypeError: fetch failed
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811589328', wa_id: '5219811589328' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTU4OTMyOBUCABEYEjU5MzgzNTcxNTY1RTE0MTYxNwA='
+    }
+  ]
 }
-error {
-  error: {
-    message: 'Authentication Error',
-    code: 190,
-    type: 'OAuthException',
-    fbtrace_id: 'ArwIXZTrWpd9oX_aLCMfPSm'
-  }
-}
-Error procesando webhook Error: Authentication Error | code 190
-    at sendMessage (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\models\messages.js:240:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async Object.geminiProccess (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\models\gemini.js:243:9)
-    at async messageInfo (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\controllers\messages.js:140:42)
-error {
-  error: {
-    message: 'Authentication Error',
-    code: 190,
-    type: 'OAuthException',
-    fbtrace_id: 'APHWJIfaW_KJyj5RyLeNaEp'
-  }
-}
-Error enviando desde dashboard Error: Authentication Error | code 190
-    at sendMessage (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\models\messages.js:240:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async sendMessage (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\controllers\dashboard.js:25:9)
-error {
-  error: {
-    message: 'Authentication Error',
-    code: 190,
-    type: 'OAuthException',
-    fbtrace_id: 'AJRBsfv0dhdRqbejXZi4vqN'
-  }
-}
-Error enviando desde dashboard Error: Authentication Error | code 190
-    at sendMessage (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\models\messages.js:240:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async sendMessage (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\controllers\dashboard.js:25:9)
-error {
-  error: {
-    message: 'Authentication Error',
-    code: 190,
-    type: 'OAuthException',
-    fbtrace_id: 'A9pYuYrSU1M8AGOVFvzF0QZ'
-  }
-}
-Error enviando desde dashboard Error: Authentication Error | code 190
-    at sendMessage (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\models\messages.js:240:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async sendMessage (C:\Users\Soporte TI Junior\Downloads\wsp-bot-oficial (1)\wsp-bot-oficial\controllers\dashboard.js:25:9)
+Supabase upsertConversation error: TypeError: fetch failed
+Supabase insertMessage error: TypeError: fetch failed
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811589328","user_id":"MX.4284256651836141"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTU4OTMyOBUCABEYEjU5MzgzNTcxNTY1RTE0MTYxNwA=","status":"sent","timestamp":"1780421469","recipient_id":"5219811589328","recipient_user_id":"MX.4284256651836141","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]

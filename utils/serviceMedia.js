@@ -1,11 +1,11 @@
-const { normalizeText } = require('./appointmentsConfig');
+const { normalizeText } = require('./configCitas');
 
 const SERVICE_MEDIA = [
     { file: 'hydratation.jpeg', keywords: ['lumi piel', 'hidratacion', 'hidratante', 'chocolate facial'] },
     { file: 'chocolaterapiaforher.jpeg', keywords: ['chocolaterapia', 'chocolaterapia for her'] },
     { file: 'membresiatop.jpeg', keywords: ['royal skin', 'membresia top', 'membresia', 'hifu', 'pdrn'] },
     { file: 'dermafacial.jpeg', keywords: ['seda effect', 'dermaplaning', 'dermafacial'] },
-    { file: 'facialandbodyrelax.jpeg', keywords: ['soft harmony', 'masaje', 'relajante', 'limpieza facial'] }
+    { file: 'facialandbodyrelax.jpeg', keywords: ['soft harmony'] }
 ];
 
 const findMediaForText = (...texts) => {

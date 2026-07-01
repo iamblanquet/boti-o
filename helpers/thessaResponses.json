@@ -2,13 +2,21 @@
   {
     "previusStep": "0",
     "step": "0",
-    "keywords": ["hola", "buenas", "buenos dias", "buenas tardes", "menu", "inicio", "ayuda"],
+    "keywords": [
+      "hola",
+      "buenas",
+      "buenos dias",
+      "buenas tardes",
+      "menu",
+      "inicio",
+      "ayuda"
+    ],
     "response": [],
     "type": "button",
     "buttonPayload": {
       "type": "button",
       "body": {
-        "text": "Somos Thessa, un espacio creado para el cuidado de la piel y el bienestar, desde la calma y la atencion al detalle. Aqui encontraras estetica facial, corporal, tecnologia laser, spa y fisioterapia integrados en una misma experiencia. Bienvenida a tu refugio! 🍃\n\nElige una opcion para ayudarte:"
+        "text": "Hola {{name}}, bienvenida a Thessa. Que gusto saludarte. Puedo ayudarte a conocer nuestros servicios, revisar precios o agendar tu cita con calma:"
       },
       "action": {
         "buttons": [
@@ -16,21 +24,21 @@
             "type": "reply",
             "reply": {
               "id": "menu_services",
-              "title": "✨ Servicios"
+              "title": "Servicios"
             }
           },
           {
             "type": "reply",
             "reply": {
               "id": "menu_appointment",
-              "title": "📅 Agendar cita"
+              "title": "Agendar cita"
             }
           },
           {
             "type": "reply",
             "reply": {
               "id": "menu_ai",
-              "title": "💬 Tengo una duda"
+              "title": "Tengo una duda"
             }
           }
         ]
@@ -40,175 +48,108 @@
   {
     "previusStep": "0",
     "step": "0",
-    "keywords": ["menu_services", "servicios", "ver servicios", "catalogo", "catalogo de servicios", "tratamientos"],
+    "keywords": [
+      "menu_services",
+      "servicios",
+      "tratamientos",
+      "catalogo"
+    ],
     "response": [],
-    "type": "list",
-    "listPayload": {
-      "type": "list",
-      "header": {
-        "type": "text",
-        "text": "Experiencias Thessa"
-      },
-      "body": {
-        "text": "Con gusto. Te comparto nuestro catalogo de experiencias para que elijas la que mas va contigo."
-      },
-      "footer": {
-        "text": "Al elegir una opcion te comparto detalles e imagen."
-      },
-      "action": {
-        "button": "Ver catalogo",
-        "sections": [
-          {
-            "title": "Servicios",
-            "rows": [
-              {
-                "id": "service_lumi_piel",
-                "title": "Lumi Piel",
-                "description": "Facial hidratante con chocolaterapia."
-              },
-              {
-                "id": "service_chocolaterapia",
-                "title": "Chocolaterapia",
-                "description": "Ritual corporal envolvente."
-              },
-              {
-                "id": "service_royal_skin",
-                "title": "Royal Skin",
-                "description": "Experiencia TOP con tecnologia avanzada."
-              },
-              {
-                "id": "service_seda_effect",
-                "title": "Seda Effect",
-                "description": "Dermafacial y dermaplaning."
-              },
-              {
-                "id": "service_soft_harmony",
-                "title": "Soft Harmony",
-                "description": "Limpieza facial y masaje relajante."
-              }
-            ]
-          }
-        ]
-      }
-    }
+    "function": "catalog"
   },
   {
     "previusStep": "0",
     "step": "0",
-    "keywords": ["service_lumi_piel"],
-    "response": [
-      "Lumi Piel es una experiencia facial hidratante con chocolaterapia, ideal para devolverle luminosidad y frescura a la piel.\n\n",
-      "Incluye limpieza facial profunda, exfoliacion suave, activos humectantes, chocolaterapia facial, aceites esenciales con notas de chocolate y copa de vino.\n\n",
-      "Precios:\n",
-      "- 1 persona: $1299\n",
-      "- 2 personas: $1800\n\n",
-      "Si te gustaria reservarla, puedes escribirme: *agendar Lumi Piel manana a las 5*."
+    "keywords": [
+      "menu_appointment",
+      "agendar",
+      "agendar cita",
+      "quiero agendar",
+      "reservar",
+      "reservar cita",
+      "hacer cita"
     ],
-    "localFile": ["hydratation.jpeg"]
-  },
-  {
-    "previusStep": "0",
-    "step": "0",
-    "keywords": ["service_chocolaterapia"],
-    "response": [
-      "Chocolaterapia for Her es un ritual corporal envolvente para relajarte profundamente y consentir tus sentidos.\n\n",
-      "Incluye exfoliacion corporal, envoltura nutritiva de chocolaterapia, masaje relajante de cuerpo completo, masaje craneal anti estres, aceites esenciales, copa de vino y decoracion con petalos.\n\n",
-      "Precios:\n",
-      "- 1 persona: $1299\n",
-      "- 2 personas: $1800"
-    ],
-    "localFile": ["chocolaterapiaforher.jpeg"]
-  },
-  {
-    "previusStep": "0",
-    "step": "0",
-    "keywords": ["service_royal_skin"],
-    "response": [
-      "Royal Skin es nuestra experiencia TOP: fusiona tecnologia avanzada con activos regenerativos de alta gama y chocolaterapia.\n\n",
-      "Incluye limpieza facial premium con PDRN, HIFU 7D, TIC con activo PDRN, mascarilla PDRN, mascara LED, exfoliacion corporal, envoltura de chocolaterapia, masaje relajante, aromaterapia, copa de vino y petalos.\n\n",
-      "Precio:\n",
-      "- 1 persona: $5199"
-    ],
-    "localFile": ["membresiatop.jpeg"]
-  },
-  {
-    "previusStep": "0",
-    "step": "0",
-    "keywords": ["service_seda_effect"],
-    "response": [
-      "Seda Effect es ideal para una piel mas suave, uniforme y luminosa.\n\n",
-      "Incluye dermaplaning, dermafacial, masaje relajante y aromaterapia.\n\n",
-      "Precios:\n",
-      "- 1 persona: $1299\n",
-      "- 2 personas: $1800"
-    ],
-    "localFile": ["dermafacial.jpeg"]
-  },
-  {
-    "previusStep": "0",
-    "step": "0",
-    "keywords": ["service_soft_harmony"],
-    "response": [
-      "Soft Harmony es un ritual disenado para soltar, descansar y disfrutar.\n\n",
-      "Incluye limpieza facial renovadora, masaje corporal relajante, aromaterapia y copa de vino.\n\n",
-      "Precio:\n",
-      "- 2 personas: $1499"
-    ],
-    "localFile": ["facialandbodyrelax.jpeg"]
-  },
-  {
-    "previusStep": "0",
-    "step": "0",
-    "keywords": ["menu_appointment", "agendar", "agendar cita", "quiero agendar", "reservar", "reservar cita", "hacer cita"],
-    "response": ["Con gusto te ayudamos a agendar. Para hacerlo mas rapido, comparteme en un solo mensaje: servicio, dia, hora, nombre y numero de personas.\n\nEjemplo: Lumi Piel manana a las 5 pm, a nombre de Ana, para 2 personas."],
+    "response": [],
     "function": "appointment"
   },
   {
     "previusStep": "0",
     "step": "0",
-    "keywords": ["gestionar cita", "cambiar cita", "reprogramar", "cancelar", "confirmar"],
+    "keywords": [
+      "gestionar cita",
+      "cambiar cita",
+      "reprogramar",
+      "cancelar",
+      "confirmar"
+    ],
     "response": [
-      "Claro, te ayudo con tu cita. Puedes escribirme:\n\n",
+      "Claro, te ayudo con tu cita. Dime que necesitas y lo revisamos paso a paso:\n\n",
       "- confirmar cita\n",
       "- reprogramar cita\n",
       "- cancelar cita\n\n",
-      "Y seguimos paso a paso."
-    ]
+      "Y con gusto seguimos desde ahi."
+    ],
+    "function": "appointment_management"
   },
   {
     "previusStep": "0",
     "step": "0",
-    "keywords": ["horarios", "horario", "atencion", "horarios de atencion"],
+    "keywords": [
+      "horarios",
+      "horario",
+      "atencion",
+      "horarios de atencion"
+    ],
     "response": [
-      "Nuestro horario de atencion es:\n",
-      "Lunes a viernes de 10:00 am a 7:00 pm\n",
-      "Sabados de 10:00 am a 4:00 pm\n",
+      "Con gusto. Nuestro horario de atencion es:\n",
+      "Lunes a viernes de 9:00 am a 6:00 pm\n",
+      "Sabados de 9:00 am a 4:00 pm\n",
       "Domingos cerrado.\n\n",
-      "Si quieres venir, dime que servicio te interesa y que dia te gustaria."
+      "Cuando quieras venir, toca Agendar cita y te muestro opciones disponibles."
     ]
   },
   {
     "previusStep": "0",
     "step": "0",
-    "keywords": ["ubicacion", "ubicaciones", "direccion", "sucursal", "sucursales"],
+    "keywords": [
+      "ubicacion",
+      "ubicaciones",
+      "direccion",
+      "sucursal",
+      "sucursales"
+    ],
     "response": [
-      "Por ahora no tengo una direccion configurada en el sistema.\n",
-      "Si quieres, podemos avanzar con tu cita y el equipo te confirma los detalles de llegada."
+      "Estamos en Claustro framboyanes 6, Tabasco 2000, 86035 Villahermosa, Tab. Si gustas, tambien puedo ayudarte a elegir un servicio antes de agendar."
     ]
   },
   {
     "previusStep": "0",
     "step": "0",
-    "keywords": ["operador", "asesor", "humano", "equipo", "hablar con el equipo", "atencion personalizada"],
+    "keywords": [
+      "operador",
+      "asesor",
+      "humano",
+      "equipo",
+      "hablar con el equipo",
+      "atencion personalizada"
+    ],
     "response": [
-      "Claro, dejamos tu mensaje para que el equipo te atienda personalmente. Si quieres, tambien puedo ayudarte a perfilar el servicio ideal mientras te contactan."
+      "Claro. Dejamos tu mensaje para que el equipo te atienda personalmente. Mientras tanto, puedo ayudarte a ubicar el servicio que mejor se ajuste a lo que buscas."
     ]
   },
   {
     "previusStep": "0",
     "step": "0",
-    "keywords": ["menu_ai", "preguntar", "pregunta", "informacion", "info", "duda", "ia"],
-    "response": ["Claro. Cuentame que te gustaria saber: puede ser sobre precios, que incluye cada experiencia, cual te conviene segun tu piel o como prepararte para tu visita."],
+    "keywords": [
+      "menu_ai",
+      "preguntar",
+      "pregunta",
+      "duda",
+      "ia"
+    ],
+    "response": [
+      "Claro, cuentame que te gustaria saber. Puede ser sobre precios, que incluye cada servicio, cual te conviene o como prepararte para tu visita."
+    ],
     "function": "gemini"
   }
 ]

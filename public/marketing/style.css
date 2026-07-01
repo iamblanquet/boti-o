@@ -1,0 +1,27 @@
+/* public/marketing/style.css */
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem; border-radius: 0.75rem; font-weight: 600; transition: all 0.2s;
+    cursor: pointer; border: none;
+}
+.btn-primary { background-color: #676a3e; color: white; }
+.btn-primary:hover:not(:disabled) { background-color: #555735; }
+.btn-secondary { background-color: white; border: 1px solid #cbd5e1; color: #334155; }
+.btn-secondary:hover:not(:disabled) { background-color: #f1f5f9; }
+.btn:disabled { background-color: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+
+.step-active { background-color: #676a3e; color: white; }
+.step-inactive { background-color: #e2e8f0; color: #64748b; }
+
+.progress-active { width: 100%; background-color: #676a3e; }
+.progress-inactive { width: 0%; }
+
+.segment-radio { position: absolute; opacity: 0; width: 0; height: 0; }
+.segment-card { transition: all 0.2s; border: 1px solid #e2e8f0; background-color: white; border-radius: 0.75rem; padding: 1.25rem; cursor: pointer; }
+.segment-radio:checked + .segment-card { border-color: #676a3e; background-color: #f6f7ef; }
+
+.segment-check { opacity: 0; transition: opacity 0.2s; color: #676a3e; }
+.segment-radio:checked + .segment-card .segment-check { opacity: 1; }
+
+.services-menu-container { max-height: 300px; overflow-y: auto; }

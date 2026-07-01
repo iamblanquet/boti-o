@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clientes - Thessa</title>
+  <link rel="stylesheet" href="/tailwind.css">
+  <link rel="stylesheet" href="/global.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+  <div class="flex min-h-screen flex-col">
+    <header class="sticky top-0 z-50 flex shrink-0 items-center justify-between bg-gradient-to-r from-emerald-800 to-emerald-600 px-4 py-3 text-white shadow-md sm:px-6">
+      <div class="flex items-center gap-4">
+        <button id="mainMenuBtn" class="group flex cursor-pointer flex-col gap-1.5 rounded-lg p-2 transition hover:bg-white/10" type="button" aria-label="Menu">
+          <span class="h-0.5 w-5 rounded-full bg-white"></span>
+          <span class="h-0.5 w-5 rounded-full bg-white"></span>
+          <span class="h-0.5 w-5 rounded-full bg-white"></span>
+        </button>
+        <a href="/home" class="brand flex items-center transition shrink-0 hover:opacity-80">
+          <img src="/mediaFiles/Logo_Thessa.png" alt="Thessa" class="h-11 w-auto object-contain">
+        </a>
+      </div>
+      <a href="/dashboard" class="inline-flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm font-bold text-white transition hover:bg-white/20">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        Bandeja
+      </a>
+    </header>
+
+    <main class="mx-auto flex w-full max-w-[1800px] flex-1 flex-col gap-4 p-3 sm:p-4 lg:p-6">
+      <section class="flex flex-col gap-4 border-b border-slate-200 pb-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Contactos y clientes</h1>
+          <p class="mt-1 max-w-2xl text-sm text-slate-500">Vista enriquecida con citas, gasto estimado, historial confirmado y responsable asignado.</p>
+        </div>
+        <div class="flex flex-col gap-2 sm:flex-row">
+          <label class="relative min-w-0 sm:w-80">
+            <svg class="absolute left-3 top-3 h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input id="clientSearch" type="search" placeholder="Buscar cliente, telefono, correo..." class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-9 pr-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100">
+          </label>
+          <select id="clientFilter" class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100">
+            <option value="all">Todos</option>
+            <option value="assigned">Asignados</option>
+            <option value="unassigned">Sin empleado</option>
+            <option value="visited">Con visita</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="grid min-h-0 flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_390px]">
+        <div class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">Lista de clientes</h2>
+              <p id="resultCount" class="text-xs text-slate-500">Cargando clientes...</p>
+            </div>
+            <button id="refreshClients" type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700" aria-label="Actualizar">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[980px] text-left">
+              <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wide text-slate-400">
+                <tr>
+                  <th class="px-4 py-3">Cliente</th>
+                  <th class="px-4 py-3">Empleado</th>
+                  <th class="px-4 py-3">Citas</th>
+                  <th class="px-4 py-3">Ultima visita</th>
+                  <th class="px-4 py-3 text-right">Gastado</th>
+                  <th class="px-4 py-3 text-center">Confirmadas</th>
+                  <th class="px-4 py-3 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="clientsTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+          </div>
+          <div id="paginationControls" class="flex flex-col gap-3 border-t border-slate-100 px-4 py-3 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between"></div>
+          <div id="emptyState" class="hidden px-4 py-12 text-center">
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-12.728 12.728m0-12.728l12.728 12.728"/></svg>
+            </div>
+            <p class="mt-3 text-sm font-bold text-slate-700">No hay clientes con esos filtros</p>
+          </div>
+        </div>
+
+        <aside id="clientDetail" class="min-w-0 self-start overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"></aside>
+      </section>
+    </main>
+  </div>
+
+  <div id="appointmentsModal" class="fixed inset-0 z-[10000] hidden bg-slate-900/45 p-3 backdrop-blur-sm sm:p-6">
+    <div class="mx-auto flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-100 bg-slate-50 px-5 py-4">
+        <div class="min-w-0">
+          <h2 id="appointmentsModalTitle" class="truncate text-base font-extrabold text-slate-900">Citas del cliente</h2>
+          <p id="appointmentsModalSub" class="mt-0.5 truncate text-xs font-semibold text-slate-500"></p>
+        </div>
+        <button id="closeAppointmentsModal" type="button" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-200 hover:text-slate-700" aria-label="Cerrar citas">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="appointmentsModalBody" class="min-h-0 flex-1 overflow-y-auto p-5"></div>
+    </div>
+  </div>
+
+
+  <!-- Reusable Web Components -->
+  <side-drawer active="clients"></side-drawer>
+  <alert-modal></alert-modal>
+
+  <!-- Component scripts -->
+  <script src="/components/SideDrawer.js"></script>
+  <script src="/components/AlertModal.js"></script>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

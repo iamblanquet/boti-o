@@ -17,6 +17,11 @@ const getMessagesUrl = () => {
     return `https://graph.facebook.com/${API_VERSION}/${PHONE_NUMBER_ID}/messages`;
 }
 
+const getMediaUrl = () => {
+    assertWhatsappConfig();
+    return `https://graph.facebook.com/${API_VERSION}/${PHONE_NUMBER_ID}/media`;
+}
+
 const getHeaders = () => {
     assertWhatsappConfig();
     return {
@@ -30,5 +35,6 @@ module.exports = {
     PHONE_NUMBER_ID,
     ACCESS_TOKEN,
     getMessagesUrl,
+    getMediaUrl,
     getHeaders
 }

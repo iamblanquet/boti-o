@@ -5,22 +5,32 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "citas:migrar": "node scripts/migrarCitasASupabase.js",
+    "clientes:migrar": "node scripts/migrarClientes.js",
+    "build:css": "npx @tailwindcss/cli -i ./src/input.css -o ./public/tailwind.css",
+    "dev:css": "npx @tailwindcss/cli -i ./src/input.css -o ./public/tailwind.css --watch",
+    "test": "node --test"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/dialogflow": "^6.3.1",
     "@google/genai": "^2.6.0",
+    "@supabase/supabase-js": "^2.106.2",
     "axios": "^1.6.3",
-    "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "express": "^4.18.2",
+    "ffmpeg-static": "^5.3.0",
+    "form-data": "^4.0.6",
     "googleapis": "^172.0.0",
-    "mysql2": "^3.9.1",
     "openai": "^4.26.1",
-    "redis": "^4.6.12",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0"
   }
 }

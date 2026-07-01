@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendario - Thessa</title>
+  <link rel="stylesheet" href="/tailwind.css">
+  <link rel="stylesheet" href="/global.css">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales-all.global.min.js"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+  <div class="flex min-h-screen flex-col">
+    <header class="sticky top-0 z-50 flex shrink-0 items-center justify-between bg-gradient-to-r from-emerald-800 to-emerald-600 px-4 py-3 text-white shadow-md sm:px-6">
+      <div class="flex items-center gap-4">
+        <button id="mainMenuBtn" class="group flex cursor-pointer flex-col gap-1.5 rounded-lg p-2 transition hover:bg-white/10" type="button" aria-label="Menu">
+          <span class="h-0.5 w-5 rounded-full bg-white"></span>
+          <span class="h-0.5 w-5 rounded-full bg-white"></span>
+          <span class="h-0.5 w-5 rounded-full bg-white"></span>
+        </button>
+        <a href="/home" class="brand flex items-center transition shrink-0 hover:opacity-80">
+          <img src="/mediaFiles/Logo_Thessa.png" alt="Thessa" class="h-11 w-auto object-contain">
+        </a>
+      </div>
+    </header>
+
+    <main class="mx-auto grid w-full max-w-[1800px] flex-1 items-start gap-4 p-3 sm:p-4 lg:grid-cols-[minmax(320px,380px)_minmax(0,1fr)] lg:p-6">
+      <aside class="flex min-w-0 flex-col gap-4">
+        <div class="flex min-w-0 flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+          <div class="flex flex-col gap-4">
+            <div>
+              <h1 class="text-xl font-bold text-slate-900 sm:text-2xl">Agenda de citas</h1>
+              <p class="mt-1 text-sm text-slate-500">Citas confirmadas sincronizadas con Google Calendar.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="rounded-xl bg-slate-50 px-2 py-2 text-center">
+                <p class="text-[10px] font-bold uppercase tracking-wide text-slate-400">Proximas</p>
+                <p id="totalAppointments" class="mt-0.5 text-lg font-bold text-slate-800">0</p>
+              </div>
+              <div class="rounded-xl bg-emerald-50 px-2 py-2 text-center">
+                <p class="text-[10px] font-bold uppercase tracking-wide text-emerald-600">Hoy</p>
+                <p id="todayAppointments" class="mt-0.5 text-lg font-bold text-emerald-800">0</p>
+              </div>
+              <div class="rounded-xl bg-sky-50 px-2 py-2 text-center">
+                <p class="text-[10px] font-bold uppercase tracking-wide text-sky-600">7 dias</p>
+                <p id="weekAppointments" class="mt-0.5 text-lg font-bold text-sky-800">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-3 border-t border-slate-100 pt-4">
+            <label class="relative min-w-0 flex-1">
+              <svg class="absolute left-3 top-3 h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input id="calendarSearch" type="search" placeholder="Buscar cliente, telefono o servicio" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100">
+            </label>
+            <button id="toggleFiltersBtn" type="button" class="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50">
+              <span class="flex items-center gap-2">
+                <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 018 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
+                Servicios
+                <span id="activeServicesCount" class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">0</span>
+              </span>
+              <svg id="filtersChevron" class="h-4 w-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+          </div>
+          <div id="serviceFilterPanel" class="hidden overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+            <div class="flex items-center justify-between border-b border-slate-200 px-4 py-2.5">
+              <span class="text-xs font-bold uppercase tracking-wide text-slate-500">Mostrar servicios</span>
+              <button id="toggleAllServices" type="button" class="text-xs font-bold text-emerald-700 hover:underline">Desmarcar todos</button>
+            </div>
+            <div id="serviceFilters" class="grid max-h-48 grid-cols-1 gap-1 overflow-y-auto p-2"></div>
+          </div>
+          <div id="calendarWarning" class="hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800"></div>
+        </div>
+
+        <aside id="inProgressCard" class="hidden overflow-hidden rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-700 to-indigo-600 text-white shadow-sm">
+          <div class="flex items-center justify-between border-b border-white/15 px-4 py-3">
+            <div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-indigo-100">En curso</p>
+              <p class="mt-0.5 text-xs font-semibold text-white/80 animate-pulse">Ocurriendo ahora</p>
+            </div>
+            <div id="inProgressNav" class="flex items-center gap-1">
+              <button id="inProgressPrevBtn" class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15 text-white hover:bg-white/25 transition">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <span id="inProgressCounter" class="text-xs font-bold text-white px-1">1/1</span>
+              <button id="inProgressNextBtn" class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15 text-white hover:bg-white/25 transition">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="inProgressDetails" class="space-y-3 p-4">
+            <div>
+              <p id="inProgressDate" class="text-base font-bold">-</p>
+              <p id="inProgressTime" class="mt-0.5 text-xs font-semibold text-indigo-100">-</p>
+            </div>
+            <div class="grid grid-cols-[76px_1fr] gap-x-2 gap-y-1.5 text-xs">
+              <span class="text-indigo-100">Cliente</span><strong id="inProgressClient" class="truncate">-</strong>
+              <span class="text-indigo-100">WhatsApp</span><a id="inProgressPhone" href="#" class="truncate font-bold text-white hover:underline">-</a>
+              <span class="text-indigo-100">Servicio</span><strong id="inProgressService" class="leading-snug">-</strong>
+              <span class="text-indigo-100">Personas</span><strong id="inProgressPeople">-</strong>
+              <span class="text-indigo-100">Estado</span><strong id="inProgressStatus" class="inline-flex w-fit items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-xs">✓ Confirmada</strong>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a id="inProgressMessage" href="/dashboard" class="rounded-lg bg-white px-2 py-2 text-center text-[11px] font-bold text-indigo-700 transition hover:bg-indigo-50">Enviar mensaje</a>
+              <a id="inProgressGoogle" target="_blank" rel="noopener" class="rounded-lg border border-white/25 bg-white/10 px-2 py-2 text-center text-[11px] font-bold text-white transition hover:bg-white/20">Abrir calendario</a>
+            </div>
+          </div>
+        </aside>
+
+        <aside class="overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-700 to-emerald-600 text-white shadow-sm">
+          <div class="flex items-center justify-between border-b border-white/15 px-4 py-3">
+            <div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-emerald-100">Proxima cita</p>
+              <p id="nextAppointmentCountdown" class="mt-0.5 text-xs font-semibold text-white/80">Buscando cita...</p>
+            </div>
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+          </div>
+          <div id="nextAppointmentEmpty" class="hidden px-4 py-5 text-center text-xs text-emerald-100">No hay citas confirmadas proximas.</div>
+          <div id="nextAppointmentDetails" class="space-y-3 p-4">
+            <div>
+              <p id="nextAppointmentDate" class="text-base font-bold">-</p>
+              <p id="nextAppointmentTime" class="mt-0.5 text-xs font-semibold text-emerald-100">-</p>
+            </div>
+            <div class="grid grid-cols-[76px_1fr] gap-x-2 gap-y-1.5 text-xs">
+              <span class="text-emerald-100">Cliente</span><strong id="nextAppointmentClient" class="truncate">-</strong>
+              <span class="text-emerald-100">WhatsApp</span><a id="nextAppointmentPhone" href="#" class="truncate font-bold text-white hover:underline">-</a>
+              <span class="text-emerald-100">Servicio</span><strong id="nextAppointmentService" class="leading-snug">-</strong>
+              <span class="text-emerald-100">Personas</span><strong id="nextAppointmentPeople">-</strong>
+              <span class="text-emerald-100">Estado</span><strong id="nextAppointmentStatus" class="inline-flex w-fit items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-xs">✓ Confirmada</strong>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a id="nextAppointmentMessage" href="/dashboard" class="rounded-lg bg-white px-2 py-2 text-center text-[11px] font-bold text-emerald-700 transition hover:bg-emerald-50">Enviar mensaje</a>
+              <a id="nextAppointmentGoogle" target="_blank" rel="noopener" class="rounded-lg border border-white/25 bg-white/10 px-2 py-2 text-center text-[11px] font-bold text-white transition hover:bg-white/20">Abrir calendario</a>
+            </div>
+          </div>
+        </aside>
+      </aside>
+
+      <section class="min-h-[680px] min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5 lg:sticky lg:top-[84px] lg:min-h-[calc(100vh-108px)]">
+        <div id="calendar" class="h-full min-h-[650px] lg:min-h-[calc(100vh-148px)]"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Reusable Side Drawer -->
+  <side-drawer active="calendar"></side-drawer>
+
+  <!-- Component scripts -->
+  <script src="/components/SideDrawer.js"></script>
+
+  <div id="appointmentModal" class="fixed inset-0 z-[1000] hidden items-end justify-center bg-slate-900/45 p-0 opacity-0 backdrop-blur-sm transition-opacity sm:items-center sm:p-4">
+    <div id="appointmentModalContent" class="w-full max-w-lg scale-95 overflow-hidden rounded-t-2xl border border-slate-100 bg-white shadow-2xl transition-transform sm:rounded-2xl">
+      <div class="relative flex items-start justify-between overflow-hidden border-b border-slate-100 p-5">
+        <div id="modalHeaderColor" class="absolute inset-0 opacity-10"></div>
+        <div class="relative">
+          <h2 id="modalAppointmentTitle" class="text-xl font-bold text-slate-900">Detalle de cita</h2>
+          <p id="modalAppointmentDatetime" class="mt-1 text-sm font-medium text-slate-600">-</p>
+        </div>
+        <button id="closeAppointmentModal" class="relative rounded-full bg-white/70 p-2 text-slate-500 shadow-sm hover:bg-white" aria-label="Cerrar">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="space-y-4 p-5">
+        <dl class="grid grid-cols-[100px_1fr] gap-x-3 gap-y-3 text-sm">
+          <dt class="font-semibold text-slate-500">Cliente</dt><dd id="modalClient" class="font-semibold text-slate-800">-</dd>
+          <dt class="font-semibold text-slate-500">WhatsApp</dt>
+          <dd class="flex flex-wrap items-center gap-2">
+            <a id="modalPhone" href="#" class="font-semibold text-emerald-700 hover:underline">-</a>
+            <a id="modalMessageLink" href="/dashboard" class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-700">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.395-3.72A7.72 7.72 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              Enviar un mensaje
+            </a>
+          </dd>
+          <dt class="font-semibold text-slate-500">Servicio</dt><dd id="modalService" class="text-slate-700">-</dd>
+          <dt class="font-semibold text-slate-500">Personas</dt><dd id="modalPeople" class="text-slate-700">-</dd>
+          <dt class="font-semibold text-slate-500">Estado</dt><dd id="modalStatus" class="capitalize text-slate-700">confirmada</dd>
+          <dt class="font-semibold text-slate-500">Fuente</dt><dd id="modalSource" class="text-slate-700">Google Calendar</dd>
+        </dl>
+        <a id="modalGoogleLink" target="_blank" rel="noopener" class="hidden w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700">Abrir en Google Calendar</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

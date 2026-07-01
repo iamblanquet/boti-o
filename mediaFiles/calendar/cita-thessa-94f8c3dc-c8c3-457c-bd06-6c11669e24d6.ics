@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-94f8c3dc-c8c3-457c-bd06-6c11669e24d6@thessa
+DTSTAMP:20260622T224713Z
+DTSTART:20260623T180000Z
+DTEND:20260623T190000Z
+SUMMARY:Cita Thessa - Depilación Láser - Abdomen Completo
+DESCRIPTION:Servicio: Depilación Láser - Abdomen Completo\nNombre: Maurici
+ o\nPersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

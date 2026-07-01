@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-872bf4d3-dc73-4fe8-88c6-093753d8d496@thessa
+DTSTAMP:20260603T191005Z
+DTSTART:20260603T210000Z
+DTEND:20260603T220000Z
+SUMMARY:Cita Thessa - Masaje Descontracturante
+DESCRIPTION:Servicio: Masaje Descontracturante\nNombre: Mauricio Blanquet\
+ nPersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

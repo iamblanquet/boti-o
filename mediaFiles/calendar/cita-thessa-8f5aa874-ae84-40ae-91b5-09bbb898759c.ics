@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-8f5aa874-ae84-40ae-91b5-09bbb898759c@thessa
+DTSTAMP:20260701T180043Z
+DTSTART:20260701T230000Z
+DTEND:20260702T000000Z
+SUMMARY:Cita Thessa - Depilación Láser - Manos
+DESCRIPTION:Servicio: Depilación Láser - Manos\nNombre: Mauricio Blanquet\
+ nPersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

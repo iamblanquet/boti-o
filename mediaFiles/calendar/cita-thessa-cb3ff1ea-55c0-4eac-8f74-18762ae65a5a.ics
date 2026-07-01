@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-cb3ff1ea-55c0-4eac-8f74-18762ae65a5a@thessa
+DTSTAMP:20260624T182242Z
+DTSTART:20260624T230000Z
+DTEND:20260625T000000Z
+SUMMARY:Cita Thessa - Depilación Láser - Manos
+DESCRIPTION:Servicio: Depilación Láser - Manos\nNombre: Mauuu\nPersonas: 1
+ \nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

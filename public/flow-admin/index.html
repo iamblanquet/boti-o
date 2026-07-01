@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flujo Conversacional | Thessa</title>
+  <link href="/tailwind.css" rel="stylesheet">
+  <link href="/global.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 m-0 p-0 antialiased h-screen flex flex-col overflow-hidden">
+  
+  <div class="flex-1 flex flex-col h-full overflow-hidden">
+    <!-- Navbar -->
+    <header id="appNavbar" class="flow-topbar">
+      <div class="flow-topbar-brand">
+        <button id="mainMenuBtn" class="flex flex-col gap-1.5 p-2 rounded-lg hover:bg-white/10 transition cursor-pointer group" type="button" aria-label="Menú">
+          <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+          <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+          <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+        </button>
+        <a href="/home" class="brand flex items-center transition shrink-0 hover:opacity-80">
+          <img src="/mediaFiles/Logo_Thessa.png" alt="Thessa" class="h-11 w-auto object-contain">
+        </a>
+      </div>
+      <label class="flow-topbar-search" for="searchFlowInput">
+        <svg class="flow-topbar-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <input type="text" id="searchFlowInput" placeholder="Buscar palabra clave, paso o mensaje...">
+      </label>
+      <div class="flow-topbar-actions">
+        <button id="addStepBtn" class="flow-primary-action" type="button">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Nuevo paso
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flow-admin-shell">
+      <div class="flow-admin-pad">
+        <div class="flow-admin-layout">
+          <aside class="flow-sidebar">
+            <div class="flow-sidebar-heading">
+              <h1>Flujo de bot</h1>
+              <p><span id="activeStepsCount">0</span> pasos visibles</p>
+            </div>
+            <div id="flowFilterList" class="flow-filter-list" aria-label="Filtros de flujo"></div>
+          </aside>
+          
+          <!-- Page Header -->
+          <div class="flow-panel-header">
+            <div>
+              <h1 class="text-2xl font-bold text-slate-800">Flujo Conversacional del Bot</h1>
+              <p class="text-slate-500 mt-1 text-sm">Gestiona los disparadores de palabras clave y configura las integraciones del bot.</p>
+            </div>
+            <button id="legacyAddStepBtn" class="btn btn-primary text-sm py-2.5 px-4 flex items-center gap-2 shadow-sm" type="button">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+              Añadir Paso
+            </button>
+          </div>
+
+          <!-- Navigation Tabs -->
+          <div class="flex border-b border-slate-200 gap-6 mt-2">
+            <button id="tabGeneralFlow" class="tab-btn active pb-3 text-sm font-semibold border-b-2 border-emerald-600 text-emerald-600 cursor-pointer transition" type="button">
+              Flujos Generales
+            </button>
+            <button id="tabApptFlow" class="tab-btn pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 cursor-pointer transition" type="button">
+              Mensajes del Sistema
+            </button>
+          </div>
+
+          <!-- Tab Content: General Flow -->
+          <div id="tabContentGeneral" class="flex flex-col gap-6">
+            <!-- Search & Overview Card -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="relative w-full md:w-80">
+                <input type="text" id="legacySearchFlowInput" placeholder="Buscar palabra clave o mensaje..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs outline-none focus:border-emerald-500 focus:bg-white transition">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 flex items-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+              </div>
+              <div class="text-xs text-slate-500 font-medium">
+                Total de pasos activos: <span id="legacyActiveStepsCount" class="text-slate-800 font-bold">0</span>
+              </div>
+            </div>
+
+            <!-- List of Flow Rules (Spacious layout) -->
+            <div id="flowGrid" class="flow-list">
+              <div class="py-12 text-center text-slate-400">Cargando flujos conversacionales...</div>
+            </div>
+          </div>
+
+          <!-- Tab Content: Appointment Messages Config -->
+          <div id="tabContentAppt" class="hidden flex flex-col gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-6">
+              <div>
+                <h2 class="text-lg font-bold text-slate-800">Textos y Preguntas del Flujo de Citas</h2>
+                <p class="text-xs text-slate-500 mt-1">Configura las preguntas que el bot enviará a los clientes al agendar o reprogramar.</p>
+              </div>
+
+              <form id="apptMessagesForm" class="flex flex-col gap-6">
+                <!-- Group 1: Selección de Servicios -->
+                <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col gap-4">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">1. Selección de Servicios</h3>
+                  
+                  <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                    Mensaje de Selección de Categoría
+                    <textarea name="service_category_intro" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                  </label>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje de Selección de Servicio (Pág. 1)
+                      <textarea name="service_select_intro" rows="2" placeholder="Usa {{category}} para el nombre de la categoría" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje de Selección de Servicio (Pág. 2+)
+                      <textarea name="service_select_more" rows="2" placeholder="Usa {{category}} para el nombre de la categoría" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 2: Disponibilidad y Fechas -->
+                <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col gap-4">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">2. Disponibilidad y Horarios</h3>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Pregunta para elegir Día
+                      <textarea name="date_select_intro" rows="2" placeholder="Usa {{service}} para el nombre del servicio" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Sin disponibilidad esta semana
+                      <textarea name="date_no_availability" rows="2" placeholder="Usa {{service}} y {{hours}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Pregunta para elegir Horario
+                      <textarea name="time_select_intro" rows="2" placeholder="Usa {{day}} para la fecha" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Sin horarios para el día
+                      <textarea name="time_no_availability" rows="2" placeholder="Usa {{service}} y {{hours}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 3: Datos del Cliente -->
+                <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col gap-4">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">3. Datos del Cliente y Validación</h3>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Pregunta: Cantidad de personas
+                      <textarea name="people_select_intro" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Pregunta: Nombre completo del cliente
+                      <textarea name="name_ask_intro" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Horario fuera de atención
+                      <textarea name="slot_out_of_hours" rows="2" placeholder="Usa {{hours}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Horario ya ocupado
+                      <textarea name="slot_not_available" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Horario que ya pasó
+                      <textarea name="slot_expired" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 4: Confirmaciones de Éxito -->
+                <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col gap-4">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">4. Éxito y Reprogramaciones</h3>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Reprogramación Exitosa
+                      <textarea name="reschedule_success" rows="2" placeholder="Usa {{datetime}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Reservación / Agendamiento Exitoso
+                      <textarea name="booking_success" rows="2" placeholder="Usa {{service}}, {{datetime}} y {{name}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Group 5: Catálogo de Servicios -->
+                <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col gap-4">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">5. Catálogo de Servicios</h3>
+                  
+                  <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                    Mensaje de Selección de Categoría (Menú de Servicios)
+                    <textarea name="catalog_category_intro" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                  </label>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje de Listado de Servicios (Pág. 1)
+                      <textarea name="catalog_service_intro" rows="2" placeholder="Usa {{category}} para el nombre de la categoría" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje de Listado de Servicios (Pág. 2+)
+                      <textarea name="catalog_service_more" rows="2" placeholder="Usa {{category}} para el nombre de la categoría" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+
+                  <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                    Mensaje: Servicio no encontrado en catálogo
+                    <textarea name="catalog_not_found" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                  </label>
+                </div>
+
+                <!-- Group 6: Plantillas y Respuestas Fijas -->
+                <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col gap-4">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">6. Plantillas y Respuestas Fijas</h3>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Invitación final a Cita (CTA de Cierre)
+                      <textarea name="closing_appointment_invite" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Sin promociones activas registradas
+                      <textarea name="promotions_empty" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+
+                  <div class="border-t border-slate-200 pt-4">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Flujo de cumpleanos y promociones</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500 md:col-span-2">
+                        Invitacion para registrarse
+                        <textarea name="promo_birthday_invitation" rows="3" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                      </label>
+                      <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                        Pregunta: Cumpleanos
+                        <textarea name="promo_birthday_ask" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                      </label>
+                      <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                        Mensaje: Cumpleanos invalido
+                        <textarea name="promo_birthday_invalid" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                      </label>
+                      <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                        Pregunta: Correo
+                        <textarea name="promo_email_ask" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                      </label>
+                      <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                        Mensaje: Correo invalido
+                        <textarea name="promo_email_invalid" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                      </label>
+                      <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                        Respuesta si rechaza registro
+                        <textarea name="promo_registration_decline" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                      </label>
+                      <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                        Confirmacion final
+                        <textarea name="promo_registration_success" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Form Submit buttons -->
+                <div class="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                  <button type="button" id="btnSaveApptMessages" class="btn btn-primary text-sm py-2.5 px-6 shadow-sm">
+                    Guardar Mensajes del Sistema
+                  </button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Reusable overlay and side editor drawer -->
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="editorDrawer" class="drawer" aria-hidden="true">
+    <div class="px-6 py-5 border-b border-slate-100 flex items-start justify-between bg-slate-50 shrink-0">
+      <div>
+        <h2 id="drawerTitle" class="text-lg font-bold text-slate-800">Añadir Paso</h2>
+        <p class="text-xs text-slate-500 mt-1">Configura las respuestas y acciones del bot.</p>
+      </div>
+      <button id="closeDrawerBtn" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition" type="button" aria-label="Cerrar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <!-- Scrollable Drawer Form -->
+    <div class="flex-1 overflow-y-auto p-6">
+      <form id="stepForm" class="flex flex-col gap-5">
+        <input type="hidden" id="editIndex" value="">
+
+        <!-- Steps Numbers -->
+        <div class="grid grid-cols-2 gap-4">
+          <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+            Paso Previo *
+            <input type="text" id="previousStepInput" required placeholder="0" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:bg-white transition font-mono font-normal text-slate-800">
+          </label>
+          <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+            Paso Siguiente *
+            <input type="text" id="stepInput" required placeholder="1" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:bg-white transition font-mono font-normal text-slate-800">
+          </label>
+        </div>
+
+        <!-- Keywords/Chips -->
+        <div class="flex flex-col gap-1.5">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Palabras Clave (Keywords) *</span>
+          <div class="chips-input-container" id="chipsContainer">
+            <!-- Chips rendered by JS -->
+            <input type="text" id="chipInput" placeholder="Escribe y presiona Enter..." class="chips-text-input">
+          </div>
+          <p class="text-[10px] text-slate-400">Presiona Enter o Coma para agregar palabras de activación.</p>
+        </div>
+
+        <!-- Action / Function Select -->
+        <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+          Acción Especial / Integración
+          <select id="functionSelect" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:bg-white transition font-normal cursor-pointer text-slate-800">
+            <option value="">Ninguna (Enviar mensaje de texto)</option>
+            <option value="gemini">Inteligencia Artificial (Gemini Fallback)</option>
+            <option value="catalog">Catálogo de Servicios</option>
+            <option value="appointment">Agendar Cita (Google Calendar)</option>
+            <option value="appointment_management">Gestión de Citas (Confirmar/Cancelar)</option>
+          </select>
+        </label>
+
+        <!-- Response Type (Only if no special function is set, but let's support it) -->
+        <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider" id="responseTypeLabel">
+          Tipo de Respuesta
+          <select id="typeSelect" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:bg-white transition font-normal cursor-pointer text-slate-800">
+            <option value="text">Mensaje de Texto plano</option>
+            <option value="button">Botones Interactivos (WhatsApp Buttons)</option>
+          </select>
+        </label>
+
+        <!-- Response Text Area -->
+        <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider" id="responseTextLabel">
+          Mensaje de Respuesta
+          <textarea id="responseTextarea" rows="4" placeholder="Escribe el mensaje..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm outline-none focus:border-emerald-500 focus:bg-white transition font-normal resize-none text-slate-800"></textarea>
+          <p class="text-[10px] text-slate-400">Puedes usar saltos de línea. Se enviará completo.</p>
+        </label>
+
+        <!-- Buttons JSON details (Visible only if type === button) -->
+        <div id="buttonPayloadContainer" class="hidden flex flex-col gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Configuración de Botones</span>
+          
+          <label class="flex flex-col gap-1.5 text-[10px] font-bold text-slate-500 uppercase">
+            Texto del Cuerpo (Body)
+            <input type="text" id="buttonBodyText" placeholder="Hola, elige una opción:" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-emerald-500 transition font-normal text-slate-800">
+          </label>
+          
+          <div class="flex flex-col gap-2">
+            <span class="text-[10px] font-bold text-slate-500 uppercase">Botones (Máximo 3)</span>
+            <div id="buttonsList" class="flex flex-col gap-2">
+              <!-- Dynamically rendered inputs for 3 buttons -->
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 shrink-0 flex items-center justify-between gap-3">
+      <button id="deleteStepBtn" class="px-4 py-2 text-red-600 hover:bg-red-50 font-semibold text-sm rounded-xl transition hidden" type="button">Eliminar Paso</button>
+      <div class="flex items-center gap-3 ml-auto">
+        <button id="cancelDrawerBtn" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-sm font-semibold hover:bg-slate-50 transition" type="button">Cancelar</button>
+        <button id="saveStepBtn" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition shadow-sm" type="button">Guardar</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Reusable layouts -->
+  <side-drawer active="flow-admin"></side-drawer>
+  <confirm-modal></confirm-modal>
+  <toast-notification></toast-notification>
+
+  <!-- Component scripts -->
+  <script src="/components/SideDrawer.js"></script>
+  <script src="/components/ConfirmModal.js"></script>
+  <script src="/components/ToastNotification.js"></script>
+
+  <script src="./app.js"></script>
+</body>
+</html>

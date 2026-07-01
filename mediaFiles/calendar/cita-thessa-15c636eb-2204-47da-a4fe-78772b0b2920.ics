@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-15c636eb-2204-47da-a4fe-78772b0b2920@thessa
+DTSTAMP:20260622T213223Z
+DTSTART:20260623T220000Z
+DTEND:20260623T230000Z
+SUMMARY:Cita Thessa - Depilación Láser - Brazos Completos
+DESCRIPTION:Servicio: Depilación Láser - Brazos Completos\nNombre: Maurici
+ o Blanquet\nPersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,109 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const CatalogStore = require('../models/serviceCatalogStore');
+
+const createMemorySupabase = () => {
+    const db = {
+        service_categories: [],
+        services: [],
+        service_prices: [],
+        service_faqs: []
+    };
+
+    const clone = (value) => JSON.parse(JSON.stringify(value));
+    const primaryKey = (table) => table === 'service_prices' ? 'id' : 'id';
+
+    const builder = (table) => ({
+        select: async () => ({ data: clone(db[table] || []), error: null }),
+        insert: async (rows) => {
+            const items = Array.isArray(rows) ? rows : [rows];
+            items.forEach((item) => {
+                const row = { ...item };
+                if(table === 'service_prices' && !row.id) row.id = `${row.service_id}-${row.people}`;
+                db[table].push(row);
+            });
+            return { data: clone(items), error: null };
+        },
+        upsert: async (rows) => {
+            const items = Array.isArray(rows) ? rows : [rows];
+            items.forEach((item) => {
+                const key = primaryKey(table);
+                const index = db[table].findIndex((row) => row[key] === item[key]);
+                if(index >= 0) db[table][index] = { ...db[table][index], ...item };
+                else db[table].push({ ...item });
+            });
+            return { data: clone(items), error: null };
+        },
+        update(values) {
+            return {
+                eq: async (column, value) => {
+                    db[table] = db[table].map((row) => row[column] === value ? { ...row, ...values } : row);
+                    return { data: null, error: null };
+                }
+            };
+        },
+        delete() {
+            return {
+                eq: async (column, value) => {
+                    db[table] = db[table].filter((row) => row[column] !== value);
+                    return { data: null, error: null };
+                }
+            };
+        },
+        _db: db
+    });
+
+    return {
+        from: builder,
+        db
+    };
+};
+
+test('service catalog store persists service prices on create and update', async () => {
+    const supabase = createMemorySupabase();
+    CatalogStore.__setTestClient(supabase);
+
+    try {
+        await CatalogStore.createCategory({ id: 'depilaciones', nombre: 'Depilaciones' });
+        await CatalogStore.createService({
+            id: 'depilacion-laser-medio-brazo',
+            nombre: 'Depilación Láser - Medio Brazo',
+            categoria: 'Depilaciones',
+            duracionMinutos: 30,
+            preciosPersonas: [
+                { personas: 1, precio: 275, exclusivo: false }
+            ],
+            descripcion: 'Servicio de depilacion laser.'
+        });
+
+        let catalog = await CatalogStore.readEditableCatalog();
+        let service = catalog.services.find((item) => item.id === 'depilacion-laser-medio-brazo');
+        assert.equal(service.precio, 275);
+        assert.deepEqual(service.preciosPersonas.map((item) => item.precio), [275]);
+
+        await CatalogStore.updateService('depilacion-laser-medio-brazo', {
+            nombre: 'Depilación Láser - Medio Brazo',
+            categoria: 'Depilaciones',
+            duracionMinutos: 30,
+            preciosPersonas: [
+                { personas: 1, precio: 350, exclusivo: false },
+                { personas: 2, precio: 600, exclusivo: true }
+            ],
+            descripcion: 'Servicio de depilacion laser actualizado.'
+        });
+
+        catalog = await CatalogStore.readEditableCatalog();
+        service = catalog.services.find((item) => item.id === 'depilacion-laser-medio-brazo');
+        assert.equal(service.precio, 350);
+        assert.deepEqual(
+            service.preciosPersonas.map((item) => ({ personas: item.personas, precio: item.precio, exclusivo: item.exclusivo })),
+            [
+                { personas: 1, precio: 350, exclusivo: false },
+                { personas: 2, precio: 600, exclusivo: true }
+            ]
+        );
+        assert.equal(supabase.db.service_prices.length, 2);
+    } finally {
+        CatalogStore.__setTestClient(null);
+    }
+});

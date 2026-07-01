@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-a544eb41-ba08-42e2-8193-a28f6875adf2@thessa
+DTSTAMP:20260618T155048Z
+DTSTART:20260618T160000Z
+DTEND:20260618T170000Z
+SUMMARY:Cita Thessa - Depilación Láser - Contorno Bikini
+DESCRIPTION:Servicio: Depilación Láser - Contorno Bikini\nNombre: Mauricio
+  Blanquet\nPersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

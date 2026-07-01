@@ -1,76 +1,56 @@
-const mysql = require('../config/mysql');
+const almacenamiento = require('./clientes/almacenamiento');
+const campaignAlmacenamiento = require('./campaigns/almacenamiento');
+const { parseCampaignAttribution } = require('../utils/campaignAttribution');
 
-const hasMysql = () => Boolean(mysql);
+const verifyStoreClient = async (telefono, nombre, mensaje, options = {}) => {
+    const attribution = parseCampaignAttribution(mensaje);
+    let campaign = null;
+    let isNewLead = false;
 
-const saveClient = async (data) => {
-    if(!hasMysql()) return null;
-    const {
-        telefono,
-        nombre
-    } = data
-    const query = `INSERT INTO clientes (telefono, nombre) VALUES (${mysql.escape(telefono)}, ${mysql.escape(nombre)})`;
-    const result = new Promise((resolve, reject) => {
-        return mysql.query(query, (err, result) => {
-            if(err){
-                console.log('Error al guardar cliente', err);
-                reject(err)
-            }
-            resolve(result)
-        })
-    })
-    return result
-}
-
-const getClient = async (telefono) => {
-    if(!hasMysql()) return [];
-    const query = `SELECT * FROM clientes WHERE telefono = ${mysql.escape(telefono)}`;
-    const result = new Promise((resolve, reject) => {
-        return mysql.query(query, (err, result) => {
-            if(err){
-                console.log('Error al obtener cliente', err);
-                reject(err)
-            }
-            resolve(result)
-        })
-    })
-    return result
-}
-
-const saveHistorial = async (data) => {
-    if(!hasMysql()) return null;
-    const {
-        cliente_id,
-        mensaje
-    } = data
-    const query = `INSERT INTO historial (cliente_id, mensaje) VALUES (${mysql.escape(cliente_id)}, ${mysql.escape(mensaje)})`;
-    const result = new Promise((resolve, reject) => {
-        return mysql.query(query, (err, result) => {
-            if(err){
-                console.log('Error al obtener historial', err);
-                reject(err)
-            }
-            resolve(result)
-        })
-    })
-    return result
-}
-
-const verifyStoreClient = async (telefono, nombre, mensaje) => {
-    const client = await getClient(telefono);
-    if(!client.length){
-        const savePayload = {
-            telefono,
-            nombre
-        }
-        await saveClient(savePayload);
-    } else {
-        const historialPayload = {
-            cliente_id: client[0].id,
-            mensaje
-        }
-        await saveHistorial(historialPayload);
+    if (attribution.leadCode) {
+        campaign = await campaignAlmacenamiento.getCampaignByLeadCode(attribution.leadCode);
+    } else if (attribution.campaignId) {
+        campaign = await campaignAlmacenamiento.getCampaign(attribution.campaignId);
     }
-    return null
-}
 
-module.exports = { verifyStoreClient }
+    const campaignId = campaign?.id || null;
+    const cleanMessage = campaignId ? attribution.cleanMessage : String(mensaje || '');
+
+    if (campaignId) {
+        try {
+            isNewLead = await campaignAlmacenamiento.registerCampaignLead(campaignId, telefono);
+        } catch (error) {
+            console.log('Error al registrar lead de campana:', error.message);
+        }
+    }
+
+    const client = await almacenamiento.getClient(telefono);
+    if (!client) {
+        await almacenamiento.saveClient({
+            phoneNumber: telefono,
+            name: nombre,
+            campaignId
+        });
+    } else if (campaignId && !client.campaignId) {
+        client.campaignId = campaignId;
+        await almacenamiento.saveClient(client);
+    }
+
+
+
+    if (options.returnAttribution) {
+        return {
+            cleanMessage,
+            originalMessage: String(mensaje || ''),
+            attribution: campaignId ? {
+                campaignId,
+                leadCode: attribution.leadCode,
+                isNewLead
+            } : null
+        };
+    }
+
+    return cleanMessage;
+};
+
+module.exports = { verifyStoreClient };

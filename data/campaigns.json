@@ -1,0 +1,38 @@
+{
+  "promo-laser": {
+    "id": "promo-laser",
+    "leadCode": "VIVELAVIDA",
+    "name": "Campaña de Depilacion Laser",
+    "source": "Facebook",
+    "medium": "cpc",
+    "prefilledText": "Hola me gustaria recibir informacion acerca de la depilacion laser",
+    "clicks": 0,
+    "leadsCount": 1,
+    "createdAt": "2026-06-15T22:04:20.741389+00:00",
+    "updatedAt": "2026-06-15T22:04:49.227Z"
+  },
+  "promosenna": {
+    "id": "promosenna",
+    "leadCode": "SENNA",
+    "name": "Campaña de Depilacion",
+    "source": "Instagram",
+    "medium": "QR",
+    "prefilledText": "Hola me gustaria informacion acerca de sus servicios de Depilacion",
+    "clicks": 0,
+    "leadsCount": 1,
+    "createdAt": "2026-06-18T18:19:06.143948+00:00",
+    "updatedAt": "2026-06-18T18:19:44.796Z"
+  },
+  "promo-manos": {
+    "id": "promo-manos",
+    "leadCode": "THESSA",
+    "name": "Campaña de Depilacion Laser",
+    "source": "Facebook",
+    "medium": "cpc",
+    "prefilledText": "Hola me gustaria agendar una cita para depilacion de manos",
+    "clicks": 0,
+    "leadsCount": 1,
+    "createdAt": "2026-06-18T21:20:34.097368+00:00",
+    "updatedAt": "2026-06-18T21:37:21.060Z"
+  }
+}

@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-a861ac27-cdbd-405f-98ff-1c4719c6c352@thessa
+DTSTAMP:20260624T200435Z
+DTSTART:20260630T200000Z
+DTEND:20260630T210000Z
+SUMMARY:Cita Thessa - Masaje con Piedras Calientes
+DESCRIPTION:Servicio: Masaje con Piedras Calientes\nNombre: josue tovar\nP
+ ersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing | Thessa</title>
+    <link href="/tailwind.css" rel="stylesheet">
+    <link href="/global.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 m-0 p-0 antialiased h-screen flex flex-col overflow-hidden">
+    
+    <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <!-- Top Navbar to match Dashboard -->
+        <header id="appNavbar" class="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-emerald-800 to-emerald-600 text-white shadow-md z-10 shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="mainMenuBtn" class="flex flex-col gap-1.5 p-2 rounded-lg hover:bg-white/10 transition cursor-pointer group" type="button" aria-label="Menu">
+                    <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+                    <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+                    <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+                </button>
+
+                <a href="/dashboard/" class="brand flex items-center transition shrink-0 hover:opacity-80">
+                    <img src="/mediaFiles/Logo_Thessa.png" alt="Thessa" class="h-11 w-auto object-contain">
+                </a>
+            </div>
+            
+            <div>
+                <button class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col min-w-0 relative overflow-y-auto">
+            <div class="p-6 lg:p-8">
+                <div class="max-w-4xl mx-auto flex flex-col gap-6 pb-12">
+                    
+                    <div class="text-center mb-2">
+                        <h1 class="text-2xl font-bold text-slate-800">Campaña de Marketing</h1>
+                        <p class="text-slate-500 mt-1 text-sm">Configura tu audiencia y envía tu mensaje en dos pasos.</p>
+                    </div>
+                
+                    <!-- Wizard Progress -->
+                    <div class="flex items-center justify-between relative mb-6 max-w-2xl mx-auto w-full">
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 rounded-full z-0"></div>
+                        <div id="progressFill" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 rounded-full z-0 transition-all duration-300 progress-inactive"></div>
+                        
+                        <div class="relative z-10 flex flex-col items-center gap-2">
+                            <div id="stepIndicator1" class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors step-active">1</div>
+                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Audiencia</span>
+                        </div>
+                        
+                        <div class="relative z-10 flex flex-col items-center gap-2">
+                            <div id="stepIndicator2" class="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors step-inactive">2</div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" id="stepLabel2">Campaña</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Audience Selection -->
+                    <section id="step1" class="flex flex-col gap-6">
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 lg:p-8 shadow-sm">
+                            <h2 class="text-lg font-bold text-slate-800 mb-6">Paso 1: Segmentar Audiencia</h2>
+                            
+                            <div class="space-y-4 mb-8">
+                                <label class="block relative">
+                                    <input type="radio" name="audienceSegment" value="probable" class="segment-radio" checked>
+                                    <div class="segment-card flex items-start gap-3">
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                                <h3 class="font-bold text-slate-800 text-sm">Citas Probables</h3>
+                                            </div>
+                                            <p class="text-xs text-slate-500">Usuarios que escribieron pero no confirmaron cita.</p>
+                                        </div>
+                                        <div class="segment-check">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="block relative">
+                                    <input type="radio" name="audienceSegment" value="recent_confirmed" class="segment-radio">
+                                    <div class="segment-card flex items-start gap-3">
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                <h3 class="font-bold text-slate-800 text-sm">Recientes</h3>
+                                            </div>
+                                            <p class="text-xs text-slate-500">Usuarios con cita confirmada recientemente.</p>
+                                        </div>
+                                        <div class="segment-check">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="block relative">
+                                    <input type="radio" name="audienceSegment" value="all" class="segment-radio">
+                                    <div class="segment-card flex items-start gap-3">
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                                <h3 class="font-bold text-slate-800 text-sm">Todos los Leads</h3>
+                                            </div>
+                                            <p class="text-xs text-slate-500">Toda la base de contactos de WhatsApp.</p>
+                                        </div>
+                                        <div class="segment-check">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Periodo (Días Atrás)</label>
+                                    <input type="number" id="daysAgo" value="2" min="1" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-emerald-500 transition-colors">
+                                    <p class="text-[11px] text-slate-400 mt-1">Busca clientes que interactuaron en este rango de días.</p>
+                                </div>
+                                
+                                <div class="relative" id="servicesDropdownContainer">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Servicios Incluidos</label>
+                                    
+                                    <div id="servicesDropdownBtn" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm cursor-pointer flex items-center justify-between">
+                                        <span id="servicesDropdownText" class="truncate text-slate-700">Todos los servicios</span>
+                                        <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+
+                                    <div id="servicesMenu" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                                        <div class="p-2 border-b border-slate-100">
+                                            <input type="text" id="serviceSearch" placeholder="Buscar..." class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+                                        </div>
+                                        <div class="p-1">
+                                            <label class="flex items-center gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                                <input type="checkbox" id="selectAllServices" class="rounded text-emerald-600 border-slate-300">
+                                                <span class="text-sm font-medium text-slate-700">Todos los servicios</span>
+                                            </label>
+                                        </div>
+                                        <div id="servicesList" class="services-menu-container p-1 border-t border-slate-100 flex flex-col">
+                                            <div class="p-3 text-center text-xs text-slate-500">Cargando...</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row items-center gap-4">
+                            <button id="calculateAudienceBtn" type="button" class="btn btn-secondary w-full md:w-auto">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                Calcular Audiencia
+                            </button>
+
+                            <div id="audienceResult" class="hidden flex-1 w-full flex items-center justify-between px-4 py-3 rounded-lg bg-emerald-50 border border-emerald-100">
+                                <div>
+                                    <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Audiencia Calculada</p>
+                                    <p class="text-xl font-bold text-emerald-900"><span id="audienceCount">0</span> <span class="text-sm font-medium">usuarios</span></p>
+                                </div>
+                                <div class="text-right hidden sm:block">
+                                    <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider mb-1">Muestra</p>
+                                    <div id="audienceSample" class="text-xs font-mono text-emerald-800 bg-emerald-100/50 px-2 py-0.5 rounded inline-block max-w-[200px] truncate"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex justify-end">
+                            <button id="nextStepBtn" type="button" disabled class="btn btn-disabled w-full sm:w-auto">
+                                Siguiente
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Step 2: Campaign Configuration -->
+                    <section id="step2" class="hidden flex flex-col gap-6">
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 lg:p-8 shadow-sm">
+                            <h2 class="text-lg font-bold text-slate-800 mb-6">Paso 2: Redactar Mensaje</h2>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-2">Mensaje</label>
+                                    <textarea id="messageInput" rows="5" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm outline-none focus:border-emerald-500 transition-colors resize-none" placeholder="Escribe tu campaña aquí..."></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-2">Archivo adjunto (Opcional)</label>
+                                    <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-slate-200 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 transition-colors">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg class="w-6 h-6 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                            <p class="text-xs text-slate-500"><span class="font-semibold text-emerald-600">Haz clic para subir</span></p>
+                                        </div>
+                                        <input id="fileInput" type="file" class="hidden" accept="image/*,video/*" />
+                                    </label>
+                                    <div id="fileName" class="text-xs text-emerald-600 mt-2 font-medium hidden flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span></span>
+                                        <button type="button" id="removeFileBtn" class="ml-2 text-slate-400 hover:text-red-500">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+                            <button id="prevStepBtn" type="button" class="btn btn-secondary w-full sm:w-auto">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                Atrás
+                            </button>
+
+                            <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                                <input type="datetime-local" id="scheduleInput" class="w-full sm:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500">
+                                
+                                <button id="sendCampaignBtn" type="button" class="btn btn-primary w-full sm:w-auto">
+                                    <span>Lanzar Campaña</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+            
+        </main>
+    </div>
+    
+    <!-- Reusable components -->
+    <side-drawer active="marketing"></side-drawer>
+    <toast-notification></toast-notification>
+
+    <!-- Component scripts -->
+    <script src="/components/SideDrawer.js"></script>
+    <script src="/components/ToastNotification.js"></script>
+
+    <script src="./app.js"></script>
+</body>
+</html>

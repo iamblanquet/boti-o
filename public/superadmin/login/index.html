@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acceso de Control - Super Admin</title>
+  
+  <link rel="stylesheet" href="/tailwind.css">
+  <link rel="stylesheet" href="/global.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="m-0 p-0 overflow-hidden w-screen h-screen flex items-center justify-center font-sans bg-slate-950 select-none">
+
+  <!-- Glowing background elements -->
+  <div class="absolute w-[500px] h-[500px] rounded-full bg-indigo-600/10 blur-[130px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none"></div>
+  <div class="absolute inset-0 cyber-grid z-0 pointer-events-none"></div>
+
+  <!-- Login Card -->
+  <main class="login-card z-10 w-full max-w-sm p-10 rounded-2xl flex flex-col text-white opacity-0 transform translate-y-4 transition-all duration-700">
+    <header class="text-center mb-8">
+      <div class="lock-icon-container">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+        </svg>
+      </div>
+      <h1 class="m-0 text-xl font-bold tracking-wide">Acceso</h1>
+    </header>
+
+    <!-- Error Alert Message -->
+    <div id="errorAlert" class="error-alert hidden mb-6 p-3.5 rounded-xl text-xs flex items-center gap-2.5 bg-red-950/30 border border-red-500/30 text-red-200">
+      <svg class="w-5 h-5 shrink-0 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+      </svg>
+      <span id="errorMessage">Error de acceso</span>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="flex flex-col gap-6">
+      <div class="form-group flex flex-col gap-2">
+        <label for="username" class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Usuario de Sistema</label>
+        <input type="text" id="username" name="username" autocomplete="username" required placeholder="Ingresa tu usuario" 
+               class="input-field py-3 px-3.5 rounded-xl border border-slate-800 bg-slate-900/60 outline-none text-white text-sm transition-all focus:border-indigo-500/50 focus:bg-slate-900 placeholder-slate-600">
+      </div>
+
+      <div class="form-group flex flex-col gap-2">
+        <label for="password" class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Contraseña</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="Ingresa tu contraseña" 
+               class="input-field py-3 px-3.5 rounded-xl border border-slate-800 bg-slate-900/60 outline-none text-white text-sm transition-all focus:border-indigo-500/50 focus:bg-slate-900 placeholder-slate-600">
+      </div>
+
+      <button type="submit" id="submitBtn" class="submit-btn py-3 px-6 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer mt-2">
+        <span id="btnText">Ingresar al Sistema</span>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+        </svg>
+      </button>
+    </form>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

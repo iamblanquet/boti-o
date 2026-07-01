@@ -1,4 +1,4 @@
-const { BUSINESS_HOURS, TIMEZONE, normalizeText } = require('./appointmentsConfig');
+const { BUSINESS_HOURS, TIMEZONE, normalizeText } = require('./configCitas');
 
 const pad = (value) => String(value).padStart(2, '0');
 
@@ -31,7 +31,7 @@ const parseDateText = (text, now = new Date()) => {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     if(value.includes('hoy')) return formatDate(today);
-    if(value.includes('manana')) {
+    if(value.includes('manana') || /\bma.?ana\b/.test(value)) {
         const date = new Date(today);
         date.setDate(date.getDate() + 1);
         return formatDate(date);
@@ -48,8 +48,12 @@ const parseDateText = (text, now = new Date()) => {
 
     const slashMatch = value.match(/\b(\d{1,2})[/-](\d{1,2})(?:[/-](20\d{2}))?\b/);
     if(slashMatch) {
-        const year = slashMatch[3] || now.getFullYear();
-        return `${year}-${pad(slashMatch[2])}-${pad(slashMatch[1])}`;
+        let year = Number(slashMatch[3] || now.getFullYear());
+        const month = Number(slashMatch[2]);
+        const day = Number(slashMatch[1]);
+        const parsedDate = new Date(year, month - 1, day);
+        if(!slashMatch[3] && parsedDate < today) year += 1;
+        return `${year}-${pad(month)}-${pad(day)}`;
     }
 
     return null;

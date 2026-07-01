@@ -1,0 +1,591 @@
+
+> wsp-bot@1.0.0 start
+> node index.js
+
+◇ injected env (26) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+MySQL no configurado. El bot funcionara sin guardar clientes.
+Servidor listo en el puerto 3000
+Recordatorios de citas activos cada 60000ms
+Seguimiento de servicios activo cada 60000ms
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBGQTIxMEI4QkE2MDczQUFEMTQA","timestamp":"1781805305","text":{"body":"Maurico Blanquet"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'text',
+  messageText: 'Maurico Blanquet'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjJCOTk2QTdGRkU1MEMwQ0YxQQA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjVGNzBCRUY3MzlGRjI4REQyMwA=","status":"delivered","timestamp":"1781805294","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjJCOTk2QTdGRkU1MEMwQ0YxQQA=","status":"sent","timestamp":"1781805311","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjJCOTk2QTdGRkU1MEMwQ0YxQQA=","status":"delivered","timestamp":"1781805311","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjJCOTk2QTdGRkU1MEMwQ0YxQQA=","status":"delivered","timestamp":"1781805311","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjJCOTk2QTdGRkU1MEMwQ0YxQQA=","status":"read","timestamp":"1781805312","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjVGNzBCRUY3MzlGRjI4REQyMwA=","status":"read","timestamp":"1781805294","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjJCOTk2QTdGRkU1MEMwQ0YxQQA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBFMDgzNzBFMjhBMzM0MjJGNzAA","timestamp":"1781805314","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_confirm_1b0d2058-ff73-41ca-bbe2-c984d5f32a9e","title":"Confirmo"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_confirm_1b0d2058-ff73-41ca-bbe2-c984d5f32a9e'
+}
+activeTool null
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjVGNzBCRUY3MzlGRjI4REQyMwA=","status":"delivered","timestamp":"1781805294","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjg3RTZCQzAxNzQ0MTQwODgyRQA='
+    }
+  ]
+}
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjcwMUIwQjA3REZGRDEyM0Y3NAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjg3RTZCQzAxNzQ0MTQwODgyRQA=","status":"sent","timestamp":"1781805319","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZBOUQ5NTA1MTEzREMxQ0I5MAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjcwMUIwQjA3REZGRDEyM0Y3NAA=","status":"sent","timestamp":"1781805320","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjg3RTZCQzAxNzQ0MTQwODgyRQA=","status":"delivered","timestamp":"1781805320","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjg3RTZCQzAxNzQ0MTQwODgyRQA=","status":"read","timestamp":"1781805320","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjg3RTZCQzAxNzQ0MTQwODgyRQA=","status":"delivered","timestamp":"1781805320","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjcwMUIwQjA3REZGRDEyM0Y3NAA=","status":"delivered","timestamp":"1781805321","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZBOUQ5NTA1MTEzREMxQ0I5MAA=","status":"sent","timestamp":"1781805322","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjcwMUIwQjA3REZGRDEyM0Y3NAA=","status":"delivered","timestamp":"1781805321","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjcwMUIwQjA3REZGRDEyM0Y3NAA=","status":"read","timestamp":"1781805321","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZBOUQ5NTA1MTEzREMxQ0I5MAA=","status":"delivered","timestamp":"1781805322","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZBOUQ5NTA1MTEzREMxQ0I5MAA=","status":"delivered","timestamp":"1781805322","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZBOUQ5NTA1MTEzREMxQ0I5MAA=","status":"read","timestamp":"1781805323","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBFMzhFQzIzOUUyMUY3NDcxN0EA","timestamp":"1781806238","text":{"body":"hola quiero agendar para seda piel"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'text',
+  messageText: 'hola quiero agendar para seda piel'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU2QTI2NEVFOTMzMkRCM0U0RgA='
+    }
+  ]
+}
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkEwMERDRDhBOEVBODY3Nzc3MQA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU2QTI2NEVFOTMzMkRCM0U0RgA=","status":"sent","timestamp":"1781806246","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkEwMERDRDhBOEVBODY3Nzc3MQA=","status":"sent","timestamp":"1781806247","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU2QTI2NEVFOTMzMkRCM0U0RgA=","status":"delivered","timestamp":"1781806246","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU2QTI2NEVFOTMzMkRCM0U0RgA=","status":"read","timestamp":"1781806246","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU2QTI2NEVFOTMzMkRCM0U0RgA=","status":"delivered","timestamp":"1781806246","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkEwMERDRDhBOEVBODY3Nzc3MQA=","status":"delivered","timestamp":"1781806247","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkEwMERDRDhBOEVBODY3Nzc3MQA=","status":"read","timestamp":"1781806248","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkEwMERDRDhBOEVBODY3Nzc3MQA=","status":"delivered","timestamp":"1781806247","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU2QTI2NEVFOTMzMkRCM0U0RgA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBEQzkyRjNFRTY0MjUxMkQ5RDIA","timestamp":"1781806249","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_date_2026-06-18","title":"Jue 18 de jun"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_date_2026-06-18'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkREN0I5MkZDMUYxQTg2NzlFNgA='
+    }
+  ]
+}
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM4NjEwMTkzOUVFMjE0MkE4MAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkREN0I5MkZDMUYxQTg2NzlFNgA=","status":"sent","timestamp":"1781806255","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM4NjEwMTkzOUVFMjE0MkE4MAA=","status":"sent","timestamp":"1781806256","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkREN0I5MkZDMUYxQTg2NzlFNgA=","status":"delivered","timestamp":"1781806255","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkREN0I5MkZDMUYxQTg2NzlFNgA=","status":"delivered","timestamp":"1781806255","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkREN0I5MkZDMUYxQTg2NzlFNgA=","status":"read","timestamp":"1781806255","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM4NjEwMTkzOUVFMjE0MkE4MAA=","status":"delivered","timestamp":"1781806256","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM4NjEwMTkzOUVFMjE0MkE4MAA=","status":"delivered","timestamp":"1781806256","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM4NjEwMTkzOUVFMjE0MkE4MAA=","status":"read","timestamp":"1781806256","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM4NjEwMTkzOUVFMjE0MkE4MAA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBERkM5ODREOTc4RDQ0MEREMjEA","timestamp":"1781806260","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_time_17-00","title":"17:00"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_time_17-00'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjNDODFFRTcyODREMUFCRTJGOAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjNDODFFRTcyODREMUFCRTJGOAA=","status":"sent","timestamp":"1781806265","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjNDODFFRTcyODREMUFCRTJGOAA=","status":"delivered","timestamp":"1781806265","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjNDODFFRTcyODREMUFCRTJGOAA=","status":"delivered","timestamp":"1781806265","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjNDODFFRTcyODREMUFCRTJGOAA=","status":"read","timestamp":"1781806265","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjNDODFFRTcyODREMUFCRTJGOAA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBFNEFENTIzRTFFRjU5ODI4NjIA","timestamp":"1781806266","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_people_1","title":"1 persona"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_people_1'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFCRkE0N0JCQUUwRDk5QjZFMAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFCRkE0N0JCQUUwRDk5QjZFMAA=","status":"sent","timestamp":"1781806270","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFCRkE0N0JCQUUwRDk5QjZFMAA=","status":"delivered","timestamp":"1781806270","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFCRkE0N0JCQUUwRDk5QjZFMAA=","status":"read","timestamp":"1781806270","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFCRkE0N0JCQUUwRDk5QjZFMAA=","status":"delivered","timestamp":"1781806270","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjAzMEJGRTM3NERDNjBEODA1QjcA","timestamp":"1781806278","text":{"body":"Mauricio Blanquet"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'text',
+  messageText: 'Mauricio Blanquet'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjhGOEQ2OTZCRTE2NjcxQ0EwOAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjhGOEQ2OTZCRTE2NjcxQ0EwOAA=","status":"sent","timestamp":"1781806284","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjhGOEQ2OTZCRTE2NjcxQ0EwOAA=","status":"delivered","timestamp":"1781806284","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjhGOEQ2OTZCRTE2NjcxQ0EwOAA=","status":"delivered","timestamp":"1781806284","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjhGOEQ2OTZCRTE2NjcxQ0EwOAA=","status":"read","timestamp":"1781806285","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjhGOEQ2OTZCRTE2NjcxQ0EwOAA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBCN0REODg1RkNBRDg4N0YxMjcA","timestamp":"1781806286","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_confirm_f5ddeec7-1eeb-439a-bf29-f5f2931ce86f","title":"Confirmo"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_confirm_f5ddeec7-1eeb-439a-bf29-f5f2931ce86f'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjlFQjY3QUZDMzhFQjhFMTU1NwA='
+    }
+  ]
+}
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNGQzFCRDlGQzJFN0VDRDI1MgA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjlFQjY3QUZDMzhFQjhFMTU1NwA=","status":"sent","timestamp":"1781806292","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE4NTQ3QTkwNUFGNDBGMDFCRAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjlFQjY3QUZDMzhFQjhFMTU1NwA=","status":"read","timestamp":"1781806293","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjlFQjY3QUZDMzhFQjhFMTU1NwA=","status":"delivered","timestamp":"1781806292","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjlFQjY3QUZDMzhFQjhFMTU1NwA=","status":"delivered","timestamp":"1781806292","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNGQzFCRDlGQzJFN0VDRDI1MgA=","status":"delivered","timestamp":"1781806293","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNGQzFCRDlGQzJFN0VDRDI1MgA=","status":"sent","timestamp":"1781806293","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE4NTQ3QTkwNUFGNDBGMDFCRAA=","status":"sent","timestamp":"1781806295","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNGQzFCRDlGQzJFN0VDRDI1MgA=","status":"read","timestamp":"1781806294","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE4NTQ3QTkwNUFGNDBGMDFCRAA=","status":"delivered","timestamp":"1781806295","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE4NTQ3QTkwNUFGNDBGMDFCRAA=","status":"delivered","timestamp":"1781806295","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE4NTQ3QTkwNUFGNDBGMDFCRAA=","status":"read","timestamp":"1781806295","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBCQzRBQTc5QzE0M0RFMTY2NkUA","timestamp":"1781806549","text":{"body":"Hola me gustaria agendar una depilacion de manos #VIVAF1"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'text',
+  messageText: 'Hola me gustaria agendar una depilacion de manos #VIVAF1'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjgxMDFENEMwMTY1RDU1RURGOAA='
+    }
+  ]
+}
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQ1Qjg4M0EyMzVBQUJEQzY4MQA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjgxMDFENEMwMTY1RDU1RURGOAA=","status":"sent","timestamp":"1781806558","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQ1Qjg4M0EyMzVBQUJEQzY4MQA=","status":"sent","timestamp":"1781806559","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjgxMDFENEMwMTY1RDU1RURGOAA=","status":"read","timestamp":"1781806558","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjgxMDFENEMwMTY1RDU1RURGOAA=","status":"delivered","timestamp":"1781806558","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjgxMDFENEMwMTY1RDU1RURGOAA=","status":"delivered","timestamp":"1781806558","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQ1Qjg4M0EyMzVBQUJEQzY4MQA=","status":"delivered","timestamp":"1781806559","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQ1Qjg4M0EyMzVBQUJEQzY4MQA=","status":"delivered","timestamp":"1781806559","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQ1Qjg4M0EyMzVBQUJEQzY4MQA=","status":"read","timestamp":"1781806559","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjgxMDFENEMwMTY1RDU1RURGOAA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBERjA1RjJBRjYxNTNCMDZFNUUA","timestamp":"1781806572","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_date_2026-06-18","title":"Jue 18 de jun"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_date_2026-06-18'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkJDMjQ1QzY2Q0Q0MTk0NUY0MQA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkJDMjQ1QzY2Q0Q0MTk0NUY0MQA=","status":"sent","timestamp":"1781806578","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkJDMjQ1QzY2Q0Q0MTk0NUY0MQA=","status":"delivered","timestamp":"1781806578","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkJDMjQ1QzY2Q0Q0MTk0NUY0MQA=","status":"delivered","timestamp":"1781806578","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkJDMjQ1QzY2Q0Q0MTk0NUY0MQA=","status":"read","timestamp":"1781806578","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkJDMjQ1QzY2Q0Q0MTk0NUY0MQA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjBENERGOEU0ODc0NDRDQUNENUYA","timestamp":"1781806582","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_time_13-00","title":"13:00"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_time_13-00'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkVBRTYwQ0YwQ0I3QzVDOUUwMQA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkVBRTYwQ0YwQ0I3QzVDOUUwMQA=","status":"sent","timestamp":"1781806587","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkVBRTYwQ0YwQ0I3QzVDOUUwMQA=","status":"delivered","timestamp":"1781806587","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkVBRTYwQ0YwQ0I3QzVDOUUwMQA=","status":"delivered","timestamp":"1781806587","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkVBRTYwQ0YwQ0I3QzVDOUUwMQA=","status":"read","timestamp":"1781806588","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkVBRTYwQ0YwQ0I3QzVDOUUwMQA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjA4QkZGMzY0NDZFQ0UzRTFGOEQA","timestamp":"1781806590","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_people_1","title":"1 persona"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_people_1'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM3RDFDNUMzNENBMjZEMzQwQwA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM3RDFDNUMzNENBMjZEMzQwQwA=","status":"sent","timestamp":"1781806594","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM3RDFDNUMzNENBMjZEMzQwQwA=","status":"delivered","timestamp":"1781806594","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM3RDFDNUMzNENBMjZEMzQwQwA=","status":"delivered","timestamp":"1781806594","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkM3RDFDNUMzNENBMjZEMzQwQwA=","status":"read","timestamp":"1781806595","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjA0QTM5MzNDMjdGQTYzODE1MUEA","timestamp":"1781806611","text":{"body":"Mauricio Blanquet"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'text',
+  messageText: 'Mauricio Blanquet'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZEQkU5QkEzQzRFMDYxRTc5MAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZEQkU5QkEzQzRFMDYxRTc5MAA=","status":"sent","timestamp":"1781806617","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZEQkU5QkEzQzRFMDYxRTc5MAA=","status":"delivered","timestamp":"1781806618","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZEQkU5QkEzQzRFMDYxRTc5MAA=","status":"delivered","timestamp":"1781806618","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNERjI0M0QwN0Y0QUQ1QzE1MwA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNERjI0M0QwN0Y0QUQ1QzE1MwA=","status":"sent","timestamp":"1781806624","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNERjI0M0QwN0Y0QUQ1QzE1MwA=","status":"delivered","timestamp":"1781806624","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNERjI0M0QwN0Y0QUQ1QzE1MwA=","status":"delivered","timestamp":"1781806624","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkNERjI0M0QwN0Y0QUQ1QzE1MwA=","status":"read","timestamp":"1781806750","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZEQkU5QkEzQzRFMDYxRTc5MAA=","status":"read","timestamp":"1781806750","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjZEQkU5QkEzQzRFMDYxRTc5MAA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjAxRkFDOUJFRTkwMEU5MTM1Q0YA","timestamp":"1781806764","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_cancel_67012be8-e17c-4c4a-9c7e-5d55a7a93497","title":"Cancelar"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_cancel_67012be8-e17c-4c4a-9c7e-5d55a7a93497'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjFFNDAyNDM3RkE2RUEzODk4NgA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjFFNDAyNDM3RkE2RUEzODk4NgA=","status":"sent","timestamp":"1781806769","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjFFNDAyNDM3RkE2RUEzODk4NgA=","status":"delivered","timestamp":"1781806769","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjFFNDAyNDM3RkE2RUEzODk4NgA=","status":"read","timestamp":"1781806780","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjAyNzEyQjNCMzZBNzk4MzAwREYA","timestamp":"1781806782","text":{"body":"Hola me gustaria informacion acerca de sus servicios de Depilacion #SENNA"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'text',
+  messageText: 'Hola me gustaria informacion acerca de sus servicios de Depilacion #SENNA'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkU0ODUwQzBCNjdFMEQ4RkY4QwA='
+    }
+  ]
+}
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFMzZCQTdDMTdDRkUyMTY1NwA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkU0ODUwQzBCNjdFMEQ4RkY4QwA=","status":"sent","timestamp":"1781806787","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE1NTY2N0EwNTQyQkU1RjBCNAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkU0ODUwQzBCNjdFMEQ4RkY4QwA=","status":"delivered","timestamp":"1781806788","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkU0ODUwQzBCNjdFMEQ4RkY4QwA=","status":"delivered","timestamp":"1781806788","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFMzZCQTdDMTdDRkUyMTY1NwA=","status":"sent","timestamp":"1781806789","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkU0ODUwQzBCNjdFMEQ4RkY4QwA=","status":"read","timestamp":"1781806788","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE1NTY2N0EwNTQyQkU1RjBCNAA=","status":"sent","timestamp":"1781806790","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFMzZCQTdDMTdDRkUyMTY1NwA=","status":"delivered","timestamp":"1781806789","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFMzZCQTdDMTdDRkUyMTY1NwA=","status":"delivered","timestamp":"1781806789","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFMzZCQTdDMTdDRkUyMTY1NwA=","status":"read","timestamp":"1781806789","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE1NTY2N0EwNTQyQkU1RjBCNAA=","status":"delivered","timestamp":"1781806790","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE1NTY2N0EwNTQyQkU1RjBCNAA=","status":"delivered","timestamp":"1781806790","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjE1NTY2N0EwNTQyQkU1RjBCNAA=","status":"read","timestamp":"1781806790","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFMzZCQTdDMTdDRkUyMTY1NwA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjA3MzRGREQwRDU3Mzc3MzI5RUIA","timestamp":"1781806804","type":"interactive","interactive":{"type":"list_reply","list_reply":{"id":"service_depilacion-laser-linea-de-abdomen","title":"Linea de Abdomen","description":"Tiempo: 25 min | Precio: $280"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'service_depilacion-laser-linea-de-abdomen'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFODUwNEQxMEJGOENCNDEwRgA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFODUwNEQxMEJGOENCNDEwRgA=","status":"sent","timestamp":"1781806808","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFODUwNEQxMEJGOENCNDEwRgA=","status":"delivered","timestamp":"1781806808","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFODUwNEQxMEJGOENCNDEwRgA=","status":"delivered","timestamp":"1781806808","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkFFODUwNEQxMEJGOENCNDEwRgA=","status":"read","timestamp":"1781806808","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjVGNzBCRUY3MzlGRjI4REQyMwA=","status":"sent","timestamp":"1781805293","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811398836', wa_id: '5219811398836' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTM5ODgzNhUCABEYEjMwMDM0OTRENjdDMzg0MUE5MAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811398836","user_id":"MX.4284184015176738"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTM5ODgzNhUCABEYEjMwMDM0OTRENjdDMzg0MUE5MAA=","status":"delivered","timestamp":"1781810345","recipient_id":"5219811398836","recipient_user_id":"MX.4284184015176738","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811398836","user_id":"MX.4284184015176738"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTM5ODgzNhUCABEYEjMwMDM0OTRENjdDMzg0MUE5MAA=","status":"sent","timestamp":"1781810345","recipient_id":"5219811398836","recipient_user_id":"MX.4284184015176738","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811398836","user_id":"MX.4284184015176738"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTM5ODgzNhUCABEYEjMwMDM0OTRENjdDMzg0MUE5MAA=","status":"delivered","timestamp":"1781810345","recipient_id":"5219811398836","recipient_user_id":"MX.4284184015176738","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU3MUQxRDZCNzY2MUJFOEU1NQA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU3MUQxRDZCNzY2MUJFOEU1NQA=","status":"sent","timestamp":"1781812805","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU3MUQxRDZCNzY2MUJFOEU1NQA=","status":"delivered","timestamp":"1781812806","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU3MUQxRDZCNzY2MUJFOEU1NQA=","status":"delivered","timestamp":"1781812805","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU3MUQxRDZCNzY2MUJFOEU1NQA=","status":"read","timestamp":"1781812872","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYFjNFQjA4ODU4NUJGMjNBOTY5NUQ3M0MA","timestamp":"1781813108","text":{"body":"si gracias ya se me habia olvidado"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'text',
+  messageText: 'si gracias ya se me habia olvidado'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU4MzRDQzQzMzY1RjkwNUNGQgA='
+    }
+  ]
+}
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQxQkYwMDI3QzU4OUJENzExNgA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU4MzRDQzQzMzY1RjkwNUNGQgA=","status":"sent","timestamp":"1781813120","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU4MzRDQzQzMzY1RjkwNUNGQgA=","status":"delivered","timestamp":"1781813121","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU4MzRDQzQzMzY1RjkwNUNGQgA=","status":"delivered","timestamp":"1781813121","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQxQkYwMDI3QzU4OUJENzExNgA=","status":"sent","timestamp":"1781813121","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjU4MzRDQzQzMzY1RjkwNUNGQgA=","status":"read","timestamp":"1781813121","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQxQkYwMDI3QzU4OUJENzExNgA=","status":"delivered","timestamp":"1781813122","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQxQkYwMDI3QzU4OUJENzExNgA=","status":"delivered","timestamp":"1781813122","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjQxQkYwMDI3QzU4OUJENzExNgA=","status":"read","timestamp":"1781813122","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYIEFDNDVCQUQ2Mjg5MDMwMEIwQkI4MDQ4QkY0Q0ZBQUVCAA==","timestamp":"1781816139","text":{"body":"Cancelar"},"type":"text"}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'text',
+  messageText: 'Cancelar'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjA0MzAxMUU1NDM2MjVCNjU0NAA='
+    }
+  ]
+}
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjA0MzAxMUU1NDM2MjVCNjU0NAA=","status":"sent","timestamp":"1781816144","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"statuses":[{"id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjA0MzAxMUU1NDM2MjVCNjU0NAA=","status":"read","timestamp":"1781816144","recipient_id":"5219811695579","recipient_user_id":"MX.4273147889613684","pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]
+body [{"id":"1564567048672340","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"5219821060551","phone_number_id":"1156248197578166"},"contacts":[{"profile":{"name":"Mau"},"wa_id":"5219811695579","user_id":"MX.4273147889613684"}],"messages":[{"context":{"from":"5219821060551","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEjA0MzAxMUU1NDM2MjVCNjU0NAA="},"from":"5219811695579","from_user_id":"MX.4273147889613684","id":"wamid.HBgNNTIxOTgxMTY5NTU3ORUCABIYIEFDNTQ3NjFBM0VCQzA0QTY5N0Y2REY3N0QyMUIyQUFBAA==","timestamp":"1781816146","type":"interactive","interactive":{"type":"button_reply","button_reply":{"id":"appt_cancel_confirm","title":"Si, cancelar"}}}]},"field":"messages"}]}]
+messageInfo {
+  from: '5219811695579',
+  waId: '5219811695579',
+  to: '529811695579',
+  type: 'interactive',
+  messageText: 'appt_cancel_confirm'
+}
+activeTool null
+result {
+  messaging_product: 'whatsapp',
+  contacts: [ { input: '529811695579', wa_id: '5219811695579' } ],
+  messages: [
+    {
+      id: 'wamid.HBgNNTIxOTgxMTY5NTU3ORUCABEYEkZGMzNDNTg2QzQ5OUIyOUM2QQA='
+    }
+  ]
+}

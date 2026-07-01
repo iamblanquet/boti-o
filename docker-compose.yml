@@ -1,0 +1,9 @@
+services:
+  thessa-bot:
+    build: .
+    container_name: thessa-whatsapp-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"

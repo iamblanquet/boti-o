@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-9b514fae-8439-4892-9856-dc8f17a6ad3a@thessa
+DTSTAMP:20260615T201403Z
+DTSTART:20260615T210000Z
+DTEND:20260615T220000Z
+SUMMARY:Cita Thessa - Depilación Láser - Bozo/Bigote
+DESCRIPTION:Servicio: Depilación Láser - Bozo/Bigote\nNombre: Mauricio Bla
+ nquet\nPersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-66ffa493-3ec3-43a2-978b-2e0102f1bcc9@thessa
+DTSTAMP:20260613T171234Z
+DTSTART:20260617T150000Z
+DTEND:20260617T160000Z
+SUMMARY:Cita Thessa - Masaje con Piedras Calientes
+DESCRIPTION:Servicio: Masaje con Piedras Calientes\nNombre: Mauricio Blanq
+ uet\nPersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

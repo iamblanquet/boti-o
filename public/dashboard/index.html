@@ -3,90 +3,463 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Thessa Recepcion</title>
-  <link rel="stylesheet" href="./styles.css">
+  <title>Thessa Recepción</title>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('embed') === 'true') {
+      document.documentElement.classList.add('embedded-mode');
+    }
+    if (urlParams.get('phone')) {
+      document.documentElement.classList.add('chat-loading-state');
+    }
+  </script>
+  <!-- Link to the compiled Tailwind CSS -->
+  <link rel="stylesheet" href="/tailwind.css">
+  <link rel="stylesheet" href="/global.css">
+  <link rel="stylesheet" href="./audioAttachments.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-  <div class="app-shell">
-    <header id="appNavbar" class="app-navbar"></header>
-    <main id="desk" class="desk no-chat">
-      <aside class="inbox">
-      <header class="inbox-header">
-        <h1>Bandeja</h1>
-        <span id="status" class="counter">0</span>
-      </header>
-      <div class="search">
-        <input id="search" type="search" placeholder="Buscar chat">
+<body class="bg-slate-50 text-slate-800 m-0 p-0 antialiased h-screen flex flex-col overflow-hidden">
+  
+  <div class="flex-1 flex flex-col h-full overflow-hidden">
+    <!-- Navbar -->
+    <header id="appNavbar" class="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-emerald-800 to-emerald-600 text-white shadow-md z-10 shrink-0">
+      <div class="flex items-center gap-4">
+        <button id="mainMenuBtn" class="flex flex-col gap-1.5 p-2 rounded-lg hover:bg-white/10 transition cursor-pointer group" type="button" aria-label="Menu">
+          <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+          <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+          <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+        </button>
+        <a href="/dashboard/" class="brand flex items-center transition shrink-0 hover:opacity-80">
+          <img src="/mediaFiles/Logo_Thessa.png" alt="Thessa" class="h-11 w-auto object-contain">
+        </a>
+      <!-- Removed top navbar buttons to be unified in the sidebar assigneeFilter -->
+      <div>
+        <button class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        </button>
       </div>
-      <div class="inbox-filters">
-        <button class="scope-pill active" type="button">Todos</button>
-        <div id="phaseFilter" class="status-filter"></div>
-      </div>
-      <section id="chatList" class="chat-list"></section>
+    </header>
+
+    <!-- Main Desk Grid Layout is defined in global.css -->
+    
+    <main id="desk" class="desk no-chat flex-1 gap-4 p-4 bg-slate-50 overflow-hidden">
+      
+      <!-- Inbox Sidebar -->
+      <aside class="flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <header class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <h1 class="text-lg font-bold text-slate-800">Bandeja</h1>
+          <span id="status" class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded-md min-w-[28px] text-center">0</span>
+        </header>
+        
+        <div class="p-3">
+          <div class="relative">
+            <svg class="w-4 h-4 absolute left-3 top-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input id="search" type="search" placeholder="Buscar chat..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+          </div>
+        </div>
+        
+        <div class="flex flex-col gap-2 px-3 pb-3 border-b border-slate-100">
+          <div id="assigneeFilter" class="flex bg-slate-100 p-1 rounded-lg w-full">
+            <!-- Populated by JS -->
+          </div>
+          <div id="phaseFilter" class="relative w-full">
+            <!-- Phase filter button populated by JS -->
+          </div>
+        </div>
+        
+        <section id="chatList" class="flex-1 overflow-y-auto overflow-x-hidden"></section>
       </aside>
 
-      <section class="workspace">
-      <header class="topbar">
-        <div>
-          <h2 id="chatName">Bandeja de atención</h2>
-          <p id="chatPhone">Conversaciones de WhatsApp en tiempo real</p>
-        </div>
-        <nav id="messageTabs" class="tabs" aria-label="Modo de atencion"></nav>
-      </header>
-
-      <section id="messages" class="messages empty">
-        <p class="empty-message">Seleccione un chat para comenzar a enviar mensajes</p>
-      </section>
-
-      <form id="composer" class="composer">
-        <div class="composer-title">Enviar un mensaje</div>
-        <div class="composer-box">
-          <textarea id="replyText" rows="2" placeholder="Mensaje..." disabled></textarea>
-          <div class="composer-tools" aria-hidden="true">
-            <span>☺</span>
-            <span>⌕</span>
-            <span>/</span>
+      <!-- Workspace Area -->
+      <section class="workspace flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm relative">
+        <header class="workspace-header flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white/50 backdrop-blur-sm z-10">
+          <div>
+            <h2 id="chatName" class="text-lg font-bold text-slate-800">Bandeja de atención</h2>
+            <p id="chatPhone" class="text-sm text-slate-500 mt-0.5">Conversaciones de WhatsApp en tiempo real</p>
           </div>
-          <button id="sendButton" class="send-button" type="submit" disabled>Enviar</button>
+          <div class="flex items-center gap-3">
+            <button id="conversationControlBtn" class="dashboard-action-btn control-take hidden" type="button">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-1.414 1.414M5.636 18.364l-1.414 1.414M12 2v2m0 16v2m10-10h-2M4 12H2m15.364 6.364l-1.414-1.414M6.05 6.05L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z"></path></svg>
+              <span id="conversationControlBtnText">Tomar control</span>
+            </button>
+            <button id="addContactBtn" class="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg text-xs transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer hidden" type="button">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+              <span id="addContactBtnText">Añadir a Contactos</span>
+            </button>
+            <nav id="messageTabs" class="flex bg-slate-100 p-1 rounded-lg" aria-label="Modo de atencion"></nav>
+          </div>
+        </header>
+
+        <!-- Messages Area -->
+        <section id="messages" class="messages flex-1 overflow-y-auto p-6 flex flex-col gap-2.5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-slate-50/50">
+          <!-- .empty state styling is handled in app.js by setting innerHTML, but we can provide a default -->
+          <div class="m-auto text-center flex flex-col items-center justify-center max-w-sm">
+            <div class="w-20 h-20 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4 text-emerald-500 shadow-inner">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            </div>
+            <p class="text-slate-400 text-lg font-medium">Seleccione un chat para comenzar a enviar mensajes</p>
+          </div>
+        </section>
+
+        <!-- Composer -->
+        <form id="composer" class="composer shrink-0 p-4 bg-slate-50 border-t border-slate-200 relative">
+
+
+          <div class="flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 transition-all relative">
+            <!-- Attachment Preview Area -->
+            <div id="attachmentPreview" class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 hidden flex items-center justify-between z-10 shrink-0">
+              <div class="flex items-center gap-2 overflow-hidden mr-4">
+                <span id="attachmentIcon" class="text-emerald-600 shrink-0 flex items-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                </span>
+                <span id="attachmentName" class="text-xs font-semibold text-slate-700 truncate">archivo.pdf</span>
+                <span id="attachmentSize" class="text-[10px] text-slate-400 shrink-0">0 KB</span>
+              </div>
+              <button type="button" id="cancelAttachment" class="text-slate-400 hover:text-red-500 transition p-1 rounded-md hover:bg-slate-200/50 cursor-pointer" aria-label="Eliminar archivo">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+
+            <textarea id="replyText" rows="2" placeholder="Escribe tu mensaje aquí..." class="w-full p-4 resize-none outline-none text-sm bg-transparent" disabled></textarea>
+
+            <div class="flex items-center justify-between px-3 py-2 bg-slate-50 border-t border-slate-100">
+              <div class="flex items-center gap-1 text-slate-400">
+                <input type="file" id="attachmentInput" class="hidden">
+                <button type="button" id="emojiButton" class="p-1.5 hover:bg-slate-200 rounded-md transition tooltip cursor-pointer" aria-label="Insertar emoji"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
+                <button type="button" id="attachmentButton" class="p-1.5 hover:bg-slate-200 rounded-md transition cursor-pointer" aria-label="Adjuntar archivo"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg></button>
+                <button type="button" id="voiceRecordButton" class="audio-record-button p-1.5 hover:bg-slate-200 rounded-md transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed" aria-label="Grabar audio" title="Grabar audio" disabled><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18.75a6 6 0 006-6v-1.5M6 11.25v1.5a6 6 0 006 6m0 0v2.25m-3 0h6M12 15a3 3 0 003-3V5.25a3 3 0 00-6 0V12a3 3 0 003 3z"></path></svg></button>
+                <span id="voiceRecordTimer" class="voice-record-timer hidden" aria-live="polite">
+                  <span class="voice-record-dot"></span>
+                  <span id="voiceRecordTimerText">0:00</span>
+                </span>
+                <button type="button" id="startAppointmentFlowBtn" class="appointment-composer-btn hidden" aria-label="Agendar con servicio" title="Agendar con servicio" disabled>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </button>
+                <button type="button" id="aiReplySuggestionBtn" class="inline-flex items-center gap-1.5 px-2 py-1.5 hover:bg-emerald-50 rounded-md transition cursor-pointer text-emerald-700 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed" aria-label="Generar sugerencia IA" title="Generar sugerencia IA" disabled>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.091-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.091L9 5.25l.813 2.846a4.5 4.5 0 003.091 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.091zM18.25 8.25L18 9.25l-.25-1a2 2 0 00-1.5-1.5l-1-.25 1-.25a2 2 0 001.5-1.5l.25-1 .25 1a2 2 0 001.5 1.5l1 .25-1 .25a2 2 0 00-1.5 1.5z"></path></svg>
+                  <span>Sugerir</span>
+                </button>
+              </div>
+              <button id="sendButton" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-1.5 px-4 rounded-lg text-sm transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm flex items-center gap-2 cursor-pointer" type="submit" disabled>
+                <span>Enviar</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.768 59.768 0 013.27 20.876L5.999 12zm0 0h7.5"></path></svg>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Emoji Picker Popup -->
+        <div id="emojiPicker" class="absolute left-6 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 hidden flex-col overflow-hidden" style="width: 340px; height: 320px; bottom: 85px;">
+          <!-- Label -->
+          <div class="px-4 py-2 bg-white text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+            Emoticonos y personas
+          </div>
+          <!-- Emojis Grid -->
+          <div id="emojiContainer" class="flex-1 overflow-y-auto px-2 pb-2 grid grid-cols-8 gap-0 place-items-center content-start bg-white">
+            <!-- Emojis populated by JS -->
+          </div>
         </div>
-      </form>
       </section>
 
-      <aside class="context">
-      <section class="context-block">
-        <h2>Contexto</h2>
-      </section>
-      <section class="context-block">
-        <h3>Agenda disponible</h3>
-        <div class="slot">
-          <strong>Jue 5:30</strong>
-          <span>Limpieza facial | Cabina 2</span>
-        </div>
-        <div class="slot">
-          <strong>Vie 6:00</strong>
-          <span>Valoracion inicial | Cabina 1</span>
-        </div>
-        <div class="slot">
-          <strong>Sab 12:00</strong>
-          <span>Espacio corto | Confirmar duracion</span>
-        </div>
-      </section>
-      <section class="context-block">
-        <h3>CRM</h3>
-        <dl>
-          <dt>Lead</dt>
-          <dd id="leadValue">Sin lead</dd>
-          <dt>Interes</dt>
-          <dd id="interestValue">Pendiente</dd>
-          <dt>Responsable</dt>
-          <dd>Frontdesk THESSA</dd>
-          <dt>Automatizacion</dt>
-          <dd>Crear oportunidad al confirmar cita</dd>
-        </dl>
-      </section>
+      <!-- Context Sidebar -->
+      <aside class="context-panel flex flex-col bg-white border border-slate-200 rounded-2xl overflow-y-auto shadow-sm">
+        <section class="p-5 border-b border-slate-100 hidden" id="nextAppointmentSection">
+          <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-4">Próxima Cita del Cliente</h3>
+          <div id="nextAppointmentContainer" class="flex flex-col gap-4">
+          </div>
+        </section>
+        <section class="p-5 border-b border-slate-100" aria-labelledby="aiSummaryTitle">
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <div>
+              <h3 id="aiSummaryTitle" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Contexto IA</h3>
+              <p id="aiSummaryStatus" class="text-[11px] text-slate-400 mt-1" aria-live="polite">Sin chat seleccionado</p>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button id="openDetailedContextBtn" type="button" class="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 text-slate-500 hover:text-emerald-700 hover:border-emerald-200 hover:bg-emerald-50 transition disabled:opacity-40 disabled:cursor-not-allowed" aria-label="Generar contexto detallado" disabled>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              </button>
+              <button id="refreshAiSummaryBtn" type="button" class="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 text-slate-500 hover:text-emerald-700 hover:border-emerald-200 hover:bg-emerald-50 transition disabled:opacity-40 disabled:cursor-not-allowed" aria-label="Actualizar resumen IA" disabled>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              </button>
+            </div>
+          </div>
+          <div id="aiSummaryContainer" class="text-sm text-slate-700">
+            <p class="text-xs text-slate-400 italic">Sin resumen disponible</p>
+          </div>
+        </section>
+
+        <details class="context-accordion border-b border-slate-100">
+          <summary class="flex items-center justify-between gap-3 p-5 cursor-pointer select-none list-none">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Citas Anteriores del Cliente</span>
+            <svg class="context-accordion-icon w-4 h-4 text-slate-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </summary>
+          <section class="px-5 pb-5">
+            <div id="clientAppointmentsContainer" class="flex flex-col gap-3">
+               <!-- Citas will be rendered here dynamically -->
+               <div class="text-xs text-slate-400 text-center py-2">Cargando citas...</div>
+            </div>
+          </section>
+        </details>
+        
+        <details class="context-accordion">
+          <summary class="flex items-center justify-between gap-3 p-5 cursor-pointer select-none list-none">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">CRM Details</span>
+            <svg class="context-accordion-icon w-4 h-4 text-slate-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </summary>
+          <section class="px-5 pb-5">
+          <dl class="flex flex-col gap-3 text-sm">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+              <dt class="text-slate-500 font-medium">Lead</dt>
+              <dd id="leadValue" class="font-semibold text-slate-800">Sin lead</dd>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+              <dt class="text-slate-500 font-medium">Interés</dt>
+              <dd id="interestValue" class="font-semibold px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md text-xs">Pendiente</dd>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+              <dt class="text-slate-500 font-medium">Responsable</dt>
+              <dd class="min-w-0 max-w-[190px]">
+                <select
+                  id="clientResponsibleInput"
+                  class="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition"
+                >
+                  <!-- Populated by JS -->
+                </select>
+              </dd>
+            </div>
+            <div class="flex flex-col gap-1.5 mt-2">
+              <dt class="text-slate-500 font-medium">Notas de CRM</dt>
+              <dd id="crmNotesValue" class="text-slate-700 bg-slate-50 p-3 rounded-xl text-xs border border-slate-100 min-h-[60px] whitespace-pre-wrap italic text-slate-400">Sin notas registradas</dd>
+            </div>
+          </dl>
+          </section>
+        </details>
       </aside>
     </main>
+
+    <!-- Contacts Modal Window (replaces offcanvas) -->
+    <div id="contactsOverlay" class="fixed inset-0 z-[9998] hidden bg-slate-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+    <div id="contactsOffcanvas" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[80vh] w-[90%] max-w-4xl bg-white shadow-2xl z-[9999] rounded-2xl flex flex-col hidden opacity-0 scale-95 transition-all duration-300">
+      <!-- Header -->
+      <header class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50 rounded-t-2xl">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800">Directorio de Contactos</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Gestión y CRM de clientes con sus datos y citas confirmadas</p>
+        </div>
+        <button id="closeContactsOffcanvas" class="text-slate-400 hover:text-slate-700 transition p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer" type="button">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </header>
+
+      <!-- Search and Filters -->
+      <div class="p-4 border-b border-slate-100 shrink-0">
+        <div class="relative">
+          <svg class="w-4 h-4 absolute left-3 top-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <input id="searchContacts" type="search" placeholder="Buscar contacto por nombre, teléfono o correo..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="flex-1 overflow-y-auto p-4">
+        <table class="w-full border-collapse text-left">
+          <thead>
+            <tr class="border-b border-slate-100 text-slate-400 text-[9px] font-bold uppercase tracking-wider">
+              <th class="px-6 py-3">Cliente</th>
+              <th class="px-6 py-3">Correo</th>
+              <th class="px-6 py-3">Notas CRM</th>
+              <th class="px-6 py-3 text-center">Citas</th>
+              <th class="px-6 py-3 text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="contactsTableBody" class="text-xs text-slate-700 divide-y divide-slate-100">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+        
+        <div id="noContactsMsg" class="hidden text-center py-12 flex flex-col items-center">
+          <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          </div>
+          <p class="text-slate-500 font-medium text-xs">No se encontraron contactos</p>
+        </div>
+      </div>
+    </div>
   </div>
+  
+  <!-- Appointment Details Modal -->
+  <div id="appointmentModal" class="fixed inset-0 z-[10010] hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform duration-300" id="appointmentModalContent">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <h3 class="font-bold text-slate-800" id="modalAppointmentTitle">Detalles de la Cita</h3>
+        <button id="closeAppointmentModal" class="text-slate-400 hover:text-slate-700 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="p-5 flex flex-col gap-4">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 uppercase tracking-wide font-semibold">Fecha y Hora</p>
+            <p class="text-sm font-medium text-slate-800" id="modalAppointmentDate">Jueves, 12 de Octubre</p>
+            <p class="text-sm text-slate-600" id="modalAppointmentTime">5:30 PM - 6:30 PM</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 uppercase tracking-wide font-semibold">Servicio</p>
+            <p class="text-sm font-medium text-slate-800" id="modalAppointmentService">Limpieza facial profunda</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 uppercase tracking-wide font-semibold">Estado</p>
+            <span id="modalAppointmentStatus" class="inline-block mt-1 px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-100 text-slate-700">Confirmada</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Edit Modal -->
+  <div id="clientEditModal" class="fixed inset-0 z-[10000] hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[calc(100vh-2rem)] overflow-y-auto transform scale-95 transition-transform duration-300" id="clientEditModalContent">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <h3 class="font-bold text-slate-800">Editar Perfil de Cliente</h3>
+        <button id="closeClientEditModal" class="text-slate-400 hover:text-slate-700 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <form id="clientEditForm" class="p-5 flex flex-col gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1" for="editClientName">Nombre</label>
+          <input type="text" id="editClientName" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1" for="editClientPhone">Teléfono</label>
+          <input type="text" id="editClientPhone" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1" for="editClientEmail">Correo Electrónico</label>
+          <input type="email" id="editClientEmail" placeholder="ejemplo@correo.com" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Cumpleaños</label>
+          <div class="grid grid-cols-2 gap-3">
+            <input type="number" id="editClientBirthdayDay" min="1" max="31" inputmode="numeric" placeholder="Día" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+            <input type="number" id="editClientBirthdayMonth" min="1" max="12" inputmode="numeric" placeholder="Mes" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+          </div>
+          <p class="mt-1 text-[11px] text-slate-400">Formato fijo para promociones: solo día y mes.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1" for="editClientCampaign">Origen / Campaña</label>
+          <select id="editClientCampaign" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+            <option value="">WhatsApp Directo (Orgánico)</option>
+            <!-- Options populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1" for="editClientResponsible">Responsable</label>
+          <select id="editClientResponsible" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1" for="editClientNotes">Notas de CRM</label>
+          <textarea id="editClientNotes" rows="4" placeholder="Preferencias, detalles de contacto, tratamientos habituales..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition resize-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 mt-2">
+          <button type="button" id="cancelClientEdit" class="px-4 py-2 border border-slate-200 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition shadow-sm">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- AI Detailed Context Modal -->
+  <div id="detailedContextModal" class="fixed inset-0 hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" style="z-index: 10020;">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col" id="detailedContextModalContent" style="max-height: calc(100vh - 32px);">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
+        <div>
+          <h3 class="font-bold text-slate-800">Contexto detallado IA</h3>
+          <p class="text-xs text-slate-500 mt-0.5" id="detailedContextSubtitle">Resumen operativo para monitoreo</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="updateDetailedContextBtn" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed" type="button">Actualizar</button>
+          <button id="closeDetailedContextModal" class="text-slate-400 hover:text-slate-700 transition p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer" type="button" aria-label="Cerrar contexto detallado">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+      </div>
+      <div id="detailedContextBody" class="p-5 overflow-y-auto flex flex-col gap-4 text-sm text-slate-700">
+        <p class="text-slate-400 italic">Generando contexto...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Confirmed Appointments Modal -->
+  <div id="clientAppointmentsModal" class="fixed inset-0 z-[10000] hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform scale-95 transition-transform duration-300" id="clientAppointmentsModalContent">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <div>
+          <h3 class="font-bold text-slate-800">Citas Confirmadas</h3>
+          <p class="text-xs text-slate-500 mt-0.5" id="clientAppointmentsModalSub">Historial de citas del cliente</p>
+        </div>
+        <button id="closeClientAppointmentsModal" class="text-slate-400 hover:text-slate-700 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="p-5 max-h-96 overflow-y-auto flex flex-col gap-3" id="clientAppointmentsModalList">
+        <!-- Dynamically populated list -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Assisted Appointment Flow Modal -->
+  <div id="appointmentFlowModal" class="fixed inset-0 z-[10030] hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-xl overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col" id="appointmentFlowModalContent" style="max-height: calc(100vh - 32px);">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-start gap-4 bg-slate-50 shrink-0">
+        <div>
+          <h3 class="font-bold text-slate-800">Agendar con servicio</h3>
+          <p id="appointmentFlowClientLabel" class="text-xs text-slate-500 mt-0.5">Selecciona el servicio ofrecido</p>
+        </div>
+        <button id="closeAppointmentFlowModal" class="text-slate-400 hover:text-slate-700 transition p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer" type="button" aria-label="Cerrar flujo de cita">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="p-5 flex flex-col gap-4 min-h-0">
+        <label class="relative block">
+          <svg class="w-4 h-4 absolute left-3 top-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <input id="appointmentServiceSearch" type="search" placeholder="Buscar servicio" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+        </label>
+        <div id="appointmentServiceList" class="min-h-[220px] max-h-[360px] overflow-y-auto rounded-xl border border-slate-200 divide-y divide-slate-100 bg-white">
+          <div class="p-4 text-sm text-slate-400 text-center">Cargando servicios...</div>
+        </div>
+      </div>
+      <div class="p-5 border-t border-slate-100 flex justify-end gap-2 bg-white shrink-0">
+        <button id="cancelAppointmentFlowBtn" type="button" class="px-4 py-2 border border-slate-200 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition">Cancelar</button>
+        <button id="confirmAppointmentFlowBtn" type="button" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>Iniciar flujo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reusable Web Components -->
+  <side-drawer active="dashboard"></side-drawer>
+  <alert-modal></alert-modal>
+
+  <!-- Component scripts -->
+  <script src="/components/SideDrawer.js"></script>
+  <script src="/components/AlertModal.js"></script>
+
+  <script src="./audioAttachments.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

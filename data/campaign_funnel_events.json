@@ -1,0 +1,86 @@
+{
+  "promo-laser:529811695579:contacted": {
+    "campaignId": "promo-laser",
+    "phoneNumber": "529811695579",
+    "stage": "contacted",
+    "appointmentId": null,
+    "occurredAt": "2026-06-15T22:04:52.036Z"
+  },
+  "promo-laser:529811695579:appointment_created": {
+    "campaignId": "promo-laser",
+    "phoneNumber": "529811695579",
+    "stage": "appointment_created",
+    "appointmentId": "07830bb4-0c2b-480e-b42a-836019d4f86f",
+    "occurredAt": "2026-06-15T22:06:13.890783+00:00"
+  },
+  "promo-laser:529811695579:captured": {
+    "campaignId": "promo-laser",
+    "phoneNumber": "529811695579",
+    "stage": "captured",
+    "appointmentId": "07830bb4-0c2b-480e-b42a-836019d4f86f",
+    "occurredAt": "2026-06-15T22:06:20.364+00:00"
+  },
+  "promo-corte:529811398836:contacted": {
+    "campaignId": "promo-corte",
+    "phoneNumber": "529811398836",
+    "stage": "contacted",
+    "appointmentId": null,
+    "occurredAt": "2026-06-16T15:22:46.031Z"
+  },
+  "promo-kaiser:529811695579:contacted": {
+    "campaignId": "promo-kaiser",
+    "phoneNumber": "529811695579",
+    "stage": "contacted",
+    "appointmentId": null,
+    "occurredAt": "2026-06-18T18:15:57.216Z"
+  },
+  "promo-kaiser:529811695579:appointment_created": {
+    "campaignId": "promo-kaiser",
+    "phoneNumber": "529811695579",
+    "stage": "appointment_created",
+    "appointmentId": "67012be8-e17c-4c4a-9c7e-5d55a7a93497",
+    "occurredAt": "2026-06-18T18:16:55.366993+00:00"
+  },
+  "promosenna:529811695579:contacted": {
+    "campaignId": "promosenna",
+    "phoneNumber": "529811695579",
+    "stage": "contacted",
+    "appointmentId": null,
+    "occurredAt": "2026-06-18T18:19:47.011Z"
+  },
+  "promosenna:529811695579:appointment_created": {
+    "campaignId": "promosenna",
+    "phoneNumber": "529811695579",
+    "stage": "appointment_created",
+    "appointmentId": "4f218355-0bc3-4f4b-b5b9-96b58e6ad73d",
+    "occurredAt": "2026-06-18T21:27:20.744211+00:00"
+  },
+  "promosenna:529811695579:captured": {
+    "campaignId": "promosenna",
+    "phoneNumber": "529811695579",
+    "stage": "captured",
+    "appointmentId": "4f218355-0bc3-4f4b-b5b9-96b58e6ad73d",
+    "occurredAt": "2026-06-18T21:27:26.337+00:00"
+  },
+  "promo-manos:529811695579:contacted": {
+    "campaignId": "promo-manos",
+    "phoneNumber": "529811695579",
+    "stage": "contacted",
+    "appointmentId": null,
+    "occurredAt": "2026-06-18T21:37:27.268Z"
+  },
+  "promo-manos:529811695579:appointment_created": {
+    "campaignId": "promo-manos",
+    "phoneNumber": "529811695579",
+    "stage": "appointment_created",
+    "appointmentId": "7e80bd8c-879c-4f3a-a8bd-e5a862c18652",
+    "occurredAt": "2026-06-18T21:38:12.735117+00:00"
+  },
+  "promo-manos:529811695579:captured": {
+    "campaignId": "promo-manos",
+    "phoneNumber": "529811695579",
+    "stage": "captured",
+    "appointmentId": "7e80bd8c-879c-4f3a-a8bd-e5a862c18652",
+    "occurredAt": "2026-06-18T21:38:22.696+00:00"
+  }
+}

@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-945e86e4-e1ed-44c5-a39d-1a4d19162487@thessa
+DTSTAMP:20260622T192036Z
+DTSTART:20260624T160000Z
+DTEND:20260624T170000Z
+SUMMARY:Cita Thessa - Depilación Láser - Contorno Bikini
+DESCRIPTION:Servicio: Depilación Láser - Contorno Bikini\nNombre: Mauuu\nP
+ ersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

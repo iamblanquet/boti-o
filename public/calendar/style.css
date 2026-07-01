@@ -1,0 +1,32 @@
+/* public/calendar/style.css */
+
+.fc { --fc-border-color:#e2e8f0; --fc-today-bg-color:#f6f7ef; --fc-now-indicator-color:#676a3e; }
+.fc .fc-toolbar { gap: .75rem; }
+.fc .fc-toolbar-title { color:#1e293b; font-size:1.1rem; font-weight:700; text-transform:capitalize; }
+.fc .fc-button-primary { background:#fff; border-color:#cbd5e1; color:#475569; box-shadow:none; font-size:.8rem; font-weight:600; }
+.fc .fc-button-primary:hover { background:#f8fafc; border-color:#94a3b8; color:#1e293b; }
+.fc .fc-button-primary:not(:disabled).fc-button-active { background:#676a3e; border-color:#676a3e; color:#fff; }
+.fc .fc-scrollgrid { border-radius:.75rem; overflow:hidden; }
+.fc .fc-col-header-cell { background:#f8fafc; }
+.fc .fc-col-header-cell-cushion { color:#475569; font-size:.75rem; font-weight:700; padding:.65rem .25rem; text-decoration:none; }
+.fc .fc-timegrid-slot-label-cushion { color:#94a3b8; font-size:.7rem; }
+.fc .fc-event { border:0; border-radius:.6rem; box-shadow:0 2px 5px rgb(15 23 42 / .12); cursor:pointer; overflow:hidden; }
+.fc .fc-timegrid-event { min-height:2.75rem; }
+.fc .fc-event-main { min-width:0; padding:.24rem .4rem; }
+.appointment-event { display:grid; min-width:0; height:100%; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto auto; column-gap:.35rem; row-gap:.08rem; overflow:hidden; }
+.appointment-event__top { display:flex; min-width:0; align-items:center; justify-content:space-between; gap:.3rem; }
+.appointment-event__time { grid-column:1; grid-row:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.64rem; font-weight:700; line-height:1.1; opacity:.92; }
+.appointment-event__status { grid-column:2; grid-row:1; display:inline-flex; flex:none; align-items:center; align-self:start; border-radius:999px; background:rgb(255 255 255 / .24); padding:.08rem .28rem; font-size:.54rem; font-weight:800; line-height:1.15; white-space:nowrap; }
+.appointment-event__details { grid-column:1 / -1; grid-row:2; min-width:0; overflow:hidden; font-size:.66rem; font-weight:700; line-height:1.12; white-space:normal; overflow-wrap:anywhere; }
+.appointment-event__client { font-weight:800; }
+.appointment-event__service { opacity:.94; }
+@media (max-width: 767px) {
+  .fc .fc-toolbar { align-items:stretch; flex-direction:column; }
+  .fc .fc-toolbar-chunk { display:flex; justify-content:center; }
+  .fc .fc-toolbar-title { font-size:1rem; }
+  .fc .fc-button { padding:.45rem .65rem; }
+  .fc .fc-timegrid-axis { width:2.8rem; }
+  .fc .fc-event-main { padding:.22rem .3rem; }
+  .appointment-event__status { font-size:.5rem; }
+  .appointment-event__details { font-size:.61rem; }
+}

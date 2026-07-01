@@ -1,0 +1,4 @@
+◇ injected env (26) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+MySQL no configurado. El bot funcionara sin guardar clientes.
+Servidor listo en el puerto 3103
+Recordatorios de citas activos cada 60000ms

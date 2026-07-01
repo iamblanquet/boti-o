@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enlaces de Tracking | Thessa</title>
+    <link href="/tailwind.css" rel="stylesheet">
+    <link href="/global.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 m-0 p-0 antialiased h-screen flex flex-col overflow-hidden">
+    
+    <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <!-- Top Navbar -->
+        <header id="appNavbar" class="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-emerald-800 to-emerald-600 text-white shadow-md z-10 shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="mainMenuBtn" class="flex flex-col gap-1.5 p-2 rounded-lg hover:bg-white/10 transition cursor-pointer group" type="button" aria-label="Menu">
+                    <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+                    <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+                    <span class="w-5 h-[2px] bg-white rounded-full group-hover:bg-emerald-100 transition"></span>
+                </button>
+
+                <a href="/dashboard/" class="brand flex items-center transition shrink-0 hover:opacity-80">
+                    <img src="/mediaFiles/Logo_Thessa.png" alt="Thessa" class="h-11 w-auto object-contain">
+                </a>
+            </div>
+            
+            <div>
+                <span class="text-sm font-semibold bg-white/15 px-3 py-1 rounded-full text-emerald-50">Admin Panel</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col min-w-0 relative overflow-y-auto">
+            <div class="p-6 lg:p-8">
+                <div class="max-w-6xl mx-auto flex flex-col gap-6 pb-12">
+                    
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-800">Enlaces de Seguimiento</h1>
+                            <p class="text-slate-500 mt-1 text-sm">Gestiona URLs de adquisición, rastrea orígenes de clientes y mide la conversión de WhatsApp.</p>
+                        </div>
+                    </div>
+
+                    <!-- KPI Cards Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                        <!-- Card 1 -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Leads</p>
+                                <p class="text-2xl font-bold text-slate-800" id="kpiLeads">0</p>
+                                <p class="text-xs text-slate-400">Base del embudo: 100%</p>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Contactados</p>
+                                <p class="text-2xl font-bold text-slate-800" id="kpiContactedRate">0%</p>
+                                <p class="text-xs text-slate-400" id="kpiContactedCount">0 de 0 leads</p>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Generaron Cita</p>
+                                <p class="text-2xl font-bold text-slate-800" id="kpiAppointmentsRate">0%</p>
+                                <p class="text-xs text-slate-400" id="kpiAppointmentsCount">0 de 0 leads</p>
+                            </div>
+                        </div>
+                        <!-- Card 4 -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="p-3 bg-violet-50 text-violet-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Captación</p>
+                                <p class="text-2xl font-bold text-slate-800" id="kpiCapturedRate">0%</p>
+                                <p class="text-xs text-slate-400" id="kpiCapturedCount">0 de 0 leads</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Layout Split -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                        
+                        <!-- Left Column: Charts -->
+                        <div class="flex flex-col gap-6 lg:col-span-1">
+                            <!-- Chart Source -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800">Leads por Canal</h3>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">Distribución según la red social de origen.</p>
+                                </div>
+                                <div class="relative w-full flex-1 flex justify-center items-center mt-4 h-48">
+                                    <canvas id="sourceChart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <!-- Chart Medium -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800">Leads por Medio</h3>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">Distribución según la estrategia (ej. cpc, qr).</p>
+                                </div>
+                                <div class="relative w-full flex-1 flex justify-center items-center mt-4 h-48">
+                                    <canvas id="mediumChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: List Table -->
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:col-span-2 overflow-hidden">
+                            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-base font-bold text-slate-800">Enlaces Activos</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">Analíticas en tiempo real del tráfico y conversión a WhatsApp.</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button id="refreshBtn" class="p-2 text-slate-500 hover:text-emerald-600 hover:bg-slate-100 rounded-lg transition" title="Actualizar">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path></svg>
+                                    </button>
+                                    <button id="openFormBtn" class="btn btn-primary text-xs py-2 px-3 flex items-center gap-1.5" title="Crear un nuevo enlace de seguimiento">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                        Nuevo Enlace
+                                    </button>
+                                </div>
+                             </div>
+
+                             <!-- Search & Filter Bar -->
+                             <div class="px-6 py-3 bg-slate-50/50 border-b border-slate-100 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                                 <div class="relative w-full sm:w-64">
+                                     <input type="text" id="searchCampaignInput" placeholder="Buscar campaña o ID..." class="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-4 py-1.5 text-xs outline-none focus:border-emerald-500 transition-colors">
+                                     <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 flex items-center">
+                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                     </div>
+                                 </div>
+                                 <div class="flex items-center gap-2 w-full sm:w-auto">
+                                     <label for="filterSourceSelect" class="text-xs text-slate-400 font-medium whitespace-nowrap shrink-0">Filtrar por canal:</label>
+                                     <select id="filterSourceSelect" class="w-full sm:w-40 bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs outline-none focus:border-emerald-500 transition-colors cursor-pointer">
+                                         <option value="all">Todos los canales</option>
+                                         <option value="facebook">Facebook</option>
+                                         <option value="instagram">Instagram</option>
+                                         <option value="tiktok">TikTok</option>
+                                         <option value="whatsapp">WhatsApp</option>
+                                         <option value="youtube">YouTube</option>
+                                         <option value="google">Google</option>
+                                         <option value="qr">QR / Volante</option>
+                                         <option value="otro">Otro</option>
+                                     </select>
+                                 </div>
+                             </div>
+
+                             <div class="flex-1 overflow-x-auto">
+                                 <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                                            <th class="py-3 px-4">Campaña / ID</th>
+                                            <th class="py-3 px-4">Origen / Medio</th>
+                                            <th class="py-3 px-4">Estadísticas por lead</th>
+                                            <th class="py-3 px-4 text-right">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="campaignsTableBody" class="divide-y divide-slate-100 text-sm">
+                                        <tr>
+                                            <td colspan="4" class="py-12 text-center text-slate-400">Cargando enlaces...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                             <!-- Pagination Controls -->
+                             <div class="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between bg-slate-50/30 text-xs text-slate-500 gap-3 shrink-0" id="paginationControls">
+                                 <div>
+                                     Mostrando <span id="paginationStart" class="font-semibold text-slate-700">0</span> a <span id="paginationEnd" class="font-semibold text-slate-700">0</span> de <span id="paginationTotal" class="font-semibold text-slate-700">0</span> enlaces
+                                 </div>
+                                 <div class="flex items-center gap-2">
+                                     <button id="prevPageBtn" class="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:hover:bg-transparent font-medium cursor-pointer transition-colors disabled:cursor-not-allowed" disabled>Anterior</button>
+                                     <span class="font-medium">Pág. <span id="currentPageNum" class="text-slate-800 font-semibold">1</span> de <span id="totalPagesNum" class="text-slate-800 font-semibold">1</span></span>
+                                     <button id="nextPageBtn" class="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:hover:bg-transparent font-medium cursor-pointer transition-colors disabled:cursor-not-allowed" disabled>Siguiente</button>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Form Drawer (Off-Canvas) -->
+    <div id="formDrawer">
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div>
+                <h3 class="text-base font-bold text-slate-800">Crear Enlace de Seguimiento</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Define los parámetros y el mensaje.</p>
+            </div>
+            <button id="closeFormBtn" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="p-6 overflow-y-auto flex-1">
+            <form id="campaignForm" class="flex flex-col gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Código Corto (ID) *</label>
+                    <input type="text" id="campaignIdInput" required placeholder="ej: promo-fb, ig-bio, volante" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm outline-none focus:border-emerald-500 transition-colors">
+                    <p class="text-[10px] text-slate-400 mt-1">Solo letras, números y guiones. Se usará como identificador interno.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Código de Lead *</label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-emerald-600">#</span>
+                        <input type="text" id="campaignLeadCodeInput" required maxlength="12" pattern="[A-Za-z0-9]{2,12}" placeholder="PL01" class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-7 pr-3.5 py-2 text-sm uppercase font-mono outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">Identificador breve que viaja en el mensaje y atribuye el lead.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Nombre de la Campaña *</label>
+                    <input type="text" id="campaignNameInput" required placeholder="ej: Anuncio FB Masaje Junio" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm outline-none focus:border-emerald-500 transition-colors">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Canal (Source) *</label>
+                        <select id="campaignSourceInput" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer">
+                            <option value="" disabled selected>Seleccionar</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="YouTube">YouTube</option>
+                            <option value="Google">Google</option>
+                            <option value="QR / Volante">QR / Volante</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Medio (Medium)</label>
+                        <input type="text" id="campaignMediumInput" placeholder="ej: cpc, bio, qr" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Mensaje de WhatsApp *</label>
+                    <textarea id="campaignTextInput" required rows="3" placeholder="Hola, me gustaría agendar un Masaje Relajante" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm outline-none focus:border-emerald-500 transition-colors resize-none"></textarea>
+                    <p class="text-[10px] text-slate-400 mt-1">El mensaje que el cliente enviará al abrir el enlace.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full mt-4 justify-center py-3">
+                    Generar Enlace
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Campaign Stats Drawer (Off-Canvas) -->
+    <div id="campaignStatsDrawer">
+        <div class="px-6 py-5 border-b border-slate-200 flex items-center justify-between bg-white sticky top-0 z-10">
+            <div>
+                <h3 class="text-base font-bold text-slate-800">Estadísticas de la Campaña</h3>
+                <p class="text-xs text-slate-400 mt-0.5" id="campaignStatsTitle">Cargando...</p>
+            </div>
+            <button id="closeCampaignStatsBtn" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-6">
+            
+            <!-- KPI Cards Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Card 1 -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-2">
+                    <div class="text-emerald-600 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Leads</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-slate-800" id="campKpiLeads">0</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-2">
+                    <div class="text-blue-600 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Contacto</p>
+                    </div>
+                    <div>
+                        <p class="text-xl font-bold text-slate-800" id="campKpiContactedRate">0%</p>
+                        <p class="text-[10px] text-slate-400" id="campKpiContactedCount">0 de 0 leads</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-2">
+                    <div class="text-indigo-600 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Citas</p>
+                    </div>
+                    <div>
+                        <p class="text-xl font-bold text-slate-800" id="campKpiAppointmentsRate">0%</p>
+                        <p class="text-[10px] text-slate-400" id="campKpiAppointmentsCount">0 de 0 leads</p>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-2">
+                    <div class="text-violet-600 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Captación</p>
+                    </div>
+                    <div>
+                        <p class="text-xl font-bold text-slate-800" id="campKpiCapturedRate">0%</p>
+                        <p class="text-[10px] text-slate-400" id="campKpiCapturedCount">0 de 0 leads</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-px w-full bg-slate-200 my-2"></div>
+
+            <!-- Campaign Funnel Chart -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-800">Gráfico de Embudo</h3>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Distribución de clientes en cada etapa.</p>
+                </div>
+                <div class="relative w-full flex-1 flex justify-center items-center mt-4 h-52">
+                    <canvas id="campaignFunnelChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-800">Detalle por Lead</h3>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Estado individual de cada numero atribuido a esta campana.</p>
+                </div>
+                <div id="campaignLeadStatsList" class="flex flex-col gap-3">
+                    <div class="py-6 text-center text-xs text-slate-400">Sin leads registrados.</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Reusable components -->
+    <side-drawer active="tracking"></side-drawer>
+    <confirm-modal></confirm-modal>
+    <toast-notification></toast-notification>
+
+    <!-- Component scripts -->
+    <script src="/components/SideDrawer.js"></script>
+    <script src="/components/ConfirmModal.js"></script>
+    <script src="/components/ToastNotification.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thessa//WhatsApp Bot//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:thessa-2cd82724-4478-40c8-a32a-e1c1fd188585@thessa
+DTSTAMP:20260603T200014Z
+DTSTART:20260605T180000Z
+DTEND:20260605T190000Z
+SUMMARY:Cita Thessa - Depilación Láser - Glúteos
+DESCRIPTION:Servicio: Depilación Láser - Glúteos\nNombre: BlanquetGames\nP
+ ersonas: 1\nGracias por agendar en Thessa.
+END:VEVENT
+END:VCALENDAR

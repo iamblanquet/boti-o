@@ -1,0 +1,67 @@
+.audio-record-button {
+  color: #64748b;
+}
+
+.audio-record-button.is-recording {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.audio-record-button.is-recording svg {
+  animation: dashboard-audio-pulse 1s ease-in-out infinite;
+}
+
+.voice-record-timer {
+  align-items: center;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 999px;
+  color: #be123c;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 6px;
+  height: 28px;
+  line-height: 1;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.voice-record-timer.hidden {
+  display: none;
+}
+
+.voice-record-dot {
+  background: #ef4444;
+  border-radius: 999px;
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+  animation: dashboard-audio-dot 1s ease-in-out infinite;
+}
+
+#attachmentPreview[data-kind="audio"] {
+  background: #f6f7ef;
+}
+
+@keyframes dashboard-audio-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes dashboard-audio-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
