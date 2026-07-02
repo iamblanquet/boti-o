@@ -176,6 +176,13 @@ const bindEvents = () => {
     if (!selectButton) return;
     state.selectedPhone = selectButton.dataset.selectClient;
     render();
+
+    // START: MOBILE RESPONSIVE OPEN DRAWER
+    const detailEl = document.getElementById('clientDetail');
+    if (detailEl) {
+      detailEl.classList.add('mobile-open');
+    }
+    // END: MOBILE RESPONSIVE OPEN DRAWER
   });
 
   document.getElementById('clientsTableBody').addEventListener('change', (event) => {
@@ -192,6 +199,17 @@ const bindEvents = () => {
   });
 
   document.getElementById('clientDetail').addEventListener('click', (event) => {
+    // START: MOBILE RESPONSIVE CLOSE DRAWER
+    const closeBtn = event.target.closest('#closeClientDetailBtn');
+    if (closeBtn) {
+      const detailEl = document.getElementById('clientDetail');
+      if (detailEl) {
+        detailEl.classList.remove('mobile-open');
+      }
+      return;
+    }
+    // END: MOBILE RESPONSIVE CLOSE DRAWER
+
     const appointmentsButton = event.target.closest('[data-open-appointments]');
     if (!appointmentsButton) return;
     openAppointmentsModal(appointmentsButton.dataset.openAppointments);

@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Master-Detail Panels
   const detailsPanel = document.getElementById('detailsPanel');
+  const closeDetailsBtn = document.getElementById('closeDetailsBtn');
   const detailsPlaceholder = document.getElementById('detailsPlaceholder');
   const detailsContent = document.getElementById('detailsContent');
   const panelTitle = document.getElementById('panelTitle');
@@ -58,6 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (addEmployeeBtn) {
     addEmployeeBtn.addEventListener('click', () => {
       openDetailsInCreateMode();
+    });
+  }
+
+  // Close details panel drawer on mobile
+  if (closeDetailsBtn) {
+    closeDetailsBtn.addEventListener('click', () => {
+      closeDetailsPanel();
     });
   }
 
@@ -465,6 +473,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reveal panel content
     if (detailsPlaceholder) detailsPlaceholder.classList.add('hidden');
     if (detailsContent) detailsContent.classList.remove('hidden');
+
+    // Open drawer on mobile
+    if (detailsPanel) detailsPanel.classList.add('mobile-open');
   }
 
   // Open details panel in empty registration mode
@@ -523,6 +534,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reveal panel content
     if (detailsPlaceholder) detailsPlaceholder.classList.add('hidden');
     if (detailsContent) detailsContent.classList.remove('hidden');
+
+    // Open drawer on mobile
+    if (detailsPanel) detailsPanel.classList.add('mobile-open');
     
     setTimeout(() => employeeNameInput.focus(), 250);
   }
@@ -538,6 +552,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (detailsContent) detailsContent.classList.add('hidden');
     if (detailsPlaceholder) detailsPlaceholder.classList.remove('hidden');
+
+    // Close drawer on mobile
+    if (detailsPanel) detailsPanel.classList.remove('mobile-open');
   }
 
   // Disable permissions grid if role is Admin (Admins have access to all modules automatically)

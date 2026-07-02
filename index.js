@@ -1,4 +1,6 @@
 const dotenv = require('dotenv').config();
+const { TIMEZONE } = require('./utils/configCitas');
+process.env.TZ = TIMEZONE;
 const express = require('express');
 const cors = require('cors');
 const http = require('http');

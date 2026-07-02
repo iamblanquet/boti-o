@@ -11,7 +11,7 @@
 </head>
 <body class="h-screen overflow-hidden bg-slate-50 text-slate-800 antialiased">
   <div class="flex h-full flex-col">
-    <header class="z-50 flex shrink-0 items-center justify-between bg-gradient-to-r from-emerald-800 to-emerald-600 px-4 py-3 text-white shadow-md sm:px-6">
+    <header id="appNavbar" class="z-50 flex shrink-0 items-center justify-between bg-gradient-to-r from-emerald-800 to-emerald-600 px-4 py-3 text-white shadow-md sm:px-6">
       <div class="flex items-center gap-4">
         <button id="mainMenuBtn" class="group flex cursor-pointer flex-col gap-1.5 rounded-lg p-2 transition hover:bg-white/10" type="button" aria-label="Menu">
           <span class="h-0.5 w-5 rounded-full bg-white"></span>
@@ -36,7 +36,9 @@
     <main class="flex min-h-0 flex-1 flex-col gap-4 p-3 sm:p-4 lg:p-6">
       <section class="tracking-header shrink-0">
         <div>
-          <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Seguimiento de pacientes</h1>
+          <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">
+            Seguimiento de pacientes <span id="mobileCountBadge" class="ml-1 inline-flex items-center justify-center rounded-full bg-slate-200/80 px-2.5 py-0.5 text-sm font-bold text-slate-700 md:hidden">0</span>
+          </h1>
           <p class="mt-1 max-w-3xl text-sm text-slate-500">Proceso de captación y seguimiento por etapas, sin modificar chats ni citas existentes.</p>
         </div>
         <div class="tracking-toolbar">

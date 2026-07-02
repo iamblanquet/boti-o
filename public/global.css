@@ -257,10 +257,10 @@ body:has(side-drawer) #mainMenuBtn {
 /* Dashboard Desktop Grid */
 #desk {
   display: grid;
-  grid-template-columns: 320px minmax(520px, 1fr) 320px;
+  grid-template-columns: 300px minmax(0, 1fr) 300px;
 }
 #desk.no-chat {
-  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr);
 }
 #desk.no-chat .workspace-header,
 #desk.no-chat .composer,
@@ -471,4 +471,221 @@ body:has(side-drawer) #mainMenuBtn {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Compact header actions and tabs on desktop to fit on a single line */
+@media (min-width: 1024px) {
+  #desk .workspace-header button,
+  #desk #messageTabs button {
+    font-size: 11px !important;
+  }
+  #desk .workspace-header .dashboard-action-btn,
+  #desk .workspace-header #addContactBtn {
+    padding: 5px 10px !important;
+    min-height: 28px !important;
+    height: 28px !important;
+  }
+  #desk #messageTabs button {
+    padding: 4px 8px !important;
+  }
+}
+
+/* ==========================================================================
+   START: MOBILE RESPONSIVE LAYOUT (ADDED FOR MOBILE CHAT VERSION)
+   If you need to return to the previous layout, remove or comment out this block.
+   ========================================================================== */
+@media (max-width: 1023px) {
+  /* Quitar padding lateral del cuerpo */
+  body:has(side-drawer) {
+    padding-left: 0 !important;
+  }
+
+  /* Mostrar botón de hamburguesa */
+  body:has(side-drawer) #mainMenuBtn {
+    display: flex !important;
+  }
+
+  /* Mostrar botones responsivos de control móvil */
+  #mobileBackBtn, #mobileInfoBtn, #mobileCrmHeader, #mobileActionsToggleBtn {
+    display: flex !important;
+  }
+
+  /* Menú lateral general flotante */
+  #sideDrawer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 260px; height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9999;
+  }
+  #sideDrawer.drawer-open {
+    transform: translateX(0);
+    box-shadow: 8px 0 32px rgba(15, 23, 42, 0.25);
+  }
+
+  /* Escritorio del chat en móvil */
+  #desk {
+    display: block !important;
+    position: relative;
+    width: 100%;
+    height: calc(100vh - var(--side-nav-width));
+    overflow: hidden;
+    padding: 0;
+  }
+
+  /* Ajustes de columnas a pantalla completa */
+  #desk > aside:first-of-type {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    border-radius: 0; border: none; box-shadow: none;
+  }
+
+  #desk .workspace {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 20;
+    border-radius: 0; border: none; box-shadow: none;
+  }
+
+  /* Visibilidad basada en no-chat */
+  #desk.no-chat > aside:first-of-type { display: flex !important; }
+  #desk.no-chat .workspace { display: none !important; }
+  #desk:not(.no-chat) > aside:first-of-type { display: none !important; }
+  #desk:not(.no-chat) .workspace { display: flex !important; }
+
+  /* Subcabecera de acciones colapsable en móvil */
+  #desk .workspace-header {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0;
+    padding: 12px 16px;
+  }
+  #mobileActionsBar {
+    display: none !important; /* Oculto por defecto en móvil */
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+  }
+  #mobileActionsBar.show-bar {
+    display: flex !important; /* Se muestra al alternar */
+  }
+
+  /* Contenedor de botones operativos (Tomar control y Editar contacto) */
+  #mobileButtonsWrapper {
+    display: flex !important;
+    width: 100% !important;
+    gap: 8px;
+    flex-shrink: 0 !important;
+  }
+  #mobileButtonsWrapper button {
+    flex: 1 !important; /* Divide la fila 50/50 */
+    justify-content: center !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  #messageTabs {
+    display: flex !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    gap: 4px;
+    justify-content: space-between; /* Distribuye las pestañas equitativamente en móvil */
+  }
+  #messageTabs button {
+    flex: 1 !important; /* Hace que todas las pestañas midan lo mismo en la barra móvil */
+    text-align: center !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Botones operativos en móvil */
+  .dashboard-action-btn, #addContactBtn {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    background-color: var(--app-navbar-to) !important; /* Usar verde oliva corporativo */
+  }
+  
+  .control-take {
+    background-color: #f97316 !important; /* Respetar naranja de Tomar Control */
+  }
+
+  /* Burbujas de chat responsivas */
+  .message.out .message-content {
+    background-color: var(--app-navbar-to) !important; /* Burbujas de salida en verde oliva caqui */
+    color: #ffffff;
+  }
+
+  /* Panel lateral de CRM e IA (Drawer flotante lateral derecho) */
+  #desk .context-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 360px;
+    height: 100%;
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -6px 0 28px rgba(15, 23, 42, 0.15);
+    border-radius: 0;
+    background-color: #ffffff;
+  }
+
+  #desk .context-panel.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Evitar que los botones del compositor inferior se deformen */
+  #composer .flex.items-center.gap-1 {
+    display: flex !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  #composer .flex.items-center.gap-1::-webkit-scrollbar {
+    display: none;
+  }
+  #composer .flex.items-center.gap-1 > * {
+    flex-shrink: 0 !important;
+  }
+
+  /* Panel lateral de ficha de cliente en móviles (Contactos y Clientes, y Administración de Accesos) */
+  #clientDetail,
+  #detailsPanel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 380px;
+    height: 100%;
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -6px 0 28px rgba(15, 23, 42, 0.18);
+    border-radius: 0;
+    background-color: #ffffff;
+    border: none;
+    overflow-y: auto;
+  }
+
+  #clientDetail.mobile-open,
+  #detailsPanel.mobile-open {
+    transform: translateX(0) !important;
+  }
+}
+
+/* Unificar el color de fondo de la barra de navegación usando los colores de marca */
+#appNavbar {
+  background: linear-gradient(90deg, var(--app-navbar-from) 0%, var(--app-navbar-to) 100%) !important;
+}
+
+/* ==========================================================================
+   END: MOBILE RESPONSIVE LAYOUT
+   ========================================================================== */
 

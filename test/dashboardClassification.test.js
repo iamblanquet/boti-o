@@ -10,7 +10,8 @@ const normalize = (value) => String(value || '')
     .replace(/[\u0300-\u036f]/g, '');
 
 const loadClassify = () => {
-    const source = fs.readFileSync(path.join(__dirname, '..', 'public', 'dashboard', 'app.js'), 'utf8');
+    let source = fs.readFileSync(path.join(__dirname, '..', 'public', 'dashboard', 'app.js'), 'utf8');
+    source = source.replace(/\r/g, '');
     const start = source.indexOf('const classify = ');
     const end = source.indexOf('\n\nconst getCurrentChat', start);
     assert.notEqual(start, -1);

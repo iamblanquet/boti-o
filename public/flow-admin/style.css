@@ -676,36 +676,59 @@
     padding: 14px;
   }
   .flow-topbar {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 10px 14px;
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: 10px !important;
+    padding: 10px 14px !important;
   }
-  .flow-topbar-brand,
+  .flow-topbar-brand {
+    grid-column: 1 / span 2 !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+  }
+  .flow-topbar-search {
+    grid-column: 1 !important;
+  }
   .flow-topbar-actions {
-    justify-content: space-between;
+    grid-column: 2 !important;
+    justify-content: flex-end !important;
   }
   .flow-admin-pad {
     padding: 10px;
   }
   .flow-admin-layout {
-    grid-template-columns: 1fr;
-    grid-auto-rows: auto;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
     overflow-y: auto;
   }
-  .flow-sidebar,
-  .flow-panel-header,
-  .flow-admin-layout > .flex.border-b,
-  #tabContentGeneral,
-  #tabContentAppt {
-    grid-column: 1;
+  .flow-panel-header {
+    order: 1 !important;
+    flex-shrink: 0 !important;
   }
   .flow-sidebar {
+    order: 2 !important;
+    display: block !important;
     grid-row: auto;
     max-height: none;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .flow-sidebar-heading {
+    display: none !important; /* Ocultar título redundante en móvil */
+  }
+  #tabContentGeneral,
+  #tabContentAppt {
+    order: 3 !important;
+    flex-shrink: 0 !important;
   }
   .flow-filter-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
   }
   .flow-filter {
     min-height: 64px;
@@ -717,6 +740,10 @@
   #tabContentGeneral,
   #tabContentAppt {
     overflow: visible;
+  }
+  /* Ocultar el encabezado de tarjeta duplicado y pegajoso dentro de Mensajes del Sistema */
+  #tabContentAppt > .bg-white > div:first-child {
+    display: none !important;
   }
 }
 
@@ -735,7 +762,8 @@
     flex-basis: 26px;
   }
   .flow-filter-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 9px !important;
   }
   .flow-card {
     padding: 14px;

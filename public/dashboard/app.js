@@ -103,6 +103,15 @@ const AudioAttachments = window.DashboardAudioAttachments;
 const sendButtonReadyContent = sendButton.innerHTML;
 let audioRecorder = null;
 
+// START: MOBILE RESPONSIVE LAYOUT ELEMENT BINDINGS
+const mobileBackBtn = document.getElementById('mobileBackBtn');
+const mobileInfoBtn = document.getElementById('mobileInfoBtn');
+const mobileCrmCloseBtn = document.getElementById('mobileCrmCloseBtn');
+const contextPanel = document.querySelector('.context-panel');
+const mobileActionsToggleBtn = document.getElementById('mobileActionsToggleBtn');
+const mobileActionsBar = document.getElementById('mobileActionsBar');
+// END: MOBILE RESPONSIVE LAYOUT ELEMENT BINDINGS
+
 // ─── Custom Alert Modal ──────────────────────────────────────────────────────
 const showCustomAlert = (message) => {
   const modal = document.getElementById('customAlertModal');
@@ -1374,6 +1383,15 @@ const selectChat = async (phoneNumber) => {
   state.replySuggestionLoading = false;
   const chat = getCurrentChat();
   desk.classList.remove('no-chat');
+
+  // START: MOBILE RESPONSIVE CLOSE CRM ON CHAT SELECT
+  if (contextPanel) {
+    contextPanel.classList.remove('mobile-open');
+  }
+  if (mobileActionsBar) {
+    mobileActionsBar.classList.remove('show-bar');
+  }
+  // END: MOBILE RESPONSIVE CLOSE CRM ON CHAT SELECT
   chatName.textContent = chat?.name || 'Paciente nuevo';
   chatPhone.textContent = `${phoneNumber} | WhatsApp`;
   replyText.disabled = false;
@@ -1496,6 +1514,35 @@ replyText.addEventListener('keydown', (event) => {
     composer.requestSubmit();
   }
 });
+
+// START: MOBILE RESPONSIVE LAYOUT EVENT LISTENERS
+if (mobileBackBtn) {
+  mobileBackBtn.addEventListener('click', () => {
+    state.selectedPhone = null;
+    desk.classList.add('no-chat');
+    renderMessages();
+    renderChats();
+  });
+}
+
+if (mobileInfoBtn && contextPanel) {
+  mobileInfoBtn.addEventListener('click', () => {
+    contextPanel.classList.toggle('mobile-open');
+  });
+}
+
+if (mobileCrmCloseBtn && contextPanel) {
+  mobileCrmCloseBtn.addEventListener('click', () => {
+    contextPanel.classList.remove('mobile-open');
+  });
+}
+
+if (mobileActionsToggleBtn && mobileActionsBar) {
+  mobileActionsToggleBtn.addEventListener('click', () => {
+    mobileActionsBar.classList.toggle('show-bar');
+  });
+}
+// END: MOBILE RESPONSIVE LAYOUT EVENT LISTENERS
 
 const writeSuggestedReply = (suggestion) => {
   replyText.value = suggestion;

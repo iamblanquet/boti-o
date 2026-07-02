@@ -72,6 +72,11 @@
         min-height: 100vh !important;
         overflow: auto !important;
       }
+      /* Asegurar que el logo esté alineado a la izquierda con el menú en móvil */
+      header .flex.items-center.gap-4 {
+        width: auto !important;
+        justify-content: flex-start !important;
+      }
     }
   </style>
 </head>
@@ -79,7 +84,7 @@
   <div class="flex-1 flex flex-col h-full overflow-hidden">
     
     <!-- Navbar (Emerald Green) -->
-    <header class="sticky top-0 z-50 flex shrink-0 items-center justify-between bg-gradient-to-r from-emerald-800 to-emerald-600 px-4 py-3 text-white shadow-md sm:px-6 select-none">
+    <header id="appNavbar" class="sticky top-0 z-50 flex shrink-0 items-center justify-between bg-gradient-to-r from-emerald-800 to-emerald-600 px-4 py-3 text-white shadow-md sm:px-6 select-none">
       <div class="flex items-center gap-4">
         <button id="mainMenuBtn" class="group flex cursor-pointer flex-col gap-1.5 rounded-lg p-2 transition hover:bg-white/10" type="button" aria-label="Menu">
           <span class="h-0.5 w-5 rounded-full bg-white"></span>
@@ -170,7 +175,14 @@
           <div id="detailsContent" class="hidden flex-1 flex flex-col overflow-hidden h-full">
             <!-- Form Header -->
             <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0 select-none">
-              <h3 id="panelTitle" class="text-xs font-bold text-slate-800 uppercase tracking-wider font-mono">Detalles de Acceso</h3>
+              <div class="flex items-center gap-2">
+                <button id="closeDetailsBtn" class="lg:hidden p-1 text-slate-400 hover:text-slate-600 transition cursor-pointer" type="button" aria-label="Cerrar">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                </button>
+                <h3 id="panelTitle" class="text-xs font-bold text-slate-800 uppercase tracking-wider font-mono">Detalles de Acceso</h3>
+              </div>
               <button id="deleteEmployeeBtn" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer" type="button" title="Eliminar cuenta de empleado">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>

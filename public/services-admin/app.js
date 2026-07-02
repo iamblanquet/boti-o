@@ -58,7 +58,8 @@ const state = {
   serviceScroll: 0,
   categoryScroll: 0,
   hitboxes: [],
-  filePath: ''
+  filePath: '',
+  view: 'categories'
 };
 
 const confirmState = {
@@ -478,69 +479,149 @@ const draw = () => {
   ctx.fillRect(0, 0, width, height);
 
   const pad = 16;
-  const leftW = 320;
-  const rightX = pad + leftW + 16;
-  const rightW = width - rightX - pad;
+  const isMobile = width < 768;
 
-  ctx.fillStyle = colors.panel;
-  roundedRect(pad, pad, leftW, height - pad * 2, 14);
-  ctx.fill();
-  ctx.strokeStyle = colors.line;
-  ctx.stroke();
+  if (isMobile) {
+    const panelW = width - pad * 2;
+    if (state.view === 'categories') {
+      ctx.fillStyle = colors.panel;
+      roundedRect(pad, pad, panelW, height - pad * 2, 14);
+      ctx.fill();
+      ctx.strokeStyle = colors.line;
+      ctx.stroke();
 
-  drawText('Categorias', pad + 18, pad + 18, { size: 20, weight: 700 });
-  drawText(`${state.categories.length} grupos`, pad + 18, pad + 47, { size: 13, color: colors.muted });
+      drawText('Categorias', pad + 18, pad + 18, { size: 20, weight: 700 });
+      drawText(`${state.categories.length} grupos`, pad + 18, pad + 47, { size: 13, color: colors.muted });
 
-  const allCategory = {
-    id: 'all',
-    nombre: 'Todos los servicios',
-    count: state.services.length
-  };
-  const categoryRows = [allCategory, ...state.categories];
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(pad + 10, pad + 76, leftW - 20, height - pad * 2 - 88);
-  ctx.clip();
-  categoryRows.forEach((category, index) => {
-    const y = pad + 84 + index * 86 - state.categoryScroll;
-    if (y > -90 && y < height + 20) {
-      drawCategoryRow(category, pad + 12, y, leftW - 24, category.id === state.selectedCategoryId);
+      const allCategory = {
+        id: 'all',
+        nombre: 'Todos los servicios',
+        count: state.services.length
+      };
+      const categoryRows = [allCategory, ...state.categories];
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(pad + 10, pad + 76, panelW - 20, height - pad * 2 - 88);
+      ctx.clip();
+      categoryRows.forEach((category, index) => {
+        const y = pad + 84 + index * 86 - state.categoryScroll;
+        if (y > -90 && y < height + 20) {
+          drawCategoryRow(category, pad + 12, y, panelW - 24, category.id === state.selectedCategoryId);
+        }
+      });
+      ctx.restore();
+    } else {
+      ctx.fillStyle = colors.panel;
+      roundedRect(pad, pad, panelW, height - pad * 2, 14);
+      ctx.fill();
+      ctx.strokeStyle = colors.line;
+      ctx.stroke();
+
+      // Botón Atrás en móvil
+      ctx.fillStyle = '#f1f5f9';
+      roundedRect(pad + 18, pad + 14, 110, 32, 8);
+      ctx.fill();
+      
+      drawText('← Categorias', pad + 28, pad + 24, { size: 13, weight: 600, color: colors.text });
+      state.hitboxes.push({
+        type: 'mobile-back-to-categories',
+        x: pad + 18,
+        y: pad + 14,
+        w: 110,
+        h: 32
+      });
+
+      const selectedTitle = state.selectedCategoryId === 'all' ? 'Catalogo completo' : getCategoryName(state.selectedCategoryId);
+      const services = getFilteredServices();
+      drawText(selectedTitle, pad + 18, pad + 70, { size: 22, weight: 700 });
+      drawText(`${services.length} servicios`, pad + 18, pad + 95, { size: 13, color: colors.muted });
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(pad + 10, pad + 115, panelW - 20, height - pad * 2 - 128);
+      ctx.clip();
+
+      if (!services.length) {
+        drawText('No hay servicios con esos filtros.', pad + 18, pad + 145, { size: 16, color: colors.muted });
+      } else {
+        const gap = 14;
+        const cardW = panelW - 24;
+        const cardH = 168;
+        services.forEach((service, index) => {
+          const y = pad + 125 + index * (cardH + gap) - state.serviceScroll;
+          if (y > -cardH && y < height + 20) {
+            drawServiceCard(service, pad + 12, y, cardW);
+          }
+        });
+      }
+      ctx.restore();
     }
-  });
-  ctx.restore();
-
-  ctx.fillStyle = colors.panel;
-  roundedRect(rightX, pad, rightW, height - pad * 2, 14);
-  ctx.fill();
-  ctx.strokeStyle = colors.line;
-  ctx.stroke();
-
-  const selectedTitle = state.selectedCategoryId === 'all' ? 'Catalogo completo' : getCategoryName(state.selectedCategoryId);
-  const services = getFilteredServices();
-  drawText(selectedTitle, rightX + 22, pad + 18, { size: 24, weight: 700 });
-  drawText(`${services.length} servicios visibles`, rightX + 22, pad + 52, { size: 13, color: colors.muted });
-
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(rightX + 16, pad + 82, rightW - 32, height - pad * 2 - 98);
-  ctx.clip();
-
-  if (!services.length) {
-    drawText('No hay servicios con esos filtros.', rightX + 28, pad + 112, { size: 16, color: colors.muted });
   } else {
-    const gap = 14;
-    const columns = rightW > 920 ? 2 : 1;
-    const cardW = (rightW - 32 - gap * (columns - 1)) / columns;
-    const cardH = 168;
-    services.forEach((service, index) => {
-      const col = index % columns;
-      const row = Math.floor(index / columns);
-      const x = rightX + 16 + col * (cardW + gap);
-      const y = pad + 92 + row * (cardH + gap) - state.serviceScroll;
-      if (y > -cardH && y < height + 20) drawServiceCard(service, x, y, cardW);
+    // DESKTOP LAYOUT (unchanged)
+    const leftW = 320;
+    const rightX = pad + leftW + 16;
+    const rightW = width - rightX - pad;
+
+    ctx.fillStyle = colors.panel;
+    roundedRect(pad, pad, leftW, height - pad * 2, 14);
+    ctx.fill();
+    ctx.strokeStyle = colors.line;
+    ctx.stroke();
+
+    drawText('Categorias', pad + 18, pad + 18, { size: 20, weight: 700 });
+    drawText(`${state.categories.length} grupos`, pad + 18, pad + 47, { size: 13, color: colors.muted });
+
+    const allCategory = {
+      id: 'all',
+      nombre: 'Todos los servicios',
+      count: state.services.length
+    };
+    const categoryRows = [allCategory, ...state.categories];
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(pad + 10, pad + 76, leftW - 20, height - pad * 2 - 88);
+    ctx.clip();
+    categoryRows.forEach((category, index) => {
+      const y = pad + 84 + index * 86 - state.categoryScroll;
+      if (y > -90 && y < height + 20) {
+        drawCategoryRow(category, pad + 12, y, leftW - 24, category.id === state.selectedCategoryId);
+      }
     });
+    ctx.restore();
+
+    ctx.fillStyle = colors.panel;
+    roundedRect(rightX, pad, rightW, height - pad * 2, 14);
+    ctx.fill();
+    ctx.strokeStyle = colors.line;
+    ctx.stroke();
+
+    const selectedTitle = state.selectedCategoryId === 'all' ? 'Catalogo completo' : getCategoryName(state.selectedCategoryId);
+    const services = getFilteredServices();
+    drawText(selectedTitle, rightX + 22, pad + 18, { size: 24, weight: 700 });
+    drawText(`${services.length} servicios visibles`, rightX + 22, pad + 52, { size: 13, color: colors.muted });
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(rightX + 16, pad + 82, rightW - 32, height - pad * 2 - 98);
+    ctx.clip();
+
+    if (!services.length) {
+      drawText('No hay servicios con esos filtros.', rightX + 28, pad + 112, { size: 16, color: colors.muted });
+    } else {
+      const gap = 14;
+      const columns = rightW > 920 ? 2 : 1;
+      const cardW = (rightW - 32 - gap * (columns - 1)) / columns;
+      const cardH = 168;
+      services.forEach((service, index) => {
+        const col = index % columns;
+        const row = Math.floor(index / columns);
+        const x = rightX + 16 + col * (cardW + gap);
+        const y = pad + 92 + row * (cardH + gap) - state.serviceScroll;
+        if (y > -cardH && y < height + 20) drawServiceCard(service, x, y, cardW);
+      });
+    }
+    ctx.restore();
   }
-  ctx.restore();
 };
 
 const syncCategoryOptions = () => {
@@ -783,6 +864,13 @@ canvas.addEventListener('click', (event) => {
   if (box.type === 'category-select') {
     state.selectedCategoryId = box.id;
     state.serviceScroll = 0;
+    if (canvas.clientWidth < 768) {
+      state.view = 'services';
+    }
+    draw();
+  }
+  if (box.type === 'mobile-back-to-categories') {
+    state.view = 'categories';
     draw();
   }
   if (box.type === 'category-edit') openCategoryDrawer(state.categories.find((category) => category.id === box.id));
@@ -795,19 +883,66 @@ canvas.addEventListener('wheel', (event) => {
   event.preventDefault();
   const rect = canvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
+  const isMobile = canvas.clientWidth < 768;
   const leftW = 320;
-  if (x < 16 + leftW) {
+  
+  if (isMobile ? state.view === 'categories' : x < 16 + leftW) {
     const total = ([{ id: 'all' }, ...state.categories].length * 86) + 16;
     state.categoryScroll = Math.max(0, Math.min(total - canvas.clientHeight + 140, state.categoryScroll + event.deltaY));
   } else {
     const services = getFilteredServices();
-    const columns = canvas.clientWidth - (16 + leftW + 16) - 16 > 920 ? 2 : 1;
+    const columns = isMobile ? 1 : (canvas.clientWidth - (16 + leftW + 16) - 16 > 920 ? 2 : 1);
     const rows = Math.ceil(services.length / columns);
     const total = rows * 182;
     state.serviceScroll = Math.max(0, Math.min(total - canvas.clientHeight + 150, state.serviceScroll + event.deltaY));
   }
   draw();
 }, { passive: false });
+
+// START: MOBILE TOUCH DRAG-SCROLL SUPPORT
+let isDragging = false;
+let startY = 0;
+let startX = 0;
+let startCategoryScroll = 0;
+let startServiceScroll = 0;
+
+canvas.addEventListener('pointerdown', (event) => {
+  isDragging = true;
+  startY = event.clientY;
+  startX = event.clientX;
+  startCategoryScroll = state.categoryScroll;
+  startServiceScroll = state.serviceScroll;
+  canvas.setPointerCapture(event.pointerId);
+});
+
+canvas.addEventListener('pointermove', (event) => {
+  if (!isDragging) return;
+  const deltaY = startY - event.clientY;
+  const isMobile = canvas.clientWidth < 768;
+  const leftW = 320;
+
+  if (isMobile ? state.view === 'categories' : startX < 16 + leftW) {
+    const total = ([{ id: 'all' }, ...state.categories].length * 86) + 16;
+    state.categoryScroll = Math.max(0, Math.min(total - canvas.clientHeight + 140, startCategoryScroll + deltaY));
+  } else {
+    const services = getFilteredServices();
+    const columns = isMobile ? 1 : (canvas.clientWidth - (16 + leftW + 16) - 16 > 920 ? 2 : 1);
+    const rows = Math.ceil(services.length / columns);
+    const total = rows * 182;
+    state.serviceScroll = Math.max(0, Math.min(total - canvas.clientHeight + 150, startServiceScroll + deltaY));
+  }
+  draw();
+});
+
+canvas.addEventListener('pointerup', (event) => {
+  isDragging = false;
+  canvas.releasePointerCapture(event.pointerId);
+});
+
+canvas.addEventListener('pointercancel', (event) => {
+  isDragging = false;
+});
+// END: MOBILE TOUCH DRAG-SCROLL SUPPORT
 
 confirmCanvas.addEventListener('click', (event) => {
   if (!confirmState.open) return;
@@ -827,6 +962,9 @@ document.addEventListener('keydown', (event) => {
 
 searchInput.addEventListener('input', () => {
   state.serviceScroll = 0;
+  if (canvas.clientWidth < 768 && searchInput.value.trim().length > 0) {
+    state.view = 'services';
+  }
   draw();
 });
 

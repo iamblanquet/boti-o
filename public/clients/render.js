@@ -132,6 +132,14 @@ export const renderClientDetail = (client) => {
   detail.innerHTML = `
     <div class="flex flex-col">
       <div class="border-b border-slate-100 px-5 py-4">
+        <!-- START: MOBILE RESPONSIVE CLOSE BUTTON -->
+        <div class="flex justify-between items-center mb-4 lg:hidden">
+          <span class="font-bold text-slate-800 text-sm">Ficha del Cliente</span>
+          <button id="closeClientDetailBtn" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-200 transition-colors" type="button" aria-label="Cerrar Ficha">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <!-- END: MOBILE RESPONSIVE CLOSE BUTTON -->
         <div class="flex items-start gap-3">
           <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-base font-extrabold text-emerald-700">${escapeHtml(getInitials(client.name))}</div>
           <div class="min-w-0 flex-1">

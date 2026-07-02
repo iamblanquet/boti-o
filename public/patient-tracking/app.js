@@ -27,6 +27,10 @@ const getVisibleItems = () => getFilteredItems({
 const render = () => {
   const visible = getVisibleItems();
   document.getElementById('totalPatients').textContent = String(visible.length);
+  // START: MOBILE RESPONSIVE COUNT BADGE
+  const mobileCountEl = document.getElementById('mobileCountBadge');
+  if (mobileCountEl) mobileCountEl.textContent = String(visible.length);
+  // END: MOBILE RESPONSIVE COUNT BADGE
   renderBoard({ stages: state.stages, items: visible });
 };
 

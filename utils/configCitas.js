@@ -1,4 +1,5 @@
 const TIMEZONE = process.env.GOOGLE_TIMEZONE || 'America/Mexico_City';
+process.env.TZ = TIMEZONE; // Configura la zona horaria del proceso de Node.js
 
 const BUSINESS_HOURS = {
     1: { start: '09:00', end: '18:00' },
