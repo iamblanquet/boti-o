@@ -471,19 +471,6 @@ document.addEventListener('DOMContentLoaded', function() {
         calendar.refetchEvents();
     });
 
-    const drawer = document.getElementById('sideDrawer');
-    const overlay = document.getElementById('drawerOverlay');
-    const closeDrawer = () => {
-        drawer.classList.remove('drawer-open');
-        overlay.classList.remove('overlay-visible');
-    };
-    document.getElementById('mainMenuBtn').addEventListener('click', () => {
-        drawer.classList.add('drawer-open');
-        overlay.classList.add('overlay-visible');
-    });
-    document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
-    overlay.addEventListener('click', closeDrawer);
-
     let mobileLayout = window.innerWidth < 768;
     window.addEventListener('resize', () => {
         const nextMobileLayout = window.innerWidth < 768;

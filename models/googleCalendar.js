@@ -175,12 +175,6 @@ const writePersistentEventsCache = (cache) => {
     }
 };
 
-const getEventsCacheKey = ({ timeMin, timeMax } = {}) => [
-    getCalendarId(),
-    timeMin ? new Date(timeMin).toISOString() : '',
-    timeMax ? new Date(timeMax).toISOString() : ''
-].join('|');
-
 const getNormalizedGlobalRange = (now = new Date()) => {
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const minDate = new Date(startOfToday.getTime() - 30 * 24 * 60 * 60 * 1000);
@@ -199,24 +193,6 @@ const filterEventsByRange = (events, timeMin, timeMax) => {
         const end = new Date(event.endAt || event.startAt).getTime();
         return start < maxTime && end > minTime;
     });
-};
-
-const getPersistentEventsCacheEntry = (params) => {
-    const cache = readPersistentEventsCache();
-    const cacheKey = getEventsCacheKey(params);
-    return { cache, cacheKey, entry: cache.entries[cacheKey] || null };
-};
-
-const setPersistentEventsCacheEntry = (params, events) => {
-    const { cache, cacheKey } = getPersistentEventsCacheEntry(params);
-    cache.entries[cacheKey] = {
-        calendarId: getCalendarId(),
-        timeMin: params?.timeMin || null,
-        timeMax: params?.timeMax || null,
-        savedAt: Date.now(),
-        events: events || []
-    };
-    writePersistentEventsCache(cache);
 };
 
 const refreshPersistentEventsCache = (params, cacheKey) => {
