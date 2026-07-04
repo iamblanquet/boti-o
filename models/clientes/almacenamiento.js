@@ -4,6 +4,11 @@ const getSupabase = require('../../config/supabase');
 
 const CitasStorage = require('../citas/almacenamiento');
 
+const normalizePhoneNumber = (phoneNumber) => String(phoneNumber || '')
+    .replace(/@c\.us$/i, '')
+    .replace(/\D/g, '');
+
+
 const BACKUP_DIR = path.join(__dirname, '..', '..', 'data');
 const BACKUP_FILE = path.join(BACKUP_DIR, 'clientes.json');
 
@@ -178,7 +183,19 @@ const listSupabaseClients = async () => {
 
 const hasOwn = (object, field) => Object.prototype.hasOwnProperty.call(object || {}, field);
 
+const clearAgendaCache = () => {
+    try {
+        const agendaCacheFile = path.join(BACKUP_DIR, 'calendar_agenda_cache.json');
+        if (fs.existsSync(agendaCacheFile)) {
+            fs.unlinkSync(agendaCacheFile);
+        }
+    } catch (error) {
+        console.log('No se pudo limpiar cache de agenda desde clientes:', error.message);
+    }
+};
+
 const saveClient = async (clientData) => {
+    clearAgendaCache();
     if (!clientData.phoneNumber) return null;
     const existing = await getClient(clientData.phoneNumber) || {};
 
@@ -236,9 +253,42 @@ const getClientConfirmedAppointments = async (phoneNumber) => {
     return appointments.filter(apt => apt.status === 'confirmada');
 }
 
+const getClientsByPhones = async (phoneNumbers) => {
+    if (!phoneNumbers || phoneNumbers.length === 0) return [];
+    
+    // Normalize phone numbers using normalizePhoneNumber
+    const lookupValues = Array.from(new Set(phoneNumbers.map(normalizePhoneNumber).filter(Boolean)));
+    if (lookupValues.length === 0) return [];
+
+    // 1. Supabase
+    const supabase = getSupabaseClient();
+    if (supabase) {
+        const { data, error } = await supabase
+            .from('clients')
+            .select('*')
+            .in('phone_number', lookupValues);
+        if (!error && data) {
+            return (data || []).map(fromDbClient);
+        }
+        console.log('Supabase getClientsByPhones error:', error?.message);
+    }
+
+    // 3. Respaldo local
+    const backup = readBackup();
+    const result = [];
+    lookupValues.forEach(phone => {
+        if (backup[phone]) {
+            result.push(normalizeClient(backup[phone]));
+        }
+    });
+    return result;
+}
+
 module.exports = {
     saveClient,
     getClient,
     listClients,
-    getClientConfirmedAppointments
+    getClientConfirmedAppointments,
+    getClientsByPhones
 };
+

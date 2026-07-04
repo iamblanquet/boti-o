@@ -6,7 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let allEvents = [];
     let selectedServices = new Set();
     let loadedRange = '';
-    let isRefreshing = false;
+    let currentAbortController = null;
+    let refreshRetryTimeout = null;
+    let refreshRetryAttempts = 0;
+    const calendarCachePrefix = 'thessa.calendar.events.';
 
     const palette = ['#0891b2', '#676a3e', '#7c3aed', '#d97706', '#e11d48', '#0284c7', '#ea580c', '#4f46e5'];
     const colors = new Map();
@@ -230,24 +233,94 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     };
 
-    const loadEvents = async (start, end) => {
-        if (isRefreshing) return;
-        isRefreshing = true;
+    const renderLoadedEvents = (events) => {
+        allEvents = (events || []).map(mapEvent);
+        buildFilters();
+        updateMetrics();
+        renderNextAppointment();
+        renderInProgressAppointments();
+        calendar.refetchEvents();
+    };
+
+    const getCacheKey = (start, end) => `${calendarCachePrefix}${start.toISOString()}_${end.toISOString()}`;
+
+    const readCachedEvents = (start, end) => {
+        try {
+            const raw = window.sessionStorage.getItem(getCacheKey(start, end));
+            if (!raw) return null;
+            const cached = JSON.parse(raw);
+            if (!cached || !Array.isArray(cached.events)) return null;
+            if (Date.now() - Number(cached.savedAt || 0) > 5 * 60 * 1000) return null;
+            return cached.events;
+        } catch (error) {
+            return null;
+        }
+    };
+
+    const writeCachedEvents = (start, end, events) => {
+        try {
+            window.sessionStorage.setItem(getCacheKey(start, end), JSON.stringify({
+                savedAt: Date.now(),
+                events: events || []
+            }));
+        } catch (error) {
+            // sessionStorage can be unavailable in private modes; the calendar still works without it.
+        }
+    };
+
+    const scheduleRefreshRetry = (start, end, payload) => {
+        if (!payload?.cache?.refreshing) {
+            refreshRetryAttempts = 0;
+            return;
+        }
+        if (refreshRetryAttempts >= 5) return;
+
+        window.clearTimeout(refreshRetryTimeout);
+        refreshRetryAttempts += 1;
+        refreshRetryTimeout = window.setTimeout(() => {
+            loadEvents(start, end, { showLoading: false }).catch((error) => {
+                warningBanner.textContent = error.message;
+                warningBanner.classList.remove('hidden');
+            });
+        }, 1200);
+    };
+
+    const loadEvents = async (start, end, options = {}) => {
+        const showLoading = options.showLoading !== false;
+        if (currentAbortController) {
+            currentAbortController.abort();
+        }
+        currentAbortController = new AbortController();
+        const { signal } = currentAbortController;
+
+        if (showLoading) {
+            calendarEl.classList.add('loading');
+        }
+
         const query = new URLSearchParams({ start: start.toISOString(), end: end.toISOString() });
         try {
-            const response = await fetch(`/api/calendar/confirmed-appointments?${query}`);
+            const response = await fetch(`/api/calendar/confirmed-appointments?${query}`, { signal });
             const payload = await response.json();
             if (!response.ok) throw new Error(payload.error || 'No se pudo cargar el calendario');
-            allEvents = (payload.events || []).map(mapEvent);
+            const events = payload.events || [];
+            writeCachedEvents(start, end, events);
+            renderLoadedEvents(events);
             warningBanner.textContent = payload.warning || '';
             warningBanner.classList.toggle('hidden', !payload.warning);
-            buildFilters();
-            updateMetrics();
-            renderNextAppointment();
-            renderInProgressAppointments();
-            calendar.refetchEvents();
+            scheduleRefreshRetry(start, end, payload);
+            return true;
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return false; // Ignorar errores de aborto planeados
+            }
+            throw error;
         } finally {
-            isRefreshing = false;
+            if (currentAbortController?.signal === signal) {
+                currentAbortController = null;
+                if (showLoading) {
+                    calendarEl.classList.remove('loading');
+                }
+            }
         }
     };
 
@@ -340,10 +413,15 @@ document.addEventListener('DOMContentLoaded', function() {
         datesSet: async (info) => {
             const range = `${info.startStr}|${info.endStr}`;
             if (range === loadedRange) return;
-            loadedRange = range;
+            const cachedEvents = readCachedEvents(info.start, info.end);
+            if (cachedEvents) {
+                renderLoadedEvents(cachedEvents);
+            }
             try {
-                await loadEvents(info.start, info.end);
+                const loaded = await loadEvents(info.start, info.end);
+                if (loaded) loadedRange = range;
             } catch (error) {
+                loadedRange = '';
                 warningBanner.textContent = error.message;
                 warningBanner.classList.remove('hidden');
             }

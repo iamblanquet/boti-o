@@ -30,3 +30,10 @@
   .appointment-event__status { font-size:.5rem; }
   .appointment-event__details { font-size:.61rem; }
 }
+
+#calendar.loading {
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 0.15s ease-in-out;
+}
+

@@ -259,7 +259,19 @@ const clearFlow = async (phoneNumber) => {
     await StateStore.del(flowKey(phoneNumber));
 }
 
+const clearAgendaCache = () => {
+    try {
+        const agendaCacheFile = path.join(BACKUP_DIR, 'calendar_agenda_cache.json');
+        if (fs.existsSync(agendaCacheFile)) {
+            fs.unlinkSync(agendaCacheFile);
+        }
+    } catch (error) {
+        console.log('No se pudo limpiar cache de agenda desde almacenamiento:', error.message);
+    }
+};
+
 const saveAppointment = async (appointment) => {
+    clearAgendaCache();
     const id = appointment.id || uuidv4();
     const now = new Date().toISOString();
     const payload = {
