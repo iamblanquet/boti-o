@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let refreshRetryTimeout = null;
     let refreshRetryAttempts = 0;
     const calendarCachePrefix = 'thessa.calendar.events.';
+    let calendar = null;
 
     const palette = ['#0891b2', '#676a3e', '#7c3aed', '#d97706', '#e11d48', '#0284c7', '#ea580c', '#4f46e5'];
     const colors = new Map();
@@ -239,7 +240,9 @@ document.addEventListener('DOMContentLoaded', function() {
         updateMetrics();
         renderNextAppointment();
         renderInProgressAppointments();
-        calendar.refetchEvents();
+        if (calendar) {
+            calendar.refetchEvents();
+        }
     };
 
     const getCacheKey = (start, end) => `${calendarCachePrefix}${start.toISOString()}_${end.toISOString()}`;
@@ -362,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
 
-    const calendar = new FullCalendar.Calendar(calendarEl, {
+    calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek',
         headerToolbar: {
             left: 'prev,next today',
