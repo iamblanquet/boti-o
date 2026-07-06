@@ -312,7 +312,7 @@ const recordIncomingMessage = async ({ phoneNumber, name, messageText, messageId
     );
     messageText = clientResult?.cleanMessage || messageText;
 
-    await ChatStore.addMessage({
+    const storedMessage = await ChatStore.addMessage({
         phoneNumber,
         name,
         direction: 'in',
@@ -334,6 +334,7 @@ const recordIncomingMessage = async ({ phoneNumber, name, messageText, messageId
         originalMessage,
         messageId,
         type,
+        createdAt: storedMessage?.createdAt || new Date().toISOString(),
         clientResult
     };
 }

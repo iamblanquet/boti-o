@@ -1,7 +1,10 @@
 const ConversationEngine = require('../models/conversationEngine');
+const ChatStore = require('../models/chatStore');
+const StateStore = require('../models/stateStore');
 
 const DEFAULT_DEBOUNCE_MS = 3000;
 const DEFAULT_MAX_WAIT_MS = 15000;
+const STATE_TTL_SECONDS = 60;
 
 const toPositiveNumber = (value, fallback) => {
     const number = Number(value);
@@ -13,6 +16,8 @@ class MessageDebouncer {
         this.debounceMs = toPositiveNumber(options.debounceMs ?? process.env.MESSAGE_DEBOUNCE_MS, DEFAULT_DEBOUNCE_MS);
         this.maxWaitMs = toPositiveNumber(options.maxWaitMs ?? process.env.MESSAGE_MAX_DEBOUNCE_MS, DEFAULT_MAX_WAIT_MS);
         this.engine = options.engine || ConversationEngine;
+        this.chatStore = options.chatStore || ChatStore;
+        this.stateStore = options.stateStore === undefined ? StateStore : options.stateStore;
         this.timers = options.timers || {
             setTimeout,
             clearTimeout
@@ -46,19 +51,67 @@ class MessageDebouncer {
         }
 
         if(this.isTextMessage(incoming)) {
-            this.addTextMessage(recorded);
+            await this.addTextMessage(recorded);
             return { status: 'debounced' };
         }
 
-        this.flushText(incoming.phoneNumber);
+        await this.flushText(incoming.phoneNumber);
         this.enqueueResponse(recorded);
         return { status: 'queued-interactive' };
     }
 
-    addTextMessage(recorded) {
+    getStateKey(phoneNumber) {
+        return `${phoneNumber}:message_debounce_batch`;
+    }
+
+    createToken() {
+        return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    async getSharedBatch(phoneNumber) {
+        if(!this.stateStore) return null;
+        const raw = await this.stateStore.get(this.getStateKey(phoneNumber));
+        if(!raw) return null;
+
+        try {
+            return JSON.parse(raw);
+        } catch (error) {
+            await this.stateStore.del(this.getStateKey(phoneNumber));
+            return null;
+        }
+    }
+
+    async saveSharedBatch(batch) {
+        if(!this.stateStore) return;
+        await this.stateStore.set(this.getStateKey(batch.phoneNumber), JSON.stringify(batch), STATE_TTL_SECONDS);
+    }
+
+    async clearSharedBatch(phoneNumber, token = null) {
+        if(!this.stateStore) return;
+        if(token) {
+            const current = await this.getSharedBatch(phoneNumber);
+            if(current?.token !== token) return;
+        }
+        await this.stateStore.del(this.getStateKey(phoneNumber));
+    }
+
+    async addTextMessage(recorded) {
         const phoneNumber = recorded.phoneNumber;
         const current = this.pendingText.get(phoneNumber);
         const now = Date.now();
+        const currentShared = await this.getSharedBatch(phoneNumber);
+        const token = this.createToken();
+        const firstAt = currentShared?.firstAt || recorded.createdAt || new Date(now).toISOString();
+        const batch = {
+            token,
+            phoneNumber,
+            name: recorded.name || currentShared?.name || '',
+            firstAt,
+            lastAt: recorded.createdAt || new Date(now).toISOString(),
+            lastMessageId: recorded.messageId,
+            updatedAt: new Date(now).toISOString()
+        };
+        await this.saveSharedBatch(batch);
 
         if(!current) {
             const entry = {
@@ -67,6 +120,7 @@ class MessageDebouncer {
                 type: recorded.type,
                 firstAt: now,
                 messages: [recorded],
+                token,
                 debounceTimer: null,
                 maxTimer: null
             };
@@ -78,31 +132,69 @@ class MessageDebouncer {
         current.name = recorded.name || current.name;
         current.type = recorded.type || current.type;
         current.messages.push(recorded);
+        current.token = token;
         this.scheduleTextFlush(current);
     }
 
     scheduleTextFlush(entry) {
         if(entry.debounceTimer) this.timers.clearTimeout(entry.debounceTimer);
         entry.debounceTimer = this.timers.setTimeout(() => {
-            this.flushText(entry.phoneNumber);
+            this.flushText(entry.phoneNumber, entry.token).catch((error) => {
+                console.log('Error vaciando debounce de mensajes', {
+                    phoneNumber: entry.phoneNumber,
+                    error: error.message
+                });
+            });
         }, this.debounceMs);
 
         if(!entry.maxTimer && this.maxWaitMs > 0) {
             entry.maxTimer = this.timers.setTimeout(() => {
-                this.flushText(entry.phoneNumber);
+                this.flushText(entry.phoneNumber).catch((error) => {
+                    console.log('Error vaciando debounce maximo de mensajes', {
+                        phoneNumber: entry.phoneNumber,
+                        error: error.message
+                    });
+                });
             }, this.maxWaitMs);
         }
     }
 
-    flushText(phoneNumber) {
-        const entry = this.pendingText.get(phoneNumber);
-        if(!entry) return null;
+    async buildTextPayloadFromSharedBatch(batch) {
+        if(!batch) return null;
+        const messages = await this.chatStore.getMessagesAsync(batch.phoneNumber);
+        const firstAt = new Date(batch.firstAt).getTime();
+        const lastAt = new Date(batch.lastAt).getTime();
+        const maxWindowStart = Date.now() - this.maxWaitMs - this.debounceMs - 1000;
+        const safeFirstAt = Number.isFinite(firstAt) ? firstAt : maxWindowStart;
+        const safeLastAt = Number.isFinite(lastAt) ? lastAt + 1000 : Date.now() + 1000;
+        const textMessages = (messages || [])
+            .filter((message) => message.direction === 'in' && message.type === 'text')
+            .filter((message) => {
+                const createdAt = new Date(message.createdAt).getTime();
+                return Number.isFinite(createdAt) && createdAt >= safeFirstAt && createdAt <= safeLastAt;
+            });
 
-        if(entry.debounceTimer) this.timers.clearTimeout(entry.debounceTimer);
-        if(entry.maxTimer) this.timers.clearTimeout(entry.maxTimer);
-        this.pendingText.delete(phoneNumber);
+        if(!textMessages.length) return null;
 
-        const messages = entry.messages || [];
+        const lastMessage = textMessages[textMessages.length - 1];
+        const combinedText = textMessages
+            .map((message) => String(message.text || '').trim())
+            .filter(Boolean)
+            .join('\n');
+
+        if(!combinedText) return null;
+
+        return {
+            phoneNumber: batch.phoneNumber,
+            name: batch.name,
+            type: 'text',
+            messageText: combinedText,
+            messageId: batch.lastMessageId || lastMessage.id
+        };
+    }
+
+    buildTextPayloadFromLocalEntry(entry) {
+        const messages = entry?.messages || [];
         if(!messages.length) return null;
 
         const lastMessage = messages[messages.length - 1];
@@ -113,14 +205,33 @@ class MessageDebouncer {
 
         if(!combinedText) return null;
 
-        const payload = {
-            phoneNumber,
+        return {
+            phoneNumber: entry.phoneNumber,
             name: lastMessage.name || entry.name,
             type: 'text',
             messageText: combinedText,
             messageId: lastMessage.messageId
         };
+    }
 
+    async flushText(phoneNumber, expectedToken = null) {
+        const entry = this.pendingText.get(phoneNumber);
+        const sharedBatch = await this.getSharedBatch(phoneNumber);
+        const token = expectedToken || entry?.token || sharedBatch?.token || null;
+
+        if(expectedToken && sharedBatch?.token !== expectedToken) return null;
+        if(!entry && !sharedBatch) return null;
+
+        if(entry?.debounceTimer) this.timers.clearTimeout(entry.debounceTimer);
+        if(entry?.maxTimer) this.timers.clearTimeout(entry.maxTimer);
+        this.pendingText.delete(phoneNumber);
+
+        const payload = sharedBatch
+            ? await this.buildTextPayloadFromSharedBatch(sharedBatch)
+            : this.buildTextPayloadFromLocalEntry(entry);
+
+        await this.clearSharedBatch(phoneNumber, token);
+        if(!payload) return null;
         this.enqueueResponse(payload);
         return payload;
     }
@@ -148,7 +259,7 @@ class MessageDebouncer {
     }
 
     async flushAll() {
-        Array.from(this.pendingText.keys()).forEach((phoneNumber) => this.flushText(phoneNumber));
+        await Promise.all(Array.from(this.pendingText.keys()).map((phoneNumber) => this.flushText(phoneNumber)));
         await Promise.allSettled(Array.from(this.queues.values()));
     }
 }

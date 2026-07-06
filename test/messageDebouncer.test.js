@@ -13,10 +13,14 @@ const createEngineMock = () => {
     return {
         calls,
         async recordIncomingMessage(payload) {
-            calls.recorded.push(payload);
-            return {
+            const recorded = {
                 ...payload,
-                messageText: String(payload.messageText || '').trim()
+                messageText: String(payload.messageText || '').trim(),
+                createdAt: new Date().toISOString()
+            };
+            calls.recorded.push(recorded);
+            return {
+                ...recorded
             };
         },
         async respondToIncomingMessage(payload) {
@@ -26,10 +30,42 @@ const createEngineMock = () => {
     };
 }
 
+const createStateStoreMock = () => {
+    const values = new Map();
+    return {
+        async get(key) {
+            return values.get(key) || null;
+        },
+        async set(key, value) {
+            values.set(key, String(value));
+        },
+        async del(key) {
+            values.delete(key);
+        }
+    };
+}
+
+const createChatStoreMock = (engine) => ({
+    async getMessagesAsync(phoneNumber) {
+        return engine.calls.recorded
+            .filter((message) => message.phoneNumber === phoneNumber)
+            .map((message) => ({
+                id: message.messageId,
+                phoneNumber: message.phoneNumber,
+                direction: 'in',
+                type: message.type,
+                text: message.messageText,
+                createdAt: message.createdAt
+            }));
+    }
+});
+
 test('debounces consecutive text messages into one response payload', async () => {
     const engine = createEngineMock();
     const debouncer = new MessageDebouncer({
         engine,
+        chatStore: createChatStoreMock(engine),
+        stateStore: createStateStoreMock(),
         debounceMs: 20,
         maxWaitMs: 100
     });
@@ -69,6 +105,8 @@ test('processes immediately when debounce is disabled', async () => {
     const engine = createEngineMock();
     const debouncer = new MessageDebouncer({
         engine,
+        chatStore: createChatStoreMock(engine),
+        stateStore: createStateStoreMock(),
         debounceMs: 0,
         maxWaitMs: 100
     });
@@ -101,6 +139,8 @@ test('flushes pending text before interactive messages and preserves order', asy
     const engine = createEngineMock();
     const debouncer = new MessageDebouncer({
         engine,
+        chatStore: createChatStoreMock(engine),
+        stateStore: createStateStoreMock(),
         debounceMs: 100,
         maxWaitMs: 500
     });
@@ -125,4 +165,41 @@ test('flushes pending text before interactive messages and preserves order', asy
     assert.equal(engine.calls.responses.length, 2);
     assert.equal(engine.calls.responses[0].messageText, 'quiero cita');
     assert.equal(engine.calls.responses[1].messageText, 'menu_appointment');
+});
+
+test('ignores stale text timers when a newer batch token exists', async () => {
+    const engine = createEngineMock();
+    const stateStore = createStateStoreMock();
+    const debouncer = new MessageDebouncer({
+        engine,
+        chatStore: createChatStoreMock(engine),
+        stateStore,
+        debounceMs: 100,
+        maxWaitMs: 500
+    });
+
+    await debouncer.handleIncoming({
+        phoneNumber: '5219990000004',
+        name: 'Luis',
+        type: 'text',
+        messageText: 'hola',
+        messageId: 'm1'
+    });
+    const firstBatch = await debouncer.getSharedBatch('5219990000004');
+
+    await debouncer.handleIncoming({
+        phoneNumber: '5219990000004',
+        name: 'Luis',
+        type: 'text',
+        messageText: 'quiero informacion',
+        messageId: 'm2'
+    });
+
+    const staleFlush = await debouncer.flushText('5219990000004', firstBatch.token);
+    assert.equal(staleFlush, null);
+
+    await debouncer.flushAll();
+
+    assert.equal(engine.calls.responses.length, 1);
+    assert.equal(engine.calls.responses[0].messageText, 'hola\nquiero informacion');
 });
