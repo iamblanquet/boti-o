@@ -3,6 +3,7 @@ const Messages = require('./messages');
 const StateStore = require('./stateStore');
 const CustomerProfile = require('./customerProfile');
 const { buildSpaExpertToneInstructions, cleanWhatsappText } = require('./aiResponseStyle');
+const ResponseGuard = require('../utils/responseGuard');
 
 let openai = null;
 
@@ -38,6 +39,9 @@ const chatgpt = async (message, phoneNumber, messageId) => {
         })
         console.log('result', JSON.stringify(result));
         const responseText = cleanWhatsappText(result.choices[0].message.content);
+        if(!await ResponseGuard.shouldSend({ phoneNumber })) {
+            return { stale: true };
+        }
         messagesGpt.push({
             role: 'assistant',
             content: responseText

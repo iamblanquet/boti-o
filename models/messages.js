@@ -4,6 +4,7 @@ const Whatsapp = require('../config/whatsapp');
 const ChatStore = require('./chatStore');
 const CustomerProfile = require('./customerProfile');
 const CampaignFunnel = require('./campaigns/funnelService');
+const ResponseGuard = require('../utils/responseGuard');
 
 const getGraphErrorMessage = (error) => {
     const graphError = error?.response?.data?.error;
@@ -93,6 +94,16 @@ const sendMessage = async (options) => {
         source = 'bot'
     } = options;
     try {
+        const canSend = await ResponseGuard.shouldSend({ phoneNumber });
+        if(!canSend) {
+            console.log('Respuesta obsoleta descartada', {
+                phoneNumber,
+                type,
+                source
+            });
+            return null;
+        }
+
         const url = Whatsapp.getMessagesUrl();
         const shouldPersonalize = source !== 'human' && options.personalize !== false;
         const outboundText = shouldPersonalize

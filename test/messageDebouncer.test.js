@@ -1,6 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { MessageDebouncer } = require('../utils/messageDebouncer');
+const ResponseGuard = require('../utils/responseGuard');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -202,4 +203,68 @@ test('ignores stale text timers when a newer batch token exists', async () => {
 
     assert.equal(engine.calls.responses.length, 1);
     assert.equal(engine.calls.responses[0].messageText, 'hola\nquiero informacion');
+});
+
+test('marks an in-flight response as stale when a newer text batch arrives', async () => {
+    const engine = createEngineMock();
+    const stateStore = createStateStoreMock();
+    let releaseFirstResponse;
+    let firstResponseStarted;
+    const firstStarted = new Promise((resolve) => {
+        firstResponseStarted = resolve;
+    });
+    const releaseFirst = new Promise((resolve) => {
+        releaseFirstResponse = resolve;
+    });
+
+    let responseCount = 0;
+    engine.respondToIncomingMessage = async (payload) => {
+        responseCount += 1;
+        if(responseCount === 1) {
+            firstResponseStarted();
+            await releaseFirst;
+        }
+
+        engine.calls.responses.push({
+            ...payload,
+            canSend: await ResponseGuard.shouldSend({ phoneNumber: payload.phoneNumber })
+        });
+        return { handledBy: 'test' };
+    };
+
+    const debouncer = new MessageDebouncer({
+        engine,
+        chatStore: createChatStoreMock(engine),
+        stateStore,
+        debounceMs: 20,
+        maxWaitMs: 500
+    });
+
+    await debouncer.handleIncoming({
+        phoneNumber: '5219990000005',
+        name: 'Sofia',
+        type: 'text',
+        messageText: 'quiero',
+        messageId: 'm1'
+    });
+
+    await firstStarted;
+
+    await debouncer.handleIncoming({
+        phoneNumber: '5219990000005',
+        name: 'Sofia',
+        type: 'text',
+        messageText: 'informacion de depilacion de manos',
+        messageId: 'm2'
+    });
+
+    releaseFirstResponse();
+    await sleep(35);
+    await debouncer.flushAll();
+
+    assert.equal(engine.calls.responses.length, 2);
+    assert.equal(engine.calls.responses[0].messageText, 'quiero');
+    assert.equal(engine.calls.responses[0].canSend, false);
+    assert.equal(engine.calls.responses[1].messageText, 'quiero\ninformacion de depilacion de manos');
+    assert.equal(engine.calls.responses[1].canSend, true);
 });

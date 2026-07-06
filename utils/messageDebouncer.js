@@ -1,6 +1,7 @@
 const ConversationEngine = require('../models/conversationEngine');
 const ChatStore = require('../models/chatStore');
 const StateStore = require('../models/stateStore');
+const ResponseGuard = require('./responseGuard');
 
 const DEFAULT_DEBOUNCE_MS = 3000;
 const DEFAULT_MAX_WAIT_MS = 15000;
@@ -189,7 +190,9 @@ class MessageDebouncer {
             name: batch.name,
             type: 'text',
             messageText: combinedText,
-            messageId: batch.lastMessageId || lastMessage.id
+            messageId: batch.lastMessageId || lastMessage.id,
+            debounceToken: batch.token,
+            debounceStateKey: this.getStateKey(batch.phoneNumber)
         };
     }
 
@@ -210,7 +213,9 @@ class MessageDebouncer {
             name: lastMessage.name || entry.name,
             type: 'text',
             messageText: combinedText,
-            messageId: lastMessage.messageId
+            messageId: lastMessage.messageId,
+            debounceToken: entry.token,
+            debounceStateKey: this.getStateKey(entry.phoneNumber)
         };
     }
 
@@ -230,7 +235,6 @@ class MessageDebouncer {
             ? await this.buildTextPayloadFromSharedBatch(sharedBatch)
             : this.buildTextPayloadFromLocalEntry(entry);
 
-        await this.clearSharedBatch(phoneNumber, token);
         if(!payload) return null;
         this.enqueueResponse(payload);
         return payload;
@@ -239,14 +243,29 @@ class MessageDebouncer {
     enqueueResponse(payload) {
         const phoneNumber = payload.phoneNumber;
         const previous = this.queues.get(phoneNumber) || Promise.resolve();
+        const runResponse = async () => {
+            if(!payload.debounceToken) return this.engine.respondToIncomingMessage(payload);
+
+            return ResponseGuard.run({
+                phoneNumber,
+                token: payload.debounceToken,
+                stateKey: payload.debounceStateKey || this.getStateKey(phoneNumber),
+                stateStore: this.stateStore
+            }, () => this.engine.respondToIncomingMessage(payload));
+        };
+
         const next = previous
             .catch(() => null)
-            .then(() => this.engine.respondToIncomingMessage(payload))
+            .then(runResponse)
             .catch((error) => {
                 console.log('Error procesando mensaje en cola', {
                     phoneNumber,
                     error: error.message
                 });
+            })
+            .finally(() => {
+                if(payload.debounceToken) return this.clearSharedBatch(phoneNumber, payload.debounceToken);
+                return null;
             })
             .finally(() => {
                 if(this.queues.get(phoneNumber) === next) {

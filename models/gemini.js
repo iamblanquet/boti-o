@@ -8,6 +8,7 @@ const { findMediaForText } = require('../utils/serviceMedia');
 const { normalizeText } = require('../utils/configCitas');
 const { buildSpaExpertToneInstructions, cleanWhatsappText } = require('./aiResponseStyle');
 const ServicesRepository = require('./servicesRepository');
+const ResponseGuard = require('../utils/responseGuard');
 
 
 
@@ -190,6 +191,10 @@ const geminiProccess = async (message, number) => {
         const instructions = buildInstructions(knowledgeBase, customerName);
         const result = await askWithFallback({ instructions, history, message });
         const answer = cleanWhatsappText(result.answer);
+
+        if(!await ResponseGuard.shouldSend({ phoneNumber: number })) {
+            return { stale: true, provider: result.provider };
+        }
 
         await saveConversationHistory(number, [
             ...history,
