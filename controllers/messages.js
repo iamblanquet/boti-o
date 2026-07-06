@@ -1,4 +1,4 @@
-const ConversationEngine = require('../models/conversationEngine');
+const messageDebouncer = require('../utils/messageDebouncer');
 const { parseIncomingMessage } = require('../utils/whatsappWebhookParser');
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
@@ -35,7 +35,7 @@ const messageInfo = async (req, res) => {
             messageText: incoming.messageText
         });
 
-        await ConversationEngine.processIncomingMessage({
+        await messageDebouncer.handleIncoming({
             phoneNumber: incoming.phoneNumber,
             name: incoming.name,
             type: incoming.type,

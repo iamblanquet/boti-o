@@ -302,7 +302,7 @@ const handleHybridServicesMessage = async ({ phoneNumber, messageText }) => {
     return null;
 }
 
-const processIncomingMessageInternal = async ({ phoneNumber, name, messageText, messageId, type }) => {
+const recordIncomingMessage = async ({ phoneNumber, name, messageText, messageId, type }) => {
     const originalMessage = messageText;
     const clientResult = await clientModel.verifyStoreClient(
         phoneNumber,
@@ -311,8 +311,6 @@ const processIncomingMessageInternal = async ({ phoneNumber, name, messageText, 
         { returnAttribution: true }
     );
     messageText = clientResult?.cleanMessage || messageText;
-    const formatMessage = messageText.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-    const commandMessage = formatMessage.replace(/[^a-z0-9_ ]+/g, '').replace(/\s+/g, ' ').trim();
 
     await ChatStore.addMessage({
         phoneNumber,
@@ -328,6 +326,21 @@ const processIncomingMessageInternal = async ({ phoneNumber, name, messageText, 
 
     await CustomerProfile.rememberName(phoneNumber, name, 'whatsapp');
     await CustomerProfile.rememberFromMessage(phoneNumber, messageText);
+
+    return {
+        phoneNumber,
+        name,
+        messageText,
+        originalMessage,
+        messageId,
+        type,
+        clientResult
+    };
+}
+
+const respondToIncomingMessageInternal = async ({ phoneNumber, messageText, messageId }) => {
+    const formatMessage = messageText.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    const commandMessage = formatMessage.replace(/[^a-z0-9_ ]+/g, '').replace(/\s+/g, ' ').trim();
 
     const control = await ConversationControlStore.getControl(phoneNumber);
     if(control?.mode === 'human') {
@@ -462,12 +475,27 @@ const processIncomingMessageInternal = async ({ phoneNumber, name, messageText, 
     return { handledBy: 'ai-fallback' };
 }
 
+const respondToIncomingMessage = async (payload) => {
+    try {
+        return await respondToIncomingMessageInternal(payload);
+    } catch (error) {
+        if(isCatalogUnavailableError(error)) {
+            console.error('Service catalog unavailable:', error.cause?.message || error.message);
+            await Messages.sendTextMessage(ServicesRepository.CATALOG_UNAVAILABLE_MESSAGE, payload.phoneNumber, { source: 'bot' });
+            return { handledBy: 'service-catalog-unavailable' };
+        }
+
+        throw error;
+    }
+}
+
 const isCatalogUnavailableError = (error) => error?.code === 'SERVICE_CATALOG_UNAVAILABLE' ||
     error instanceof ServicesRepository.ServiceCatalogUnavailableError;
 
 const processIncomingMessage = async (payload) => {
     try {
-        return await processIncomingMessageInternal(payload);
+        const recorded = await recordIncomingMessage(payload);
+        return await respondToIncomingMessage(recorded);
     } catch (error) {
         if(isCatalogUnavailableError(error)) {
             console.error('Service catalog unavailable:', error.cause?.message || error.message);
@@ -481,6 +509,8 @@ const processIncomingMessage = async (payload) => {
 
 module.exports = {
     processIncomingMessage,
+    recordIncomingMessage,
+    respondToIncomingMessage,
     shouldPrioritizeServiceIntent,
     isRecommendationOrDoubtRequest
 };
