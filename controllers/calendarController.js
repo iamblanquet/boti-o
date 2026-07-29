@@ -142,6 +142,13 @@ const getGoogleEventValue = (event, key, descriptionLabel = key) => {
     return privateProperties[key] || getDescriptionValue(event.description, descriptionLabel);
 };
 
+const toParticipantNames = (value) => {
+    if(Array.isArray(value)) return value.map((name) => String(name || '').trim()).filter(Boolean);
+    const text = String(value || '').trim();
+    if(!text) return [];
+    return text.split('|').map((name) => name.trim()).filter(Boolean);
+};
+
 const getMergedStatus = (appointment, event) => {
     const statusCandidates = [
         appointment?.status,
@@ -189,6 +196,7 @@ const toLocalCalendarEvent = (appointment) => ({
     phoneNumber: appointment.phoneNumber || null,
     serviceName: appointment.serviceName || 'Otros',
     people: appointment.people || 1,
+    participantNames: toParticipantNames(appointment.participantNames),
     status: appointment.status,
     htmlLink: appointment.eventId
         ? `https://calendar.google.com/calendar/event?eid=${encodeURIComponent(appointment.eventId)}`
@@ -317,6 +325,9 @@ const getConfirmedAppointments = async (req, res) => {
                 const client = clientsByPhone.get(normalizePhoneNumber(phoneNumber));
 
                 const status = getMergedStatus(appointment, event);
+                const participantNames = appointment?.participantNames?.length
+                    ? appointment.participantNames
+                    : getGoogleEventValue(event, 'participantNames', 'Participantes');
 
                 return {
                     ...event,
@@ -330,6 +341,7 @@ const getConfirmedAppointments = async (req, res) => {
                     people: appointment?.people
                         || getGoogleEventValue(event, 'people', 'Personas')
                         || 1,
+                    participantNames: toParticipantNames(participantNames),
                     status
                 };
             })

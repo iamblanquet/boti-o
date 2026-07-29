@@ -227,6 +227,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 phoneNumber: appointment.phoneNumber || '',
                 serviceName,
                 people: appointment.people || 1,
+                participantNames: Array.isArray(appointment.participantNames)
+                    ? appointment.participantNames
+                    : [],
                 status: appointment.status || 'confirmada',
                 htmlLink: appointment.htmlLink || null,
                 source: appointment.source || 'local'
@@ -339,6 +342,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('modalClient').textContent = props.clientName;
         document.getElementById('modalService').textContent = props.serviceName;
         document.getElementById('modalPeople').textContent = props.people;
+        const participantNames = Array.isArray(props.participantNames)
+            ? props.participantNames.filter(Boolean)
+            : [];
+        document.getElementById('modalParticipants').textContent = participantNames.length
+            ? participantNames.join(', ')
+            : props.clientName || 'Sin participantes registrados';
         document.getElementById('modalStatus').textContent = props.status;
         document.getElementById('modalSource').textContent = props.source === 'google-calendar' ? 'Google Calendar' : 'Registro local';
         document.getElementById('modalHeaderColor').style.backgroundColor = getColor(props.serviceName);

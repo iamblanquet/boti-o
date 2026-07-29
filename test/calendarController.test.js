@@ -158,7 +158,8 @@ test('calendar endpoint reads Google event metadata from extended properties', a
                         phoneNumber: '5218880000000',
                         clientName: 'Cliente Metadata',
                         serviceName: 'Masaje Relajante',
-                        people: '2'
+                        people: '2',
+                        participantNames: 'Ana López | Beatriz Pérez'
                     }
                 },
                 startAt: '2099-07-11T16:00:00.000Z',
@@ -183,6 +184,7 @@ test('calendar endpoint reads Google event metadata from extended properties', a
         assert.equal(result.body.events[0].phoneNumber, '5218880000000');
         assert.equal(result.body.events[0].serviceName, 'Masaje Relajante');
         assert.equal(result.body.events[0].people, '2');
+        assert.deepEqual(result.body.events[0].participantNames, ['Ana López', 'Beatriz Pérez']);
         assert.equal(result.body.events[0].status, 'confirmada');
     } finally {
         cleanup();
