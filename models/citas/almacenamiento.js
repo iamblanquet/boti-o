@@ -77,7 +77,8 @@ const toDbAppointment = (appointment) => {
         date: appointment.date,
         time: appointment.time,
         price: appointment.price,
-        source: appointment.source
+        source: appointment.source,
+        participantNames: appointment.participantNames
     };
 
     Object.keys(metadata).forEach((key) => {

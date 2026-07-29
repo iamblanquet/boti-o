@@ -216,6 +216,13 @@ const toExtendedPropertyValue = (value) => {
     return String(value).slice(0, 1024);
 }
 
+const formatAppointmentParticipants = (appointment) => {
+    const names = Array.isArray(appointment?.participantNames)
+        ? appointment.participantNames.filter(Boolean)
+        : [];
+    return names.length ? names.join(' y ') : appointment?.name || '';
+};
+
 const buildAppointmentExtendedProperties = (appointment = {}) => {
     const privateProperties = {
         app: 'thessa',
@@ -225,7 +232,10 @@ const buildAppointmentExtendedProperties = (appointment = {}) => {
         serviceId: appointment.serviceId,
         serviceName: appointment.serviceName,
         clientName: appointment.name,
-        people: appointment.people
+        people: appointment.people,
+        participantNames: Array.isArray(appointment.participantNames)
+            ? appointment.participantNames.join(' | ')
+            : null
     };
 
     const normalized = Object.entries(privateProperties).reduce((acc, [key, value]) => {
@@ -247,7 +257,7 @@ const createAppointmentEvent = async ({ appointment, start, end }) => {
             requestBody: {
                 summary: `Cita Thessa - ${appointment.serviceName}`,
                 description: [
-                    `Cliente: ${appointment.name}`,
+                    `Participantes: ${formatAppointmentParticipants(appointment)}`,
                     `Telefono WhatsApp: ${appointment.phoneNumber}`,
                     `Servicio: ${appointment.serviceName}`,
                     `Personas: ${appointment.people}`,
@@ -283,7 +293,7 @@ const updateAppointmentEvent = async ({ eventId, appointment, start, end }) => {
             requestBody: {
                 summary: `Cita Thessa - ${appointment.serviceName}`,
                 description: [
-                    `Cliente: ${appointment.name}`,
+                    `Participantes: ${formatAppointmentParticipants(appointment)}`,
                     `Telefono WhatsApp: ${appointment.phoneNumber}`,
                     `Servicio: ${appointment.serviceName}`,
                     `Personas: ${appointment.people}`,

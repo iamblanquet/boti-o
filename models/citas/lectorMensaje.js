@@ -9,9 +9,20 @@ const {
     mergeDefinedData
 } = require('./datos');
 const { hasAnyAppointmentData } = require('./reglas');
+const { parseParticipantNames, formatParticipantNames } = require('./participantes');
 const { sendServiceButtonsByCategory } = require('./preguntas');
 
 const getDataFromMessage = async (phoneNumber, flow, message) => {
+    if(flow.waitingFor === 'participantNames') {
+        const data = { ...flow.data };
+        const participantNames = parseParticipantNames(message);
+        if(participantNames) {
+            data.participantNames = participantNames;
+            data.name = formatParticipantNames(participantNames);
+        }
+        return { data, manual: {} };
+    }
+
     const extractedByAi = await extractAppointmentDetails({ message, currentData: flow.data, waitingFor: flow.waitingFor });
     const manual = await extractAppointmentData(message);
     const previous = flow.data || {};

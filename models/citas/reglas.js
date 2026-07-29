@@ -1,4 +1,5 @@
 const { normalizeText } = require('../../utils/configCitas');
+const { hasTwoParticipantNames } = require('./participantes');
 
 const FLOW_MODE_CREATE = 'create';
 const FLOW_MODE_RESCHEDULE = 'reschedule';
@@ -104,6 +105,7 @@ const nextMissingField = (data) => {
     if(!data.date) return 'date';
     if(!data.time) return 'time';
     if(!data.people) return 'people';
+    if(data.people === 2 && !hasTwoParticipantNames(data.participantNames)) return 'participantNames';
     if(!data.name) return 'name';
     return null;
 }
@@ -114,13 +116,14 @@ const hasExpectedField = (field, data) => {
         date: Boolean(data.date),
         time: Boolean(data.time),
         people: Boolean(data.people),
+        participantNames: hasTwoParticipantNames(data.participantNames),
         name: Boolean(data.name)
     };
 
     return Boolean(checks[field]);
 }
 
-const hasAnyAppointmentData = (data) => Boolean(data?.serviceId || data?.people || data?.date || data?.time || data?.name);
+const hasAnyAppointmentData = (data) => Boolean(data?.serviceId || data?.people || data?.date || data?.time || data?.name || data?.participantNames);
 
 module.exports = {
     FLOW_MODE_CREATE,

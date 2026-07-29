@@ -94,6 +94,7 @@ const iniciarFlujoCita = async (phoneNumber, message, mode = FLOW_MODE_CREATE) =
             serviceName: appointment.serviceName,
             durationMinutes: appointment.durationMinutes,
             people: appointment.people,
+            participantNames: appointment.participantNames || [],
             date: data.date,
             time: data.time
         };
@@ -134,6 +135,10 @@ const continuarFlujoCita = async (phoneNumber, message, flow) => {
     if(flow.mode === FLOW_MODE_CANCEL) return continueCancelFlow(phoneNumber, message, flow);
 
     const extracted = await getDataFromMessage(phoneNumber, flow, message);
+
+    if(flow.waitingFor === 'participantNames' && !hasExpectedField('participantNames', extracted.data)) {
+        return saveFlowAndAsk(phoneNumber, flow, 'participantNames');
+    }
 
     if(looksLikeKnowledgeQuestion(message) && !hasAppointmentIntent(message) && !(await looksLikeAvailabilityRequest(message))) {
         return sendToAiDuringFlow(phoneNumber, message);

@@ -166,6 +166,10 @@ const askForField = async (phoneNumber, field, data = {}) => {
     if(field === 'date') return sendAvailableDayButtons(phoneNumber, data);
     if(field === 'time') return sendAvailableTimeButtons(phoneNumber, data);
     if(field === 'people') return sendPeopleButtons(phoneNumber);
+    if(field === 'participantNames') {
+        await sendTextMessage(phoneNumber, 'Perfecto. Compárteme los nombres completos de las dos personas, separados por una coma.\n\nEjemplo: Ana López, Beatriz Pérez');
+        return true;
+    }
 
     await sendTextMessage(phoneNumber, getMessage('name_ask_intro'));
     return true;
