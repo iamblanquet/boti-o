@@ -1,7 +1,35 @@
+const fs = require('fs');
+const path = require('path');
 const StateStore = require('./stateStore');
 const Messages = require('./messages');
-const stepsResponses = require('../helpers/thessaResponses.json');
 const { normalizeText } = require('../utils/configCitas');
+
+const DEFAULT_RESPONSES_FILE = path.join(__dirname, '..', 'helpers', 'thessaResponses.json');
+let responsesFile = DEFAULT_RESPONSES_FILE;
+let cachedStepsResponses = null;
+let cachedVersion = null;
+
+const validateStepsResponses = (flow) => Array.isArray(flow) && flow.every((item) => (
+    item && typeof item === 'object' && Array.isArray(item.keywords)
+));
+
+const getStepsResponses = () => {
+    try {
+        const stat = fs.statSync(responsesFile);
+        const version = `${stat.mtimeMs}:${stat.size}`;
+        if(cachedStepsResponses && cachedVersion === version) return cachedStepsResponses;
+
+        const parsed = JSON.parse(fs.readFileSync(responsesFile, 'utf8'));
+        if(!validateStepsResponses(parsed)) throw new Error('El flujo debe ser un arreglo de pasos con palabras clave.');
+
+        cachedStepsResponses = parsed;
+        cachedVersion = version;
+        return cachedStepsResponses;
+    } catch (error) {
+        console.error('No se pudo recargar el flujo conversacional:', error.message);
+        return cachedStepsResponses || [];
+    }
+};
 
 const normalizeMessage = (value) => normalizeText(value)
     .replace(/[^a-z0-9_ ]+/g, ' ')
@@ -29,7 +57,7 @@ const matchesKeyword = (message, keyword) => {
     return (` ${normalizedMessage} `).includes(` ${normalizedKeyword} `);
 }
 
-const findStepResponse = (message, step) => stepsResponses.find((item) => {
+const findStepResponse = (message, step) => getStepsResponses().find((item) => {
     const previousStep = item.previousStep ?? item.previusStep;
     return Number(previousStep) === Number(step) &&
         item.keywords.some((keyword) => matchesKeyword(message, keyword));
@@ -129,5 +157,10 @@ const sendMessageSteps = async (message, phoneNumber, messageId) => {
 module.exports = {
     sendMessageSteps,
     matchesKeyword,
-    findStepResponse
+    findStepResponse,
+    __setResponsesFileForTest: (file = DEFAULT_RESPONSES_FILE) => {
+        responsesFile = file;
+        cachedStepsResponses = null;
+        cachedVersion = null;
+    }
 };
