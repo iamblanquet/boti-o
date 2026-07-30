@@ -31,7 +31,16 @@ const hasAvailabilityIntent = (message) => {
 
 const hasRescheduleIntent = (message) => {
     const value = normalizeText(message);
-    return ['reprogramar', 'cambiar cita', 'cambiar mi cita', 'mover mi cita', 'cambiar la cita'].some((keyword) => value.includes(keyword));
+    return [
+        'reprogramar',
+        'reagendar',
+        'reagendar cita',
+        'reagendar mi cita',
+        'cambiar cita',
+        'cambiar mi cita',
+        'mover mi cita',
+        'cambiar la cita'
+    ].some((keyword) => value.includes(keyword));
 }
 
 const hasCancelIntent = (message) => {
