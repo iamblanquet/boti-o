@@ -1,6 +1,7 @@
 const Messages = require('../messages');
 const {
     listActiveAppointments,
+    listAppointmentsNeedingCalendarSync,
     saveAppointment
 } = require('./almacenamiento');
 const { formatHumanDateTime } = require('../../utils/dateTime');
@@ -112,11 +113,55 @@ const shouldSendOneHourReminder = (appointment, msUntilStart) => {
         && msUntilStart > 0;
 }
 
+const shouldExpirePendingAppointment = (appointment, msUntilStart) => appointment.status === 'pendiente'
+    && msUntilStart <= ONE_HOUR_MS
+    && msUntilStart > 0;
+
+const expirePendingAppointment = async (appointment) => {
+    const { cancelAppointmentEvent } = require('../googleCalendar');
+    let calendarSyncStatus = 'not-required';
+    if(appointment.eventId) {
+        try {
+            await cancelAppointmentEvent(appointment.eventId);
+            calendarSyncStatus = 'synced';
+        } catch (error) {
+            calendarSyncStatus = 'pending-delete';
+            console.error(`No se pudo eliminar evento de cita expirada ${appointment.id}:`, error.message);
+        }
+    }
+    await saveAppointment({
+        ...appointment,
+        status: 'expirada',
+        expiredAt: new Date().toISOString(),
+        calendarSyncStatus
+    });
+    await Messages.sendTextMessage(
+        `Como no recibimos tu confirmacion, liberamos el horario de tu cita para ${formatHumanDateTime(appointment.startAt)}. Cuando gustes, te ayudo a agendar otro.`,
+        appointment.phoneNumber,
+        { source: 'bot', personalize: false }
+    );
+};
+
+const retryCalendarDeletions = async () => {
+    const { cancelAppointmentEvent } = require('../googleCalendar');
+    const appointments = await listAppointmentsNeedingCalendarSync();
+    for(const appointment of appointments) {
+        if(!appointment.eventId) continue;
+        try {
+            await cancelAppointmentEvent(appointment.eventId);
+            await saveAppointment({ ...appointment, calendarSyncStatus: 'synced' });
+        } catch (error) {
+            console.error(`No se pudo reintentar Calendar para cita ${appointment.id}:`, error.message);
+        }
+    }
+};
+
 const checkAppointmentReminders = async (now = new Date()) => {
     if(running) return;
     running = true;
 
     try {
+        await retryCalendarDeletions();
         const appointments = await listActiveAppointments();
 
         for(const appointment of appointments) {
@@ -126,6 +171,11 @@ const checkAppointmentReminders = async (now = new Date()) => {
             const msUntilStart = startAt.getTime() - now.getTime();
 
             try {
+                if(shouldExpirePendingAppointment(appointment, msUntilStart)) {
+                    await expirePendingAppointment(appointment);
+                    continue;
+                }
+
                 if(shouldSendConfirmationReminder(appointment, msUntilStart)) {
                     await sendConfirmationReminder(appointment);
                     await markReminderSent(appointment, 'confirmation2hSentAt', now);
@@ -165,5 +215,6 @@ const startAppointmentReminders = () => {
 
 module.exports = {
     startAppointmentReminders,
-    checkAppointmentReminders
+    checkAppointmentReminders,
+    shouldExpirePendingAppointment
 }

@@ -15,6 +15,13 @@ const normalizePhoneNumber = (phoneNumber) => String(phoneNumber || '')
     .replace(/@c\.us$/i, '')
     .replace(/\D/g, '');
 
+const ACTIVE_STATUSES = new Set(['pendiente', 'confirmada']);
+const isUpcomingActiveAppointment = (appointment, now = new Date()) => {
+    if(!appointment || !ACTIVE_STATUSES.has(appointment.status)) return false;
+    const endAt = new Date(appointment.endAt || appointment.startAt);
+    return !Number.isNaN(endAt.getTime()) && endAt >= now;
+};
+
 const getEmptyBackup = () => ({
     appointments: {},
     customers: {},
@@ -60,7 +67,7 @@ const saveAppointmentBackup = (appointment) => {
     backup.customers[appointment.phoneNumber] = Array.from(customerIds);
 
     const activeIds = new Set(backup.active || []);
-    if(appointment.status !== 'cancelada') {
+    if(!['cancelada', 'expirada'].includes(appointment.status)) {
         activeIds.add(appointment.id);
     } else {
         activeIds.delete(appointment.id);
@@ -78,7 +85,9 @@ const toDbAppointment = (appointment) => {
         time: appointment.time,
         price: appointment.price,
         source: appointment.source,
-        participantNames: appointment.participantNames
+        participantNames: appointment.participantNames,
+        expiredAt: appointment.expiredAt,
+        calendarSyncStatus: appointment.calendarSyncStatus
     };
 
     Object.keys(metadata).forEach((key) => {
@@ -121,6 +130,8 @@ const fromDbAppointment = (row) => {
         eventId: row.event_id,
         confirmedAt: row.confirmed_at,
         reminders: row.reminders || {},
+        expiredAt: row.metadata?.expiredAt,
+        calendarSyncStatus: row.metadata?.calendarSyncStatus,
         createdAt: row.created_at,
         updatedAt: row.updated_at
     };
@@ -352,8 +363,40 @@ const getCustomerAppointmentsByPhoneNumbers = async (phoneNumbers) => {
 
 const getLatestActiveAppointment = async (phoneNumber) => {
     const appointments = await getCustomerAppointments(phoneNumber);
-    return appointments.find((appointment) => ['pendiente', 'confirmada'].includes(appointment.status)) || null;
+    return appointments.find((appointment) => isUpcomingActiveAppointment(appointment)) || null;
 }
+
+const listSupabaseAppointmentsNeedingCalendarSync = async () => {
+    const supabase = getSupabaseClient();
+    if(!supabase) return null;
+
+    const { data, error } = await supabase
+        .from('appointments')
+        .select('*')
+        .in('status', ['cancelada', 'expirada'])
+        .contains('metadata', { calendarSyncStatus: 'pending-delete' });
+    if(error) {
+        console.log('Supabase listAppointmentsNeedingCalendarSync error:', error.message);
+        return null;
+    }
+    return (data || []).map(fromDbAppointment);
+};
+
+const getUpcomingActiveAppointments = async (phoneNumber, now = new Date()) => {
+    const appointments = await getCustomerAppointments(phoneNumber);
+    return appointments
+        .filter((appointment) => isUpcomingActiveAppointment(appointment, now))
+        .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+};
+
+const listAppointmentsNeedingCalendarSync = async () => {
+    const supabaseAppointments = await listSupabaseAppointmentsNeedingCalendarSync();
+    if(supabaseAppointments) return supabaseAppointments;
+    const backup = readBackup();
+    return Object.values(backup.appointments || {}).filter((appointment) =>
+        ['cancelada', 'expirada'].includes(appointment.status) && appointment.calendarSyncStatus === 'pending-delete'
+    );
+};
 
 module.exports = {
     getFlow,
@@ -364,5 +407,8 @@ module.exports = {
     listActiveAppointments,
     getCustomerAppointments,
     getCustomerAppointmentsByPhoneNumbers,
-    getLatestActiveAppointment
+    getLatestActiveAppointment,
+    getUpcomingActiveAppointments,
+    isUpcomingActiveAppointment,
+    listAppointmentsNeedingCalendarSync
 }

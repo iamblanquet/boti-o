@@ -9,7 +9,7 @@ const {
     clearFlow,
     saveAppointment,
     getAppointment,
-    getLatestActiveAppointment
+    getUpcomingActiveAppointments
 } = require('./almacenamiento');
 const Messages = require('../messages');
 const {
@@ -50,12 +50,35 @@ const sendConfirmButtons = async (phoneNumber, appointmentId, text) => sendButto
     { id: `appt_cancel_${appointmentId}`, title: 'Cancelar' }
 ]);
 
+const isEligibleAppointment = (appointment, phoneNumber) => {
+    if(!appointment || appointment.phoneNumber !== phoneNumber) return false;
+    if(!['pendiente', 'confirmada'].includes(appointment.status)) return false;
+    const endAt = new Date(appointment.endAt || appointment.startAt);
+    return !Number.isNaN(endAt.getTime()) && endAt >= new Date();
+};
+
+const sendAppointmentSelection = async (phoneNumber, appointments, action) => {
+    const verb = action === 'cancel' ? 'cancelar' : 'confirmar';
+    const buttons = appointments.map((appointment) => ({
+        id: `${action === 'cancel' ? 'appt_cancel' : 'appt_confirm'}_${appointment.id}`,
+        title: `${appointment.serviceName || 'Cita'} ${new Date(appointment.startAt).toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit' })}`.slice(0, 20)
+    }));
+    const { sendButtonGroups } = require('./mensajesWhatsapp');
+    await sendButtonGroups(phoneNumber, `Tienes varias citas proximas. Selecciona cual deseas ${verb}:`, buttons);
+    return true;
+};
+
 const confirmAppointmentById = async (phoneNumber, appointmentId) => {
     await clearFlow(phoneNumber);
 
     const appointment = appointmentId ? await getAppointment(appointmentId) : null;
-    if(!appointment || appointment.phoneNumber !== phoneNumber || !['pendiente', 'confirmada'].includes(appointment.status)) {
+    if(!isEligibleAppointment(appointment, phoneNumber)) {
         await sendTextMessage(phoneNumber, 'No encontre esa cita activa para confirmar. Si quieres, revisamos los datos con el equipo.');
+        return true;
+    }
+
+    if(appointment.status === 'confirmada') {
+        await sendTextMessage(phoneNumber, `Tu cita ya estaba confirmada para ${formatHumanDateTime(appointment.startAt)}. Te esperamos con mucho gusto.`);
         return true;
     }
 
@@ -73,7 +96,11 @@ const confirmAppointmentById = async (phoneNumber, appointmentId) => {
         }
     }
     await sendTextMessage(phoneNumber, `Gracias. Tu cita queda confirmada para ${formatHumanDateTime(appointment.startAt)}. Te esperamos con mucho gusto.`);
-    await sendCalendarInvite(phoneNumber, confirmedAppointment);
+    try {
+        await sendCalendarInvite(phoneNumber, confirmedAppointment);
+    } catch (error) {
+        console.error('No se pudo enviar la invitacion de calendario:', error.message);
+    }
 
     // Invitar a registrar datos de promociones (correo y cumpleaños) si aplica
     const PromoFlow = require('./promoFlow');
@@ -86,25 +113,34 @@ const cancelAppointmentById = async (phoneNumber, appointmentId, options = {}) =
     await clearFlow(phoneNumber);
 
     const appointment = appointmentId ? await getAppointment(appointmentId) : null;
-    if(!appointment || appointment.phoneNumber !== phoneNumber || !['pendiente', 'confirmada'].includes(appointment.status)) {
+    if(!isEligibleAppointment(appointment, phoneNumber)) {
         await sendTextMessage(phoneNumber, 'No encontre esa cita activa para cancelar. Si quieres, lo revisamos con el equipo.');
         return true;
     }
 
-    if(appointment.eventId) await cancelAppointmentEvent(appointment.eventId);
-    await saveAppointment({ ...appointment, status: 'cancelada' });
+    let calendarSyncStatus = 'not-required';
+    if(appointment.eventId) {
+        try {
+            await cancelAppointmentEvent(appointment.eventId);
+            calendarSyncStatus = 'synced';
+        } catch (error) {
+            calendarSyncStatus = 'pending-delete';
+            console.error('No se pudo eliminar el evento de Calendar:', error.message);
+        }
+    }
+    await saveAppointment({ ...appointment, status: 'cancelada', calendarSyncStatus });
     await sendTextMessage(phoneNumber, options.message || 'Listo, ya cancele tu cita. Cuando quieras, te ayudo a encontrar otro horario.');
     return true;
 }
 
 const confirmLatestAppointment = async (phoneNumber) => {
-    const appointment = await getLatestActiveAppointment(phoneNumber);
-    if(!appointment) {
+    const appointments = await getUpcomingActiveAppointments(phoneNumber);
+    if(!appointments.length) {
         await sendTextMessage(phoneNumber, 'No encontre una cita activa para confirmar. Si quieres, revisamos los datos con el equipo.');
         return true;
     }
-
-    return confirmAppointmentById(phoneNumber, appointment.id);
+    if(appointments.length > 1) return sendAppointmentSelection(phoneNumber, appointments, 'confirm');
+    return confirmAppointmentById(phoneNumber, appointments[0].id);
 }
 
 const continueCancelFlow = async (phoneNumber, message, flow) => {
@@ -113,16 +149,13 @@ const continueCancelFlow = async (phoneNumber, message, flow) => {
         : await getLatestActiveAppointment(phoneNumber);
     await clearFlow(phoneNumber);
 
-    if(!appointment || appointment.phoneNumber !== phoneNumber || !['pendiente', 'confirmada'].includes(appointment.status)) {
+    if(!isEligibleAppointment(appointment, phoneNumber)) {
         await sendTextMessage(phoneNumber, 'No encontre una cita activa para cancelar con este numero. Si la hiciste con otro telefono, te ayudo a revisarlo con el equipo.');
         return true;
     }
 
     if(isAffirmative(message) || hasCancelIntent(message)) {
-        if(appointment.eventId) await cancelAppointmentEvent(appointment.eventId);
-        await saveAppointment({ ...appointment, status: 'cancelada' });
-        await sendTextMessage(phoneNumber, 'Listo, ya cancele tu cita. Cuando quieras, te ayudo a encontrar otro horario.');
-        return true;
+        return cancelAppointmentById(phoneNumber, appointment.id);
     }
 
     await sendTextMessage(phoneNumber, 'Perfecto, dejamos tu cita como estaba. Te esperamos con gusto.');
@@ -130,11 +163,14 @@ const continueCancelFlow = async (phoneNumber, message, flow) => {
 }
 
 const startCancelFlow = async (phoneNumber) => {
-    const appointment = await getLatestActiveAppointment(phoneNumber);
-    if(!appointment) {
+    const appointments = await getUpcomingActiveAppointments(phoneNumber);
+    if(!appointments.length) {
         await sendTextMessage(phoneNumber, 'No encontre una cita activa para cancelar con este numero. Si la hiciste con otro telefono, te ayudo a revisarlo con el equipo.');
         return true;
     }
+
+    if(appointments.length > 1) return sendAppointmentSelection(phoneNumber, appointments, 'cancel');
+    const appointment = appointments[0];
 
     await saveFlow(phoneNumber, { mode: FLOW_MODE_CANCEL, appointmentId: appointment.id, data: {} });
     await sendButtonMessage(phoneNumber, `Claro, te ayudo. Tengo registrada tu cita de ${appointment.serviceName} para ${formatHumanDateTime(appointment.startAt)}.\n\nQuieres que la cancele y libere ese espacio en calendario?`, [

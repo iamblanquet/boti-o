@@ -102,7 +102,7 @@ create table if not exists appointments (
   people int,
   start_at timestamptz not null,
   end_at timestamptz not null,
-  status text not null default 'pendiente' check (status in ('pendiente', 'confirmada', 'cancelada')),
+  status text not null default 'pendiente' check (status in ('pendiente', 'confirmada', 'cancelada', 'expirada')),
   event_id text,
   confirmed_at timestamptz,
   reminders jsonb not null default '{}'::jsonb,
@@ -110,6 +110,11 @@ create table if not exists appointments (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Actualiza instalaciones existentes que fueron creadas antes del estado "expirada".
+alter table appointments drop constraint if exists appointments_status_check;
+alter table appointments add constraint appointments_status_check
+  check (status in ('pendiente', 'confirmada', 'cancelada', 'expirada'));
 
 create index if not exists idx_appointments_phone_start on appointments(phone_number, start_at desc);
 create index if not exists idx_appointments_status_start on appointments(status, start_at);

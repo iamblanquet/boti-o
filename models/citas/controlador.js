@@ -188,7 +188,7 @@ const handleAppointmentMessage = async (phoneNumber, message) => {
             return continuarFlujoCita(phoneNumber, message, flow);
         }
 
-        if(hasConfirmIntent(message)) return confirmLatestAppointment(phoneNumber);
+        if(hasConfirmIntent(message) || isAffirmative(message)) return confirmLatestAppointment(phoneNumber);
         if(hasRescheduleIntent(message)) return iniciarFlujoCita(phoneNumber, message, FLOW_MODE_RESCHEDULE);
         if(hasAppointmentIntent(message) || await looksLikeAppointmentRequest(message) || await looksLikeAvailabilityRequest(message)) {
             return iniciarFlujoCita(phoneNumber, message, FLOW_MODE_CREATE);
