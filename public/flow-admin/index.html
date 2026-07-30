@@ -271,6 +271,60 @@
                   </div>
                 </div>
 
+                <!-- Group 7: Gestion de Citas -->
+                <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col gap-4">
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">7. Gestion de Citas</h3>
+                  <p class="text-xs text-slate-500">Puedes usar <code>{{service}}</code>, <code>{{datetime}}</code>, <code>{{people}}</code> y <code>{{outcome}}</code> donde se indique.</p>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Sin citas proximas
+                      <textarea name="management_no_appointments" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Elegir cita
+                      <textarea name="management_select_appointments" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Menu de acciones
+                      <textarea name="management_action_menu" rows="3" placeholder="Usa {{service}} y {{datetime}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Confirmar cancelacion
+                      <textarea name="management_cancel_confirm" rows="3" placeholder="Usa {{service}} y {{datetime}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Confirmar cambio de horario
+                      <textarea name="management_reschedule_confirm" rows="4" placeholder="Usa {{service}}, {{datetime}} y {{people}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Cambio exitoso
+                      <textarea name="management_reschedule_success" rows="3" placeholder="Usa {{datetime}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Conservar cita
+                      <textarea name="management_keep" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Opcion ya procesada
+                      <textarea name="management_action_processed" rows="2" placeholder="Usa {{outcome}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                    <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
+                      Mensaje: Cita no disponible
+                      <textarea name="management_unavailable_appointment" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
+                    </label>
+                  </div>
+                </div>
+
                 <!-- Form Submit buttons -->
                 <div class="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
                   <button type="button" id="btnSaveApptMessages" class="btn btn-primary text-sm py-2.5 px-6 shadow-sm">

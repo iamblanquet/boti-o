@@ -34,7 +34,18 @@ const DEFAULT_MESSAGES = {
   promo_email_ask: "Anotado. Ahora, por favor compartenos tu correo electronico:",
   promo_email_invalid: "Por favor, escribe un correo electronico valido. Ejemplo: usuario@correo.com",
   promo_registration_decline: "Sin problema. Si en algun momento cambias de opinion, puedes registrarte despues. Que tengas un excelente dia!",
-  promo_registration_success: "Listo. Ya registramos tus datos para recibir nuestras promociones exclusivas. Muchas gracias!"
+  promo_registration_success: "Listo. Ya registramos tus datos para recibir nuestras promociones exclusivas. Muchas gracias!",
+
+  // Gestion de citas existentes
+  management_no_appointments: "No encuentro citas proximas con este numero. Si quieres, puedo ayudarte a agendar una nueva.",
+  management_select_appointments: "Claro. Estas son tus citas proximas. Elige cual deseas gestionar:",
+  management_action_menu: "Elegiste tu cita de {{service}} para {{datetime}}.\n\nQue deseas hacer?",
+  management_cancel_confirm: "Confirmas que deseas cancelar tu cita de {{service}} para {{datetime}}?",
+  management_keep: "Perfecto, conservamos tu cita como estaba.",
+  management_reschedule_confirm: "Confirma el cambio de horario:\n\n{{service}}\n{{datetime}}\n{{people}}",
+  management_reschedule_success: "Listo. Tu cita fue reprogramada para {{datetime}}. Te esperamos con gusto.",
+  management_action_processed: "{{outcome}} La otra opcion ya no esta disponible.",
+  management_unavailable_appointment: "Esa cita ya no esta disponible para gestionarse. Te muestro tus citas actuales."
 };
 
 let customMessages = {};
