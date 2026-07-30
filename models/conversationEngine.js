@@ -415,6 +415,11 @@ const respondToIncomingMessageInternal = async ({ phoneNumber, messageText, mess
         if(handledByState) return { handledBy: 'conversation-state' };
     }
 
+    if(GestionCitas.isManagementPayload(messageText)) {
+        const handledExpiredManagementAction = await GestionCitas.handleExpiredAction(phoneNumber, messageText);
+        if(handledExpiredManagementAction) return { handledBy: 'expired-appointment-management-action' };
+    }
+
     if(shouldCheckAppointmentFirst && GestionCitas.isManagementIntent(messageText)) {
         const handledByAppointmentManagement = await FlujoCitas.iniciarGestion(phoneNumber);
         if(handledByAppointmentManagement) return { handledBy: 'appointment-management' };
