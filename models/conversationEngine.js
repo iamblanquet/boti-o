@@ -16,11 +16,6 @@ const StateStore = require('./stateStore');
 const GuidedFlowRunner = require('./guidedFlowRunner');
 const ServiceFollowup = require('./serviceFollowup');
 const ConversationControlStore = require('./conversationControlStore');
-const {
-    hasCancelIntent,
-    hasConfirmIntent,
-    hasRescheduleIntent
-} = require('./citas/reglas');
 
 const { INTENTS, DATA_FIELDS } = ServiceIntentDetector;
 
@@ -417,18 +412,6 @@ const respondToIncomingMessageInternal = async ({ phoneNumber, messageText, mess
     if(activeState?.intent === FlujoCitas.INTENCION_CITA && shouldCheckAppointmentFirst) {
         const handledByState = await FlujoCitas.continuar(phoneNumber, messageText);
         if(handledByState) return { handledBy: 'conversation-state' };
-    }
-
-    // Gestionar una cita existente antes que respuestas configurables o IA.
-    // Asi las keywords editables no pueden secuestrar cancelar, confirmar o reagendar.
-    const isAppointmentManagementRequest = shouldCheckAppointmentFirst && (
-        hasCancelIntent(messageText) ||
-        hasConfirmIntent(messageText) ||
-        hasRescheduleIntent(messageText)
-    );
-    if(isAppointmentManagementRequest) {
-        const handledByAppointmentManagement = await FlujoCitas.continuar(phoneNumber, messageText);
-        if(handledByAppointmentManagement) return { handledBy: 'appointment-management' };
     }
 
     const handledByServiceFollowup = await ServiceFollowup.handleMessage({
