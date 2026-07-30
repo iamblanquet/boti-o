@@ -16,6 +16,7 @@ const StateStore = require('./stateStore');
 const GuidedFlowRunner = require('./guidedFlowRunner');
 const ServiceFollowup = require('./serviceFollowup');
 const ConversationControlStore = require('./conversationControlStore');
+const GestionCitas = require('./citas/gestion/controlador');
 
 const { INTENTS, DATA_FIELDS } = ServiceIntentDetector;
 
@@ -412,6 +413,11 @@ const respondToIncomingMessageInternal = async ({ phoneNumber, messageText, mess
     if(activeState?.intent === FlujoCitas.INTENCION_CITA && shouldCheckAppointmentFirst) {
         const handledByState = await FlujoCitas.continuar(phoneNumber, messageText);
         if(handledByState) return { handledBy: 'conversation-state' };
+    }
+
+    if(shouldCheckAppointmentFirst && GestionCitas.isManagementIntent(messageText)) {
+        const handledByAppointmentManagement = await FlujoCitas.iniciarGestion(phoneNumber);
+        if(handledByAppointmentManagement) return { handledBy: 'appointment-management' };
     }
 
     const handledByServiceFollowup = await ServiceFollowup.handleMessage({

@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ai: 'IA Gemini',
     catalog: 'Catalogo',
     appointment: 'Agendar cita',
-    appointment_management: 'Gestion de citas'
+    appointment_management: 'Iniciar gestion de citas'
   };
 
   const getFlowKind = (item) => {

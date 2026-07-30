@@ -1,0 +1,140 @@
+const Messages = require('../../messages');
+const { getFlow, saveFlow, clearFlow, getAppointment, getUpcomingActiveAppointments } = require('../almacenamiento');
+const { sendAvailableDayButtons, sendAvailableTimeButtons } = require('../preguntas');
+const { confirmAppointmentById, cancelAppointmentById } = require('../confirmacionCancelacion');
+const { STEPS, isManagementFlow, createFlow } = require('./estado');
+const { sendAppointmentSelection, sendActionMenu, sendCancelConfirmation, sendRescheduleConfirmation } = require('./mensajes');
+const { validateProposedSlot, applyReschedule } = require('./reprogramacion');
+
+const sendText = (phoneNumber, text) => Messages.sendTextMessage(text, phoneNumber);
+const actionPayload = (message) => {
+    const value = String(message || '').trim();
+    const match = value.match(/^appt_manage_(select|confirm|reschedule|cancel|cancel_yes|reschedule_yes|keep)_([a-f0-9-]+)$/i);
+    return match ? { action: match[1], appointmentId: match[2] } : null;
+};
+
+const isManagementIntent = (message) => {
+    const value = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return ['gestionar cita', 'gestionar mis citas', 'mis citas', 'reagendar', 'reprogramar', 'cambiar cita', 'cambiar mi cita', 'mover mi cita', 'cancelar cita', 'cancelar mi cita', 'confirmar cita'].some((intent) => value.includes(intent));
+};
+
+const getOwnedAppointment = async (phoneNumber, appointmentId) => {
+    const appointment = appointmentId ? await getAppointment(appointmentId) : null;
+    return appointment?.phoneNumber === phoneNumber ? appointment : null;
+};
+
+const start = async (phoneNumber) => {
+    const appointments = await getUpcomingActiveAppointments(phoneNumber);
+    if(!appointments.length) {
+        await clearFlow(phoneNumber);
+        await sendText(phoneNumber, 'No encuentro citas proximas con este numero. Si quieres, puedo ayudarte a agendar una nueva.');
+        return true;
+    }
+    if(appointments.length === 1) {
+        const appointment = appointments[0];
+        await saveFlow(phoneNumber, createFlow(STEPS.SELECT_ACTION, { appointmentId: appointment.id }));
+        await sendActionMenu(phoneNumber, appointment);
+        return true;
+    }
+    await saveFlow(phoneNumber, createFlow(STEPS.SELECT_APPOINTMENT));
+    await sendAppointmentSelection(phoneNumber, appointments);
+    return true;
+};
+
+const selectAppointment = async (phoneNumber, appointmentId) => {
+    const appointment = await getOwnedAppointment(phoneNumber, appointmentId);
+    if(!appointment || !['pendiente', 'confirmada'].includes(appointment.status)) {
+        await sendText(phoneNumber, 'Esa cita ya no esta disponible para gestionarse. Te muestro tus citas actuales.');
+        return start(phoneNumber);
+    }
+    await saveFlow(phoneNumber, createFlow(STEPS.SELECT_ACTION, { appointmentId }));
+    await sendActionMenu(phoneNumber, appointment);
+    return true;
+};
+
+const startReschedule = async (phoneNumber, appointment) => {
+    await saveFlow(phoneNumber, createFlow(STEPS.SELECT_DATE, { appointmentId: appointment.id, date: null, time: null }));
+    return sendAvailableDayButtons(phoneNumber, { ...appointment, appointmentId: appointment.id });
+};
+
+const handleDate = async (phoneNumber, flow, date) => {
+    if(!date) return sendAvailableDayButtons(phoneNumber, { ...flow.data, appointmentId: flow.data.appointmentId });
+    const appointment = await getOwnedAppointment(phoneNumber, flow.data.appointmentId);
+    if(!appointment) return start(phoneNumber);
+    await saveFlow(phoneNumber, createFlow(STEPS.SELECT_TIME, { appointmentId: appointment.id, date, time: null }));
+    return sendAvailableTimeButtons(phoneNumber, { ...appointment, appointmentId: appointment.id, date });
+};
+
+const handleTime = async (phoneNumber, flow, time) => {
+    if(!time) return sendAvailableTimeButtons(phoneNumber, flow.data);
+    const appointment = await getOwnedAppointment(phoneNumber, flow.data.appointmentId);
+    if(!appointment) return start(phoneNumber);
+    const slot = await validateProposedSlot(appointment, flow.data.date, time);
+    if(!slot.valid) {
+        await sendText(phoneNumber, 'Ese horario ya no esta disponible. Te muestro otras opciones.');
+        return sendAvailableTimeButtons(phoneNumber, { ...appointment, appointmentId: appointment.id, date: flow.data.date });
+    }
+    const nextFlow = createFlow(STEPS.CONFIRM_RESCHEDULE, { appointmentId: appointment.id, date: flow.data.date, time });
+    await saveFlow(phoneNumber, nextFlow);
+    return sendRescheduleConfirmation(phoneNumber, appointment, slot.start);
+};
+
+const handleMessage = async (phoneNumber, message, suppliedFlow = null) => {
+    const flow = suppliedFlow || await getFlow(phoneNumber);
+    if(!isManagementFlow(flow)) return false;
+    const payload = actionPayload(message);
+    const appointmentId = payload?.appointmentId || flow.data?.appointmentId;
+
+    if(flow.waitingFor === STEPS.SELECT_APPOINTMENT) return payload?.action === 'select'
+        ? selectAppointment(phoneNumber, appointmentId)
+        : start(phoneNumber);
+
+    const appointment = await getOwnedAppointment(phoneNumber, appointmentId);
+    if(!appointment) return start(phoneNumber);
+
+    if(flow.waitingFor === STEPS.SELECT_ACTION) {
+        if(payload?.action === 'confirm') return confirmAppointmentById(phoneNumber, appointment.id);
+        if(payload?.action === 'reschedule') return startReschedule(phoneNumber, appointment);
+        if(payload?.action === 'cancel') {
+            await saveFlow(phoneNumber, createFlow(STEPS.CONFIRM_CANCEL, { appointmentId: appointment.id }));
+            return sendCancelConfirmation(phoneNumber, appointment);
+        }
+        return sendActionMenu(phoneNumber, appointment);
+    }
+
+    if(flow.waitingFor === STEPS.SELECT_DATE) {
+        const dateMatch = String(message || '').match(/^appt_date_(\d{4}-\d{2}-\d{2})$/);
+        return handleDate(phoneNumber, flow, dateMatch?.[1]);
+    }
+    if(flow.waitingFor === STEPS.SELECT_TIME) {
+        const timeMatch = String(message || '').match(/^appt_time_(\d{2})-(\d{2})$/);
+        return handleTime(phoneNumber, flow, timeMatch ? `${timeMatch[1]}:${timeMatch[2]}` : null);
+    }
+    if(flow.waitingFor === STEPS.CONFIRM_CANCEL) {
+        if(payload?.action === 'cancel_yes') return cancelAppointmentById(phoneNumber, appointment.id);
+        if(payload?.action === 'keep') {
+            await clearFlow(phoneNumber);
+            await sendText(phoneNumber, 'Perfecto, conservamos tu cita como estaba.');
+            return true;
+        }
+        return sendCancelConfirmation(phoneNumber, appointment);
+    }
+    if(flow.waitingFor === STEPS.CONFIRM_RESCHEDULE) {
+        if(payload?.action === 'reschedule_yes') {
+            const result = await applyReschedule(appointment, flow.data.date, flow.data.time);
+            if(!result.valid) return handleTime(phoneNumber, flow, null);
+            await clearFlow(phoneNumber);
+            await sendText(phoneNumber, `Listo. Tu cita fue reprogramada para ${result.start ? require('../../../utils/dateTime').formatHumanDateTime(result.start) : 'el nuevo horario'}. Te esperamos con gusto.`);
+            return true;
+        }
+        if(payload?.action === 'keep') {
+            await clearFlow(phoneNumber);
+            await sendText(phoneNumber, 'Perfecto, conservamos tu cita como estaba.');
+            return true;
+        }
+        return sendRescheduleConfirmation(phoneNumber, appointment, require('../../../utils/dateTime').combineDateTime(flow.data.date, flow.data.time));
+    }
+    return false;
+};
+
+module.exports = { start, handleMessage, isManagementFlow, isManagementIntent, actionPayload };

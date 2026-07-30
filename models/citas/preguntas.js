@@ -176,6 +176,7 @@ const askForField = async (phoneNumber, field, data = {}) => {
 }
 
 module.exports = {
+    sendAvailableDayButtons,
     sendServiceButtonsByCategory,
     sendAvailableTimeButtons,
     askForField

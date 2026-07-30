@@ -1,6 +1,7 @@
 const ControladorCitas = require('./controlador');
 const { getFlow, saveFlow, clearFlow } = require('./almacenamiento');
 const StateManager = require('../conversationStateManager');
+const GestionCitas = require('./gestion/controlador');
 
 const INTENCION_CITA = 'agendar_cita';
 const FLOW_MODE_CREATE = 'create';
@@ -56,7 +57,16 @@ const preparar = async (phoneNumber) => {
 }
 
 const continuar = async (phoneNumber, message) => {
-    const handled = await ControladorCitas.handleAppointmentMessage(phoneNumber, message);
+    const currentFlow = await getFlow(phoneNumber);
+    const handled = GestionCitas.isManagementFlow(currentFlow)
+        ? await GestionCitas.handleMessage(phoneNumber, message, currentFlow)
+        : await ControladorCitas.handleAppointmentMessage(phoneNumber, message);
+    await reflejarFlujoCita(phoneNumber);
+    return handled;
+}
+
+const iniciarGestion = async (phoneNumber) => {
+    const handled = await GestionCitas.start(phoneNumber);
     await reflejarFlujoCita(phoneNumber);
     return handled;
 }
@@ -88,6 +98,7 @@ module.exports = {
     preparar,
     continuar,
     iniciarConServicio,
+    iniciarGestion,
     reflejarFlujoCita,
     reiniciar
 };

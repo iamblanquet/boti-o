@@ -124,7 +124,7 @@ const sendMessageSteps = async (message, phoneNumber, messageId) => {
         const FlujoCitas = require('./citas/flujo');
         await StateStore.del(`${phoneNumber}:tool`);
         await StateStore.del(stepsKey);
-        const handled = await FlujoCitas.continuar(phoneNumber, message);
+        const handled = await FlujoCitas.iniciarGestion(phoneNumber);
         if(handled) return true;
     }
 
