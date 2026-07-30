@@ -194,10 +194,28 @@ create table if not exists bot_state (
 
 create index if not exists idx_bot_state_expires_at on bot_state(expires_at);
 
+-- Configuracion editable desde el panel. No debe depender del checkout de Git.
+create table if not exists bot_configuration (
+  key text primary key,
+  value jsonb not null,
+  version integer not null default 1,
+  updated_by text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create or replace function set_updated_at()
 returns trigger as $$
 begin
   new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+create or replace function bump_bot_configuration_version()
+returns trigger as $$
+begin
+  new.version = old.version + 1;
   return new;
 end;
 $$ language plpgsql;
@@ -241,6 +259,16 @@ drop trigger if exists trg_bot_state_updated_at on bot_state;
 create trigger trg_bot_state_updated_at
 before update on bot_state
 for each row execute procedure set_updated_at();
+
+drop trigger if exists trg_bot_configuration_updated_at on bot_configuration;
+create trigger trg_bot_configuration_updated_at
+before update on bot_configuration
+for each row execute procedure set_updated_at();
+
+drop trigger if exists trg_bot_configuration_version on bot_configuration;
+create trigger trg_bot_configuration_version
+before update on bot_configuration
+for each row execute procedure bump_bot_configuration_version();
 
 -- Tabla de campañas/enlaces de seguimiento
 create table if not exists campaigns (

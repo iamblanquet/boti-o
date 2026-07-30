@@ -3,6 +3,7 @@ const path = require('path');
 const StateStore = require('./stateStore');
 const Messages = require('./messages');
 const { normalizeText } = require('../utils/configCitas');
+const Configuration = require('./configuration/repository');
 
 const DEFAULT_RESPONSES_FILE = path.join(__dirname, '..', 'helpers', 'thessaResponses.json');
 let responsesFile = DEFAULT_RESPONSES_FILE;
@@ -57,11 +58,13 @@ const matchesKeyword = (message, keyword) => {
     return (` ${normalizedMessage} `).includes(` ${normalizedKeyword} `);
 }
 
-const findStepResponse = (message, step) => getStepsResponses().find((item) => {
+const findStepResponseInFlow = (flow, message, step) => (flow || []).find((item) => {
     const previousStep = item.previousStep ?? item.previusStep;
     return Number(previousStep) === Number(step) &&
         item.keywords.some((keyword) => matchesKeyword(message, keyword));
 });
+
+const findStepResponse = (message, step) => findStepResponseInFlow(getStepsResponses(), message, step);
 
 const setActiveTool = async (phoneNumber, tool) => {
     const activeToolKey = `${phoneNumber}:tool`;
@@ -85,7 +88,8 @@ const sendMessageSteps = async (message, phoneNumber, messageId) => {
         step = await StateStore.get(stepsKey) || 0;
     }
 
-    const key = findStepResponse(message, step);
+    const flow = await Configuration.getConversationFlow();
+    const key = findStepResponseInFlow(flow, message, step);
     if(!key) return false;
 
     const {

@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs').promises;
 const path = require('path');
 const flowController = require('../controllers/flowController');
+const Configuration = require('../models/configuration/repository');
 
 const RESPONSES_FILE = path.join(__dirname, '../helpers/thessaResponses.json');
 const BACKUP_FILE = path.join(__dirname, '../helpers/thessaResponses.json.backup');
@@ -11,10 +12,40 @@ const SYSTEM_MESSAGES_FILE = path.join(__dirname, '../helpers/systemMessages.jso
 const SYSTEM_BACKUP_FILE = path.join(__dirname, '../helpers/systemMessages.json.backup');
 
 test.describe('Flow Admin API', () => {
+  const configurationRows = new Map();
   let hasBackup = false;
   let hasSystemBackup = false;
 
   test.before(async () => {
+    Configuration.__setTestClient({
+      from() {
+        return {
+          select() {
+            return {
+              eq(key) {
+                return {
+                  maybeSingle: async () => ({ data: configurationRows.get(key) || null, error: null })
+                };
+              }
+            };
+          },
+          upsert(payload) {
+            const previous = configurationRows.get(payload.key);
+            const row = {
+              value: payload.value,
+              version: (previous?.version || 0) + 1,
+              updated_at: payload.updated_at
+            };
+            configurationRows.set(payload.key, row);
+            return {
+              select() {
+                return { single: async () => ({ data: row, error: null }) };
+              }
+            };
+          }
+        };
+      }
+    });
     // Backup original responses
     try {
       await fs.copyFile(RESPONSES_FILE, BACKUP_FILE);
@@ -29,6 +60,7 @@ test.describe('Flow Admin API', () => {
   });
 
   test.after(async () => {
+    Configuration.__setTestClient(null);
     // Restore backup responses
     if (hasBackup) {
       await fs.copyFile(BACKUP_FILE, RESPONSES_FILE);
@@ -128,9 +160,9 @@ test.describe('Flow Admin API', () => {
     await flowController.updateFlow(req, res);
     assert.equal(statusCalledWith, 200);
 
-    const onDisk = JSON.parse(await fs.readFile(RESPONSES_FILE, 'utf8'));
-    assert.equal(onDisk[0].step, '1');
-    assert.equal(onDisk[0].keywords[0], 'saludar');
+    const saved = await Configuration.getConversationFlow();
+    assert.equal(saved[0].step, '1');
+    assert.equal(saved[0].keywords[0], 'saludar');
   });
 
   test('GET /api/flow/system-messages - returns all default and custom messages', async () => {
@@ -180,9 +212,9 @@ test.describe('Flow Admin API', () => {
     await flowController.updateSystemMessages(req, res);
     assert.equal(statusCalledWith, 200);
 
-    const onDisk = JSON.parse(await fs.readFile(SYSTEM_MESSAGES_FILE, 'utf8'));
-    assert.equal(onDisk.service_category_intro, 'Custom Category Choice');
-    assert.equal(onDisk.booking_success, 'Cita de {{service}} agendada para {{datetime}} a nombre de {{name}}');
-    assert.equal(onDisk.promo_birthday_invitation, 'Custom club de beneficios invitation');
+    const saved = await Configuration.getSystemMessageOverrides();
+    assert.equal(saved.service_category_intro, 'Custom Category Choice');
+    assert.equal(saved.booking_success, 'Cita de {{service}} agendada para {{datetime}} a nombre de {{name}}');
+    assert.equal(saved.promo_birthday_invitation, 'Custom club de beneficios invitation');
   });
 });

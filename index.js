@@ -8,6 +8,7 @@ const apiRouter = require('./routes/index');
 const { startAppointmentReminders } = require('./models/citas/recordatorios');
 const { startServiceFollowupReminders } = require('./models/serviceFollowup');
 const { warmCalendarAgendaCache } = require('./controllers/calendarController');
+const { refreshSystemMessages } = require('./utils/systemMessageLoader');
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -45,6 +46,7 @@ server.listen(port, ()=> {
     console.log(`Servidor listo en el puerto ${port}`);
     startAppointmentReminders();
     startServiceFollowupReminders();
+    refreshSystemMessages().catch((error) => console.log('No se pudo cargar configuracion de mensajes:', error.message));
     warmCalendarAgendaCache()
         .then(() => console.log('Cache de agenda precargado.'))
         .catch((error) => console.log('No se pudo precargar cache de agenda:', error.message));

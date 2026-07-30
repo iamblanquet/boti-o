@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "citas:migrar": "node scripts/migrarCitasASupabase.js",
+    "configuracion:migrar": "node scripts/migrarConfiguracionBotASupabase.js",
     "clientes:migrar": "node scripts/migrarClientes.js",
     "build:css": "npx @tailwindcss/cli -i ./src/input.css -o ./public/tailwind.css",
     "dev:css": "npx @tailwindcss/cli -i ./src/input.css -o ./public/tailwind.css --watch",

@@ -1,6 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-const MESSAGES_FILE = path.join(__dirname, '../helpers/systemMessages.json');
+const Configuration = require('../models/configuration/repository');
 
 const DEFAULT_MESSAGES = {
   // Citas (Appointment Booking)
@@ -39,16 +37,27 @@ const DEFAULT_MESSAGES = {
   promo_registration_success: "Listo. Ya registramos tus datos para recibir nuestras promociones exclusivas. Muchas gracias!"
 };
 
+let customMessages = {};
+let refreshInFlight = null;
+
+const refreshSystemMessages = async () => {
+  if(refreshInFlight) return refreshInFlight;
+  refreshInFlight = Configuration.getSystemMessageOverrides()
+    .then((messages) => {
+      customMessages = messages || {};
+      return customMessages;
+    })
+    .catch((error) => {
+      console.error('Error loading custom system messages:', error.message);
+      return customMessages;
+    })
+    .finally(() => { refreshInFlight = null; });
+  return refreshInFlight;
+};
+
 const getMessages = () => {
-  try {
-    if (fs.existsSync(MESSAGES_FILE)) {
-      const custom = JSON.parse(fs.readFileSync(MESSAGES_FILE, 'utf8'));
-      return { ...DEFAULT_MESSAGES, ...custom };
-    }
-  } catch (e) {
-    console.error('Error loading custom system messages:', e);
-  }
-  return DEFAULT_MESSAGES;
+  refreshSystemMessages();
+  return { ...DEFAULT_MESSAGES, ...customMessages };
 };
 
 const getMessage = (key, interpolations = {}) => {
@@ -62,6 +71,7 @@ const getMessage = (key, interpolations = {}) => {
 
 module.exports = {
   DEFAULT_MESSAGES,
+  refreshSystemMessages,
   getMessages,
   getMessage
 };
