@@ -45,6 +45,10 @@ const schedule = async ({ phoneNumber, text, type, buttonPayload, listPayload, s
     const entry = {
         phoneNumber,
         prompt: String(text || buttonPayload?.body?.text || listPayload?.body?.text || '').trim(),
+        replyType: ['button', 'list'].includes(type) ? type : null,
+        interactivePayload: ['button', 'list'].includes(type)
+            ? (buttonPayload || listPayload || null)
+            : null,
         customerMessageAt: new Date(customerAt).toISOString(),
         dueAt: new Date(now + NUDGE_DELAY_MS).toISOString(),
         sentAt: null
@@ -77,6 +81,16 @@ const sendDueNudge = async (phoneNumber, now = new Date()) => {
     }), phoneNumber, {
         source: 'nudge', personalize: false
     });
+    if(result && entry.replyType && entry.interactivePayload) {
+        await Messages.sendMessage({
+            text: '',
+            phoneNumber,
+            type: entry.replyType,
+            [entry.replyType === 'button' ? 'buttonPayload' : 'listPayload']: entry.interactivePayload,
+            source: 'nudge',
+            personalize: false
+        });
+    }
     if(result) {
         await StateStore.set(key(phoneNumber), JSON.stringify({ ...entry, sentAt: now.toISOString() }), NUDGE_TTL_SECONDS);
     }

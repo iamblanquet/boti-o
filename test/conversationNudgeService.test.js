@@ -31,3 +31,30 @@ test('sends only one nudge and cancels it when the customer answers', async () =
         await StateStore.del(Nudge.key(phoneNumber));
     }
 });
+
+test('re-sends the pending interactive control with the nudge', async () => {
+    const phoneNumber = '5219990000086';
+    const originalText = Messages.sendTextMessage;
+    const originalMessage = Messages.sendMessage;
+    const interactive = [];
+    Messages.sendTextMessage = async () => ({ data: {} });
+    Messages.sendMessage = async (payload) => { interactive.push(payload); return { data: {} }; };
+    try {
+        await Nudge.recordCustomerMessage(phoneNumber, new Date().toISOString());
+        await Nudge.schedule({
+            phoneNumber,
+            type: 'list',
+            source: 'bot',
+            listPayload: { type: 'list', body: { text: 'Elige un servicio' }, action: { button: 'Ver servicios', sections: [] } }
+        });
+        const entry = await Nudge.get(phoneNumber);
+        await Nudge.sendDueNudge(phoneNumber, new Date(new Date(entry.dueAt).getTime() + 1));
+        assert.equal(interactive.length, 1);
+        assert.equal(interactive[0].type, 'list');
+        assert.equal(interactive[0].listPayload.action.button, 'Ver servicios');
+    } finally {
+        Messages.sendTextMessage = originalText;
+        Messages.sendMessage = originalMessage;
+        await StateStore.del(Nudge.key(phoneNumber));
+    }
+});
