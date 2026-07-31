@@ -77,7 +77,9 @@ const iniciarConServicio = async (phoneNumber, service, message = '') => {
         data: {
             serviceId: service.id,
             serviceName: service.nombre,
-            durationMinutes: service.duracionMinutos
+            durationMinutes: service.duracionMinutos,
+            price: service.precio,
+            personPrices: service.preciosPersonas || service.personPrices || []
         },
         waitingFor: null
     });

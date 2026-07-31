@@ -48,6 +48,7 @@ const {
 } = require('./agenda');
 const { getDataFromMessage } = require('./lectorMensaje');
 const ServicesRepository = require('../servicesRepository');
+const { isPeopleAllowed, getPriceForPeople } = require('./precios');
 
 const sendTextMessage = (phoneNumber, message) => Messages.sendTextMessage(message, phoneNumber);
 const isCatalogUnavailableError = (error) => error?.code === 'SERVICE_CATALOG_UNAVAILABLE' ||
@@ -148,6 +149,15 @@ const continuarFlujoCita = async (phoneNumber, message, flow) => {
         if(looksLikeKnowledgeQuestion(message) || !hasAnyAppointmentData(extracted.manual)) {
             return sendToAiDuringFlow(phoneNumber, message);
         }
+    }
+
+    if(extracted.data.people && Array.isArray(extracted.data.personPrices)) {
+        if(!isPeopleAllowed(extracted.data.personPrices, extracted.data.people)) {
+            extracted.data.people = null;
+            extracted.data.selectedPrice = null;
+            return saveFlowAndAsk(phoneNumber, { ...flow, data: extracted.data }, 'people');
+        }
+        extracted.data.selectedPrice = getPriceForPeople(extracted.data.personPrices, extracted.data.people);
     }
 
     flow.data = extracted.data;

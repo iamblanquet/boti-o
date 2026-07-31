@@ -31,6 +31,8 @@ const extractAppointmentData = async (message) => {
             serviceId: service?.id,
             serviceName: service?.name,
             durationMinutes: service?.durationMinutes,
+            price: service?.price,
+            personPrices: service?.personPrices,
             date: buttonPayload.date,
             time: buttonPayload.time,
             people: buttonPayload.people
@@ -41,6 +43,8 @@ const extractAppointmentData = async (message) => {
         serviceId: service?.id,
         serviceName: service?.name,
         durationMinutes: service?.durationMinutes,
+        price: service?.price,
+        personPrices: service?.personPrices,
         date: buttonPayload.date || parseDateText(message),
         time: buttonPayload.time || parseTimeText(message),
         people: buttonPayload.people || parsePeopleText(message)
@@ -53,11 +57,13 @@ const mergeDefinedData = async (currentData, extractedData) => {
         if(value !== null && value !== undefined && value !== '') merged[key] = value;
     });
 
-    if(merged.serviceId && !merged.durationMinutes) {
+    if(merged.serviceId && (!merged.durationMinutes || !Array.isArray(merged.personPrices))) {
         const service = await getCatalogServiceById(merged.serviceId);
         if(service) {
             merged.serviceName = service.name;
             merged.durationMinutes = service.durationMinutes;
+            merged.price = service.price;
+            merged.personPrices = service.personPrices;
         }
     }
 

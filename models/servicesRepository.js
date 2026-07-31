@@ -62,6 +62,8 @@ const toAppointmentService = (service) => service ? {
     id: service.id,
     name: service.nombre,
     durationMinutes: service.duracionMinutos,
+    price: service.precio,
+    personPrices: service.preciosPersonas || [],
     keywords: [
         service.nombre,
         ...(service.keywords || []),

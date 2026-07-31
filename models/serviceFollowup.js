@@ -77,7 +77,8 @@ const toFollowupService = (service = {}) => ({
     id: service.id,
     nombre: service.nombre || service.name,
     duracionMinutos: service.duracionMinutos || service.durationMinutes,
-    precio: service.precio
+    precio: service.precio,
+    preciosPersonas: service.preciosPersonas || service.personPrices || []
 });
 
 const savePendingOffer = (phoneNumber, service) => {

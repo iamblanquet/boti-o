@@ -24,6 +24,7 @@ const { sendAvailableTimeButtons } = require('./preguntas');
 const { sendConfirmButtons } = require('./confirmacionCancelacion');
 const { checkAvailability } = require('./verificadorDisponibilidad');
 const { getMessage } = require('../../utils/systemMessageLoader');
+const { formatPrice } = require('../responseTemplates');
 
 const sendTextMessage = (phoneNumber, message) => Messages.sendTextMessage(message, phoneNumber);
 
@@ -94,6 +95,7 @@ const createOrReschedule = async ({ phoneNumber, flow }) => {
 
     const appointment = {
         ...data,
+        price: data.selectedPrice ?? data.price ?? null,
         phoneNumber,
         startAt: start.toISOString(),
         endAt: end.toISOString(),
@@ -141,14 +143,18 @@ const createOrReschedule = async ({ phoneNumber, flow }) => {
         appointmentId: savedAppointment.id,
         data: {}
     });
+    const confirmationText = getMessage('booking_success', {
+        service: data.serviceName,
+        datetime: formatHumanDateTime(start),
+        name: data.name
+    });
+    const priceSummary = data.selectedPrice !== null && data.selectedPrice !== undefined
+        ? `Inversión total: ${formatPrice(data.selectedPrice)}.`
+        : '';
     await sendConfirmButtons(
         phoneNumber,
         savedAppointment.id,
-        getMessage('booking_success', {
-            service: data.serviceName,
-            datetime: formatHumanDateTime(start),
-            name: data.name
-        })
+        [confirmationText, priceSummary].filter(Boolean).join('\n\n')
     );
     return true;
 }

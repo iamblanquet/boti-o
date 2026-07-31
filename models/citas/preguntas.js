@@ -17,6 +17,7 @@ const {
     findAvailableSlotsForDate,
     findAvailableDaysThisWeek
 } = require('./disponibilidad');
+const { getAllowedPeopleOptions } = require('./precios');
 
 const MAX_ROWS_PER_LIST = 10;
 const CATALOG_UNAVAILABLE_MESSAGE = ServicesRepository.CATALOG_UNAVAILABLE_MESSAGE;
@@ -154,12 +155,15 @@ const sendAvailableTimeButtons = async (phoneNumber, data) => {
     }
 }
 
-const sendPeopleButtons = async (phoneNumber) => {
-    await sendButtonMessage(phoneNumber, getMessage('people_select_intro'), [
-        { id: 'appt_people_1', title: '1 persona' },
-        { id: 'appt_people_2', title: '2 personas' },
-        { id: 'appt_people_3', title: '3 personas' }
-    ]);
+const sendPeopleButtons = async (phoneNumber, data = {}) => {
+    const options = getAllowedPeopleOptions(data.personPrices);
+    const message = options.length === 1
+        ? `Para ${getServiceLabel(data)}, esta experiencia está disponible para ${options[0]} ${options[0] === 1 ? 'persona' : 'personas'}.`
+        : getMessage('people_select_intro');
+    await sendButtonMessage(phoneNumber, message, options.map((people) => ({
+        id: `appt_people_${people}`,
+        title: `${people} ${people === 1 ? 'persona' : 'personas'}`
+    })));
     return true;
 }
 
@@ -167,7 +171,7 @@ const askForField = async (phoneNumber, field, data = {}) => {
     if(field === 'service') return sendServiceButtons(phoneNumber);
     if(field === 'date') return sendAvailableDayButtons(phoneNumber, data);
     if(field === 'time') return sendAvailableTimeButtons(phoneNumber, data);
-    if(field === 'people') return sendPeopleButtons(phoneNumber);
+    if(field === 'people') return sendPeopleButtons(phoneNumber, data);
     if(field === 'participantNames') {
         await sendTextMessage(phoneNumber, 'Perfecto. Compárteme los nombres completos de las dos personas, separados por una coma.\n\nEjemplo: Ana López, Beatriz Pérez');
         return true;
@@ -181,5 +185,6 @@ module.exports = {
     sendAvailableDayButtons,
     sendServiceButtonsByCategory,
     sendAvailableTimeButtons,
+    sendPeopleButtons,
     askForField
 };
