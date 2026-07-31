@@ -86,6 +86,7 @@ const toDbAppointment = (appointment) => {
         price: appointment.price,
         source: appointment.source,
         participantNames: appointment.participantNames,
+        medicalCondition: appointment.medicalCondition,
         expiredAt: appointment.expiredAt,
         calendarSyncStatus: appointment.calendarSyncStatus
     };

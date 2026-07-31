@@ -22,6 +22,11 @@ const DEFAULT_MESSAGES = {
   booking_success: "Listo. Apartamos tu cita de {{service}} para {{datetime}} a nombre de {{name}}.",
   appointment_confirmation_care: "Para que disfrutes al máximo tu experiencia, te recomendamos:\n• Llegar entre 10 y 15 minutos antes de tu cita.\n• Usar ropa cómoda.\n• Informarnos con anticipación si presentas alguna condición médica, embarazo o lesión.\n\nAsí podremos brindarte una atención personalizada.",
   appointment_post_care: "Después de tu tratamiento te recomendamos mantenerte bien hidratado(a), permitir que tu cuerpo descanse y seguir las indicaciones de nuestro equipo si tu servicio requiere cuidados específicos.",
+  medical_condition_button_prompt: "Si deseas compartir información médica relevante para tu atención, toca el botón:",
+  medical_condition_prompt: "🌿 Gracias por informarnos. Para cuidar tu bienestar y preparar la atención de forma adecuada, cuéntanos qué condición médica, alergia, lesión, embarazo o tratamiento reciente debemos considerar. ✨",
+  medical_condition_saved: "Gracias. Ya registramos esta información para que nuestro equipo la considere en tu cita.",
+  medical_condition_cancelled: "Sin problema. Si más adelante deseas compartir alguna información relevante, aquí estaremos para ayudarte.",
+  medical_condition_unavailable: "No pude vincular esta información a una cita confirmada. El equipo puede revisarla contigo directamente.",
   
   // Catálogo (Services Catalog)
   catalog_category_intro: "Elige una categoria y te comparto los servicios disponibles:",

@@ -22,9 +22,15 @@ const { getMessage } = require('../../utils/systemMessageLoader');
 
 const sendTextMessage = (phoneNumber, message) => Messages.sendTextMessage(message, phoneNumber);
 
-const sendAppointmentConfirmationCare = async (phoneNumber) => {
+const sendAppointmentConfirmationCare = async (phoneNumber, appointmentId) => {
     const message = getMessage('appointment_confirmation_care');
     if(message.trim()) await sendTextMessage(phoneNumber, message);
+    if(!appointmentId) return;
+
+    const { getMedicalConditionActionId } = require('../medicalConditionFlow');
+    await sendButtonMessage(phoneNumber, getMessage('medical_condition_button_prompt'), [
+        { id: getMedicalConditionActionId(appointmentId), title: 'Condición médica' }
+    ]);
 };
 
 const sendCalendarInvite = async (phoneNumber, appointment) => {
@@ -117,7 +123,7 @@ const confirmAppointmentById = async (phoneNumber, appointmentId) => {
     }
 
     // Invitar a registrar datos de promociones (correo y cumpleaños) si aplica
-    await sendAppointmentConfirmationCare(phoneNumber);
+    await sendAppointmentConfirmationCare(phoneNumber, confirmedAppointment.id);
 
     const PromoFlow = require('./promoFlow');
     await PromoFlow.iniciarSiAplica(phoneNumber);

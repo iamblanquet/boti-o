@@ -17,6 +17,7 @@ const GuidedFlowRunner = require('./guidedFlowRunner');
 const ServiceFollowup = require('./serviceFollowup');
 const ConversationControlStore = require('./conversationControlStore');
 const GestionCitas = require('./citas/gestion/controlador');
+const MedicalConditionFlow = require('./medicalConditionFlow');
 
 const { INTENTS, DATA_FIELDS } = ServiceIntentDetector;
 
@@ -404,6 +405,13 @@ const respondToIncomingMessageInternal = async ({ phoneNumber, messageText, mess
     }
 
     const activeState = await StateManager.getActiveState(phoneNumber);
+
+    const handledByMedicalCondition = await MedicalConditionFlow.handleMessage({
+        phoneNumber,
+        messageText,
+        activeState
+    });
+    if(handledByMedicalCondition) return handledByMedicalCondition;
 
     if(activeState?.intent === 'registro_promociones') {
         const PromoFlow = require('./citas/promoFlow');
