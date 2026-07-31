@@ -109,14 +109,15 @@ const sendAvailableDayButtons = async (phoneNumber, data) => {
             return true;
         }
 
-        await sendButtonGroups(
-            phoneNumber,
-            getMessage('date_select_intro', { service: getServiceLabel(data) }),
-            days.map((day) => ({
+        await sendListMessage(phoneNumber, {
+            body: getMessage('date_select_intro', { service: getServiceLabel(data) }),
+            button: 'Ver fechas',
+            sectionTitle: 'Fechas disponibles',
+            rows: days.map((day) => ({
                 id: `appt_date_${day.date}`,
                 title: day.title
             }))
-        );
+        });
         return true;
     } catch (error) {
         console.error('Available days error:', error.message);
@@ -136,14 +137,15 @@ const sendAvailableTimeButtons = async (phoneNumber, data) => {
             return true;
         }
 
-        await sendButtonGroups(
-            phoneNumber,
-            getMessage('time_select_intro', { day: formatDayButtonTitle(data.date) }),
-            slots.map((slot) => ({
+        await sendListMessage(phoneNumber, {
+            body: getMessage('time_select_intro', { day: formatDayButtonTitle(data.date) }),
+            button: 'Ver horarios',
+            sectionTitle: 'Horarios disponibles',
+            rows: slots.map((slot) => ({
                 id: `appt_time_${slot.time.replace(':', '-')}`,
                 title: slot.time
             }))
-        );
+        });
         return true;
     } catch (error) {
         console.error('Available times error:', error.message);

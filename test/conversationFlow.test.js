@@ -565,7 +565,8 @@ test('configured flow wins even when Gemini mode is active', async () => {
             messageId: 'incoming-4',
             type: 'interactive'
         });
-        const dateId = sent[0].buttonPayload.action.buttons[0].reply.id;
+        assert.equal(sent[0].type, 'list');
+        const dateId = sent[0].listPayload.action.sections[0].rows[0].id;
         assert.match(dateId, /^appt_date_\d{4}-\d{2}-\d{2}$/);
 
         sent.length = 0;
@@ -576,7 +577,8 @@ test('configured flow wins even when Gemini mode is active', async () => {
             messageId: 'incoming-5',
             type: 'interactive'
         });
-        const timeId = sent[0].buttonPayload.action.buttons[0].reply.id;
+        assert.equal(sent[0].type, 'list');
+        const timeId = sent[0].listPayload.action.sections[0].rows[0].id;
         assert.match(timeId, /^appt_time_\d{2}-\d{2}$/);
 
         sent.length = 0;
