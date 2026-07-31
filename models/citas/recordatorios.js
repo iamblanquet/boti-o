@@ -2,9 +2,11 @@ const Messages = require('../messages');
 const {
     listActiveAppointments,
     listAppointmentsNeedingCalendarSync,
+    listAppointmentsReadyForPostCare,
     saveAppointment
 } = require('./almacenamiento');
 const { formatHumanDateTime } = require('../../utils/dateTime');
+const { getMessage } = require('../../utils/systemMessageLoader');
 
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
 const ONE_HOUR_MS = 60 * 60 * 1000;
@@ -113,6 +115,21 @@ const shouldSendOneHourReminder = (appointment, msUntilStart) => {
         && msUntilStart > 0;
 }
 
+const shouldSendPostAppointmentCare = (appointment, now = new Date()) => {
+    const reminders = getReminderFlags(appointment);
+    const dueAt = new Date(reminders.postAppointmentCareDueAt).getTime();
+    return appointment.status === 'confirmada'
+        && !reminders.postAppointmentCareSentAt
+        && Number.isFinite(dueAt)
+        && dueAt <= now.getTime();
+};
+
+const sendPostAppointmentCare = async (appointment) => Messages.sendTextMessage(
+    getMessage('appointment_post_care'),
+    appointment.phoneNumber,
+    { source: 'bot', personalize: false }
+);
+
 const shouldExpirePendingAppointment = (appointment, msUntilStart) => appointment.status === 'pendiente'
     && msUntilStart <= ONE_HOUR_MS
     && msUntilStart > 0;
@@ -162,6 +179,17 @@ const checkAppointmentReminders = async (now = new Date()) => {
 
     try {
         await retryCalendarDeletions();
+        const postCareAppointments = await listAppointmentsReadyForPostCare(now);
+        for(const appointment of postCareAppointments) {
+            try {
+                if(!shouldSendPostAppointmentCare(appointment, now)) continue;
+                await sendPostAppointmentCare(appointment);
+                await markReminderSent(appointment, 'postAppointmentCareSentAt', now);
+            } catch (error) {
+                console.error(`No se pudo enviar cuidado posterior de cita ${appointment.id}:`, error.message);
+            }
+        }
+
         const appointments = await listActiveAppointments();
 
         for(const appointment of appointments) {
@@ -216,5 +244,6 @@ const startAppointmentReminders = () => {
 module.exports = {
     startAppointmentReminders,
     checkAppointmentReminders,
-    shouldExpirePendingAppointment
+    shouldExpirePendingAppointment,
+    shouldSendPostAppointmentCare
 }

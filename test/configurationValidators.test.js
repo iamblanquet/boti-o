@@ -24,6 +24,7 @@ test('configuration validators reject malformed flow and missing placeholders', 
 
 test('appointment confirmation care message is available and configurable', () => {
     assert.match(getMessage('appointment_confirmation_care'), /Llegar entre 10 y 15 minutos antes/i);
+    assert.match(getMessage('appointment_post_care'), /mantenerte bien hidratado/i);
     assert.equal(
         validateSystemMessages({ appointment_confirmation_care: 'Recuerda llegar con tiempo.' }, {}).appointment_confirmation_care,
         'Recuerda llegar con tiempo.'

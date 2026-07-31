@@ -88,7 +88,15 @@ const confirmAppointmentById = async (phoneNumber, appointmentId) => {
         return true;
     }
 
-    const confirmedAppointment = await saveAppointment({ ...appointment, status: 'confirmada', confirmedAt: new Date().toISOString() });
+    const confirmedAppointment = await saveAppointment({
+        ...appointment,
+        status: 'confirmada',
+        confirmedAt: new Date().toISOString(),
+        reminders: {
+            ...(appointment.reminders || {}),
+            postAppointmentCareDueAt: appointment.endAt
+        }
+    });
     if(confirmedAppointment.eventId) {
         try {
             await updateAppointmentEvent({

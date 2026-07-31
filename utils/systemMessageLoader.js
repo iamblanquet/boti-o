@@ -21,6 +21,7 @@ const DEFAULT_MESSAGES = {
   reschedule_success: "Listo. Reprogramamos tu cita para {{datetime}}.",
   booking_success: "Listo. Apartamos tu cita de {{service}} para {{datetime}} a nombre de {{name}}.",
   appointment_confirmation_care: "Para que disfrutes al máximo tu experiencia, te recomendamos:\n• Llegar entre 10 y 15 minutos antes de tu cita.\n• Usar ropa cómoda.\n• Informarnos con anticipación si presentas alguna condición médica, embarazo o lesión.\n\nAsí podremos brindarte una atención personalizada.",
+  appointment_post_care: "Después de tu tratamiento te recomendamos mantenerte bien hidratado(a), permitir que tu cuerpo descanse y seguir las indicaciones de nuestro equipo si tu servicio requiere cuidados específicos.",
   
   // Catálogo (Services Catalog)
   catalog_category_intro: "Elige una categoria y te comparto los servicios disponibles:",

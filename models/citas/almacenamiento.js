@@ -192,6 +192,27 @@ const listSupabaseActiveAppointments = async () => {
     return (data || []).map(fromDbAppointment);
 }
 
+const listSupabaseAppointmentsReadyForPostCare = async (now = new Date()) => {
+    const supabase = getSupabaseClient();
+    if(!supabase) return null;
+
+    const since = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
+    const { data, error } = await supabase
+        .from('appointments')
+        .select('*')
+        .eq('status', 'confirmada')
+        .gte('end_at', since)
+        .lte('end_at', now.toISOString())
+        .order('end_at', { ascending: true });
+
+    if(error) {
+        console.log('Supabase listAppointmentsReadyForPostCare error:', error.message);
+        return null;
+    }
+
+    return (data || []).map(fromDbAppointment);
+};
+
 const listSupabaseCustomerAppointments = async (phoneNumber) => {
     const supabase = getSupabaseClient();
     if(!supabase) return null;
@@ -398,6 +419,17 @@ const listAppointmentsNeedingCalendarSync = async () => {
     );
 };
 
+const listAppointmentsReadyForPostCare = async (now = new Date()) => {
+    const supabaseAppointments = await listSupabaseAppointmentsReadyForPostCare(now);
+    if(supabaseAppointments) return supabaseAppointments;
+
+    const since = now.getTime() - 24 * 60 * 60 * 1000;
+    return Object.values(readBackup().appointments || {}).filter((appointment) => {
+        const endAt = new Date(appointment.endAt).getTime();
+        return appointment.status === 'confirmada' && Number.isFinite(endAt) && endAt >= since && endAt <= now.getTime();
+    });
+};
+
 module.exports = {
     getFlow,
     saveFlow,
@@ -410,5 +442,6 @@ module.exports = {
     getLatestActiveAppointment,
     getUpcomingActiveAppointments,
     isUpcomingActiveAppointment,
-    listAppointmentsNeedingCalendarSync
+    listAppointmentsNeedingCalendarSync,
+    listAppointmentsReadyForPostCare
 }

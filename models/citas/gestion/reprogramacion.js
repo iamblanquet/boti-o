@@ -31,6 +31,13 @@ const applyReschedule = async (appointment, date, time) => {
         // La persona ya confirmo explicitamente el cambio; conserva el estado previo.
         status: appointment.status,
         confirmedAt: appointment.confirmedAt || null,
+        reminders: appointment.status === 'confirmada'
+            ? {
+                ...(appointment.reminders || {}),
+                postAppointmentCareDueAt: slot.end.toISOString(),
+                postAppointmentCareSentAt: null
+            }
+            : appointment.reminders || {},
         source: slot.availability.source === 'google' ? 'google-calendar' : 'local-calendar-fallback'
     };
     let eventId = appointment.eventId || null;
