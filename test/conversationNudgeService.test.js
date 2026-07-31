@@ -7,6 +7,11 @@ const Messages = require('../models/messages');
 test('only bot questions and interactive messages can schedule a conversation nudge', () => {
     assert.equal(Nudge.isWaitingForReply({ type: 'text', text: '¿Qué día te conviene?', source: 'bot' }), true);
     assert.equal(Nudge.isWaitingForReply({ type: 'button', buttonPayload: { body: {} }, source: 'bot' }), true);
+    assert.equal(Nudge.isWaitingForReply({
+        type: 'button',
+        buttonPayload: { action: { buttons: [{ reply: { id: 'appt_confirm_123' } }] } },
+        source: 'bot'
+    }), true);
     assert.equal(Nudge.isWaitingForReply({ type: 'text', text: 'Tu cita quedó confirmada.', source: 'bot' }), false);
     assert.equal(Nudge.isWaitingForReply({ type: 'text', text: '¿Cómo seguimos?', source: 'human' }), false);
 });
@@ -52,6 +57,31 @@ test('re-sends the pending interactive control with the nudge', async () => {
         assert.equal(interactive.length, 1);
         assert.equal(interactive[0].type, 'list');
         assert.equal(interactive[0].listPayload.action.button, 'Ver servicios');
+    } finally {
+        Messages.sendTextMessage = originalText;
+        Messages.sendMessage = originalMessage;
+        await StateStore.del(Nudge.key(phoneNumber));
+    }
+});
+
+test('reminds appointment confirmation without duplicating its action buttons', async () => {
+    const phoneNumber = '5219990000085';
+    const originalText = Messages.sendTextMessage;
+    const originalMessage = Messages.sendMessage;
+    const interactive = [];
+    Messages.sendTextMessage = async () => ({ data: {} });
+    Messages.sendMessage = async (payload) => { interactive.push(payload); return { data: {} }; };
+    try {
+        await Nudge.recordCustomerMessage(phoneNumber, new Date().toISOString());
+        await Nudge.schedule({
+            phoneNumber,
+            type: 'button',
+            source: 'bot',
+            buttonPayload: { type: 'button', body: { text: 'Me confirmas tu asistencia?' }, action: { buttons: [{ reply: { id: 'appt_confirm_123', title: 'Confirmo' } }] } }
+        });
+        const entry = await Nudge.get(phoneNumber);
+        await Nudge.sendDueNudge(phoneNumber, new Date(new Date(entry.dueAt).getTime() + 1));
+        assert.equal(interactive.length, 0);
     } finally {
         Messages.sendTextMessage = originalText;
         Messages.sendMessage = originalMessage;

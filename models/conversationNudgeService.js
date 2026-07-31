@@ -25,6 +25,13 @@ const arm = (phoneNumber, dueAt) => {
     timers.set(phoneNumber, timer);
 };
 const isQuestion = (text) => /[?¿]/.test(String(text || ''));
+const getInteractiveIds = (payload) => [
+    ...(payload?.action?.buttons || []).map((button) => button.reply?.id),
+    ...(payload?.action?.sections || []).flatMap((section) => (section.rows || []).map((row) => row.id))
+].filter(Boolean);
+const isClosingAppointmentAction = (payload) => getInteractiveIds(payload).some((id) => (
+    /^(appt_confirm_|appt_cancel_|appt_manage_|svc_offer_|svc_obj_)/.test(String(id))
+));
 const isWaitingForReply = ({ type, text, buttonPayload, listPayload, source }) => {
     if(source === 'human' || source === 'nudge') return false;
     if(['button', 'list'].includes(type) && (buttonPayload || listPayload)) return true;
@@ -46,6 +53,7 @@ const schedule = async ({ phoneNumber, text, type, buttonPayload, listPayload, s
         phoneNumber,
         prompt: String(text || buttonPayload?.body?.text || listPayload?.body?.text || '').trim(),
         replyType: ['button', 'list'].includes(type) ? type : null,
+        resendInteractive: !isClosingAppointmentAction(buttonPayload || listPayload),
         interactivePayload: ['button', 'list'].includes(type)
             ? (buttonPayload || listPayload || null)
             : null,
@@ -99,10 +107,10 @@ const isAppointmentPayload = (payload) => {
         source: 'nudge', personalize: false
     });
     let resumed = false;
-    if(result && isAppointmentPayload(entry.interactivePayload)) {
+    if(result && entry.resendInteractive && isAppointmentPayload(entry.interactivePayload)) {
         resumed = await resumeAppointmentFlow(phoneNumber);
     }
-    if(result && !resumed && entry.replyType && entry.interactivePayload) {
+    if(result && entry.resendInteractive && !resumed && entry.replyType && entry.interactivePayload) {
         await Messages.sendMessage({
             text: '',
             phoneNumber,
