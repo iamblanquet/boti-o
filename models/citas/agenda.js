@@ -97,6 +97,7 @@ const createOrReschedule = async ({ phoneNumber, flow }) => {
         ...data,
         price: data.selectedPrice ?? data.price ?? null,
         phoneNumber,
+        createdAt: new Date().toISOString(),
         startAt: start.toISOString(),
         endAt: end.toISOString(),
         status: 'pendiente',

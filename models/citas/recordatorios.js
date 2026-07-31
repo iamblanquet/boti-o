@@ -110,7 +110,12 @@ const shouldSendConfirmationReminder = (appointment, msUntilStart) => {
 
 const shouldSendOneHourReminder = (appointment, msUntilStart) => {
     const reminders = getReminderFlags(appointment);
+    const createdAt = new Date(appointment.createdAt).getTime();
+    const startAt = new Date(appointment.startAt).getTime();
+    const wasCreatedInsideReminderWindow = Number.isFinite(createdAt) && Number.isFinite(startAt)
+        && createdAt > startAt - ONE_HOUR_MS;
     return !reminders.reminder1hSentAt
+        && !wasCreatedInsideReminderWindow
         && msUntilStart <= ONE_HOUR_MS
         && msUntilStart > 0;
 }
@@ -129,35 +134,6 @@ const sendPostAppointmentCare = async (appointment) => Messages.sendTextMessage(
     appointment.phoneNumber,
     { source: 'bot', personalize: false }
 );
-
-const shouldExpirePendingAppointment = (appointment, msUntilStart) => appointment.status === 'pendiente'
-    && msUntilStart <= ONE_HOUR_MS
-    && msUntilStart > 0;
-
-const expirePendingAppointment = async (appointment) => {
-    const { cancelAppointmentEvent } = require('../googleCalendar');
-    let calendarSyncStatus = 'not-required';
-    if(appointment.eventId) {
-        try {
-            await cancelAppointmentEvent(appointment.eventId);
-            calendarSyncStatus = 'synced';
-        } catch (error) {
-            calendarSyncStatus = 'pending-delete';
-            console.error(`No se pudo eliminar evento de cita expirada ${appointment.id}:`, error.message);
-        }
-    }
-    await saveAppointment({
-        ...appointment,
-        status: 'expirada',
-        expiredAt: new Date().toISOString(),
-        calendarSyncStatus
-    });
-    await Messages.sendTextMessage(
-        `Como no recibimos tu confirmacion, liberamos el horario de tu cita para ${formatHumanDateTime(appointment.startAt)}. Cuando gustes, te ayudo a agendar otro.`,
-        appointment.phoneNumber,
-        { source: 'bot', personalize: false }
-    );
-};
 
 const retryCalendarDeletions = async () => {
     const { cancelAppointmentEvent } = require('../googleCalendar');
@@ -199,11 +175,6 @@ const checkAppointmentReminders = async (now = new Date()) => {
             const msUntilStart = startAt.getTime() - now.getTime();
 
             try {
-                if(shouldExpirePendingAppointment(appointment, msUntilStart)) {
-                    await expirePendingAppointment(appointment);
-                    continue;
-                }
-
                 if(shouldSendConfirmationReminder(appointment, msUntilStart)) {
                     await sendConfirmationReminder(appointment);
                     await markReminderSent(appointment, 'confirmation2hSentAt', now);
@@ -244,6 +215,6 @@ const startAppointmentReminders = () => {
 module.exports = {
     startAppointmentReminders,
     checkAppointmentReminders,
-    shouldExpirePendingAppointment,
+    shouldSendOneHourReminder,
     shouldSendPostAppointmentCare
 }

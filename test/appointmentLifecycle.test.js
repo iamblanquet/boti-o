@@ -5,7 +5,7 @@ const {
     isUpcomingActiveAppointment
 } = require('../models/citas/almacenamiento');
 const {
-    shouldExpirePendingAppointment,
+    shouldSendOneHourReminder,
     shouldSendPostAppointmentCare
 } = require('../models/citas/recordatorios');
 
@@ -26,10 +26,21 @@ test('only future pending or confirmed appointments are active', () => {
     }, now), false);
 });
 
-test('a pending appointment expires during the final hour only', () => {
-    assert.equal(shouldExpirePendingAppointment({ status: 'pendiente' }, 60 * 60 * 1000), true);
-    assert.equal(shouldExpirePendingAppointment({ status: 'pendiente' }, 60 * 60 * 1000 + 1), false);
-    assert.equal(shouldExpirePendingAppointment({ status: 'confirmada' }, 30 * 60 * 1000), false);
+test('a recently created appointment is kept and does not receive an immediate duplicate reminder', () => {
+    const startAt = '2026-07-30T12:30:00.000Z';
+    assert.equal(shouldSendOneHourReminder({
+        status: 'pendiente',
+        startAt,
+        createdAt: '2026-07-30T12:00:00.000Z',
+        reminders: {}
+    }, 30 * 60 * 1000), false);
+
+    assert.equal(shouldSendOneHourReminder({
+        status: 'pendiente',
+        startAt,
+        createdAt: '2026-07-30T10:00:00.000Z',
+        reminders: {}
+    }, 30 * 60 * 1000), true);
 });
 
 test('post-appointment care is sent once the confirmed appointment has ended', () => {
