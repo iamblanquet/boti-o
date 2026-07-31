@@ -120,11 +120,12 @@ test('incoming service question is handled by services before guided welcome but
         rememberName: CustomerProfile.rememberName,
         rememberFromMessage: CustomerProfile.rememberFromMessage,
         verifyStoreClient: Clients.verifyStoreClient,
-        saveOfferState: ServiceFollowup.saveOfferState
+        sendOfferDecisionButtons: ServiceFollowup.sendOfferDecisionButtons
     };
 
     const phoneNumber = '5219990000001';
     const sent = [];
+    const offeredServices = [];
 
     Messages.sendMessage = async (payload) => {
         sent.push(payload);
@@ -138,7 +139,10 @@ test('incoming service question is handled by services before guided welcome but
     CustomerProfile.rememberName = async () => {};
     CustomerProfile.rememberFromMessage = async () => {};
     Clients.verifyStoreClient = async () => {};
-    ServiceFollowup.saveOfferState = async () => null;
+    ServiceFollowup.sendOfferDecisionButtons = async (_phone, service) => {
+        offeredServices.push(service);
+        return true;
+    };
 
     try {
         await StateStore.del(`${phoneNumber}:steps`);
@@ -171,6 +175,7 @@ test('incoming service question is handled by services before guided welcome but
         assert.match(sent[0].text, /Depilaci.n L.ser - Medio Brazo/i);
         assert.match(sent[0].text, /Duracion aproximada: 30 minutos/i);
         assert.doesNotMatch(sent[0].text, /Elige uno/i);
+        assert.equal(offeredServices.at(-1)?.id, 'depilacion-laser-medio-brazo');
     } finally {
         Messages.sendMessage = originals.sendMessage;
         Messages.sendTextMessage = originals.sendTextMessage;
@@ -179,9 +184,42 @@ test('incoming service question is handled by services before guided welcome but
         CustomerProfile.rememberName = originals.rememberName;
         CustomerProfile.rememberFromMessage = originals.rememberFromMessage;
         Clients.verifyStoreClient = originals.verifyStoreClient;
-        ServiceFollowup.saveOfferState = originals.saveOfferState;
+        ServiceFollowup.sendOfferDecisionButtons = originals.sendOfferDecisionButtons;
         await StateStore.del(`${phoneNumber}:steps`);
         await StateStore.del(`${phoneNumber}:tool`);
+    }
+});
+
+test('a service selected from the catalog receives its own appointment action', async () => {
+    const CatalogMenu = require('../models/catalogMenu');
+    const Messages = require('../models/messages');
+    const ServiceFollowup = require('../models/serviceFollowup');
+
+    const originals = {
+        sendTextMessage: Messages.sendTextMessage,
+        sendLocalMedia: Messages.sendLocalMedia,
+        sendOfferDecisionButtons: ServiceFollowup.sendOfferDecisionButtons
+    };
+    const offeredServices = [];
+
+    Messages.sendTextMessage = async () => null;
+    Messages.sendLocalMedia = async () => null;
+    ServiceFollowup.sendOfferDecisionButtons = async (_phone, service) => {
+        offeredServices.push(service);
+        return true;
+    };
+
+    try {
+        const handled = await CatalogMenu.handlePayload('5219990000099', 'service_masaje-relajante');
+
+        assert.equal(handled, true);
+        assert.equal(offeredServices.length, 1);
+        assert.equal(offeredServices[0].id, 'masaje-relajante');
+        assert.equal(offeredServices[0].nombre, 'Masaje Relajante');
+    } finally {
+        Messages.sendTextMessage = originals.sendTextMessage;
+        Messages.sendLocalMedia = originals.sendLocalMedia;
+        ServiceFollowup.sendOfferDecisionButtons = originals.sendOfferDecisionButtons;
     }
 });
 

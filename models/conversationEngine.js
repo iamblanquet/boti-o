@@ -141,7 +141,7 @@ const sendServiceTemplate = async (phoneNumber, service, requestedField = DATA_F
     if(service.imagen) {
         await Messages.sendLocalMedia(service.imagen, phoneNumber, { source: 'bot' });
     }
-    await rememberOfferedService(phoneNumber, service);
+    await ServiceFollowup.sendOfferDecisionButtons(phoneNumber, service);
 }
 
 const handleServiceConsultation = async ({ phoneNumber, messageText, intent }) => {
@@ -477,14 +477,14 @@ const respondToIncomingMessageInternal = async ({ phoneNumber, messageText, mess
     }
 
     if(activeTool === 'gemini') {
-        await Gemini.geminiProccess(messageText, phoneNumber);
+        await sendAiRecommendationWithActions({ phoneNumber, messageText });
         return { handledBy: 'gemini' };
     }
 
     const handledByGuidedResponse = await GuidedResponses.handleGuidedResponse(phoneNumber, messageText);
     if(handledByGuidedResponse) return { handledBy: 'guided-response' };
 
-    await Gemini.geminiProccess(messageText, phoneNumber);
+    await sendAiRecommendationWithActions({ phoneNumber, messageText });
     return { handledBy: 'ai-fallback' };
 }
 

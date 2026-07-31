@@ -165,7 +165,7 @@ const handlePayload = async (phoneNumber, messageText) => {
         if(service.imagen) {
             await Messages.sendLocalMedia(service.imagen, phoneNumber, { source: 'bot' });
         }
-        await ServiceFollowup.saveOfferState(phoneNumber, service);
+        await ServiceFollowup.sendOfferDecisionButtons(phoneNumber, service);
         return true;
     }
 

@@ -1,4 +1,4 @@
-﻿const { GoogleGenAI } = require('@google/genai');
+const { GoogleGenAI } = require('@google/genai');
 const { OpenAI } = require('openai');
 const StateStore = require('./stateStore');
 const Messages = require('./messages');
@@ -47,8 +47,8 @@ const getRelevantKnowledgeBase = async (message) => {
 const buildInstructions = (knowledgeBase, customerName = null) => [
     buildSpaExpertToneInstructions(customerName),
     'Usa exclusivamente la informacion de la base de conocimiento para responder sobre servicios, precios e inclusiones.',
-    'Si el cliente pregunta por disponibilidad, horarios para cita, agendar, reagendar o cancelar, no digas que no tienes acceso al calendario ni que no puedes consultarlo. Guialo a tocar "Agendar cita" en el menu para que el flujo de botones revise disponibilidad.',
-    'Si el cliente menciona una fecha relativa como "manana", "hoy" o un dia de la semana, reconoce el dia con naturalidad y dile que el flujo de citas puede mostrarle dias y horarios disponibles por botones.',
+    'Si el cliente pregunta por disponibilidad, horarios para cita o agendar, responde de forma natural sobre el servicio y cierra invitandole a reservar, pero nunca le pidas tocar "Agendar cita" en el menu. El sistema enviara el boton correcto para iniciar la cita con el servicio recomendado.',
+    'Si el cliente menciona una fecha relativa como "manana", "hoy" o un dia de la semana, reconoce el dia con naturalidad. No lo redirijas al menu ni le digas que toque botones: el sistema enviara las opciones de cita correspondientes.',
     'No incluyas etiquetas como [cite: 1] en la respuesta final.',
     '',
     'Base de conocimiento:',
