@@ -75,13 +75,34 @@ const sendDueNudge = async (phoneNumber, now = new Date()) => {
     if(now.getTime() - new Date(entry.customerMessageAt).getTime() > CUSTOMER_WINDOW_MS) {
         await cancel(phoneNumber);
         return false;
+}
+
+const resumeAppointmentFlow = async (phoneNumber) => {
+    const { getFlow } = require('./citas/almacenamiento');
+    const { askForField } = require('./citas/preguntas');
+    const flow = await getFlow(phoneNumber);
+    if(!flow?.waitingFor || !['service', 'date', 'time', 'people', 'participantNames', 'name'].includes(flow.waitingFor)) {
+        return false;
     }
+    await askForField(phoneNumber, flow.waitingFor, flow.data || {});
+    return true;
+};
+
+const isAppointmentPayload = (payload) => {
+    const buttons = payload?.action?.buttons || [];
+    const rows = payload?.action?.sections?.flatMap((section) => section.rows || []) || [];
+    return [...buttons, ...rows].some((item) => String(item?.reply?.id || item?.id || '').startsWith('appt_'));
+};
     const result = await Messages.sendTextMessage(getMessage('conversation_nudge', {
         prompt: entry.prompt || 'tu respuesta'
     }), phoneNumber, {
         source: 'nudge', personalize: false
     });
-    if(result && entry.replyType && entry.interactivePayload) {
+    let resumed = false;
+    if(result && isAppointmentPayload(entry.interactivePayload)) {
+        resumed = await resumeAppointmentFlow(phoneNumber);
+    }
+    if(result && !resumed && entry.replyType && entry.interactivePayload) {
         await Messages.sendMessage({
             text: '',
             phoneNumber,
@@ -92,7 +113,7 @@ const sendDueNudge = async (phoneNumber, now = new Date()) => {
         });
     }
     if(result) {
-        await StateStore.set(key(phoneNumber), JSON.stringify({ ...entry, sentAt: now.toISOString() }), NUDGE_TTL_SECONDS);
+        await cancel(phoneNumber);
     }
     return Boolean(result);
 };
