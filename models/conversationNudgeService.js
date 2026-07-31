@@ -2,7 +2,7 @@ const StateStore = require('./stateStore');
 const Messages = require('./messages');
 const { getMessage } = require('../utils/systemMessageLoader');
 
-const NUDGE_DELAY_MS = Number(process.env.CONVERSATION_NUDGE_DELAY_MS || 10 * 60 * 1000);
+const NUDGE_DELAY_MS = Number(process.env.CONVERSATION_NUDGE_DELAY_MS || 2 * 60 * 1000);
 const CUSTOMER_WINDOW_MS = 24 * 60 * 60 * 1000;
 const NUDGE_TTL_SECONDS = 26 * 60 * 60;
 const timers = new Map();
