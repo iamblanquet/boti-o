@@ -539,15 +539,17 @@ const renderChats = () => {
   chatList.innerHTML = chats.map((chat) => {
     const meta = classify(chat);
     const alert = chat.alert;
+    const medicalCondition = String(chat.appointmentSummary?.medicalCondition || '').trim();
     return `
       <button class="w-full text-left p-4 border-b border-slate-100 hover:bg-emerald-50 transition cursor-pointer relative ${chat.phoneNumber === state.selectedPhone ? 'bg-emerald-50/80 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-emerald-500' : ''} ${alert ? 'bg-orange-50 hover:bg-orange-100 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-orange-500' : ''}" data-phone="${chat.phoneNumber}">
         <div class="flex items-baseline justify-between gap-2 mb-1">
-          <span class="font-bold text-slate-800 text-sm truncate">${escapeHtml(chat.name || 'Paciente nuevo')}</span>
+          <span class="font-bold text-slate-800 text-sm truncate">${medicalCondition ? '<span class="text-amber-600" title="El cliente reportó información médica relevante" aria-label="Alerta médica">⚠</span> ' : ''}${escapeHtml(chat.name || 'Paciente nuevo')}</span>
           <span class="text-xs font-semibold text-slate-400 shrink-0">${formatTime(chat.lastAt) || 'Ahora'}</span>
         </div>
         <div class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-2">${escapeHtml(formatPayloadText(chat.lastMessage) || 'Conversación lista para iniciar desde WhatsApp.')}</div>
         <div class="flex items-center justify-between gap-2">
           <span class="text-xs font-bold text-orange-600">${escapeHtml(meta.tag)}</span>
+          ${medicalCondition ? '<span class="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Alerta médica</span>' : ''}
           ${alert ? `<span class="bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full truncate max-w-[130px]">${escapeHtml(alert.title || 'Atención')}</span>` : ''}
         </div>
       </button>
@@ -598,6 +600,7 @@ const renderMessageContent = (message) => {
 const renderMessages = () => {
   const chat = getCurrentChat();
   const alert = chat?.alert;
+  const medicalCondition = String(chat?.appointmentSummary?.medicalCondition || '').trim();
   const controlBanner = renderControlBanner();
 
   if (!state.selectedPhone) {
@@ -628,6 +631,7 @@ const renderMessages = () => {
     const label = state.filter === 'all' ? 'esta conversación' : `mensajes de ${state.filter.toUpperCase()}`;
     messagesEl.innerHTML = `
       ${controlBanner}
+      ${renderMedicalConditionBanner(medicalCondition)}
       ${renderAlertBanner(alert)}
       <div class="m-auto text-center">
         <p class="text-slate-400 font-medium">No hay ${label} todavía.</p>
@@ -638,6 +642,7 @@ const renderMessages = () => {
 
   messagesEl.innerHTML = `
     ${controlBanner}
+    ${renderMedicalConditionBanner(medicalCondition)}
     ${renderAlertBanner(alert)}
     ${visibleMessages.map((message) => `
       <div class="w-full flex ${message.direction === 'out' ? 'justify-end' : 'justify-start'}">
@@ -680,6 +685,19 @@ const renderAlertBanner = (alert) => {
         <p class="text-sm text-orange-700 mt-1">${escapeHtml(alert.message || 'Este chat necesita revisión del equipo.')}</p>
       </div>
       <span class="text-xs font-semibold text-orange-400 shrink-0">${formatDateTime(alert.createdAt)}</span>
+    </div>
+  `;
+};
+
+const renderMedicalConditionBanner = (medicalCondition) => {
+  if (!medicalCondition) return '';
+  return `
+    <div class="flex items-start gap-3 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl shadow-sm w-full max-w-2xl mx-auto mb-4" role="alert">
+      <span class="text-xl leading-none text-amber-600" aria-hidden="true">⚠</span>
+      <div class="flex-1">
+        <strong class="block text-sm font-bold text-amber-900">Información médica relevante</strong>
+        <p class="text-sm text-amber-800 mt-1 whitespace-pre-wrap">${escapeHtml(medicalCondition)}</p>
+      </div>
     </div>
   `;
 };

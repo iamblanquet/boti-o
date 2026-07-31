@@ -39,6 +39,9 @@ const buildAppointmentSummary = (appointments = []) => {
     const pending = futureActive.find((appointment) => appointment.status === 'pendiente');
     const next = confirmed || pending || futureActive[0] || null;
     const latest = [...appointments].sort((a, b) => new Date(b.startAt || 0) - new Date(a.startAt || 0))[0] || null;
+    const medicalAppointment = [...appointments]
+        .filter((appointment) => String(appointment.medicalCondition || '').trim())
+        .sort((a, b) => new Date(b.updatedAt || b.startAt || 0) - new Date(a.updatedAt || a.startAt || 0))[0] || null;
 
     return {
         totalCount: appointments.length,
@@ -46,7 +49,8 @@ const buildAppointmentSummary = (appointments = []) => {
         activeStatus: next?.status || null,
         nextStartAt: next?.startAt || null,
         latestStatus: latest?.status || null,
-        latestStartAt: latest?.startAt || null
+        latestStartAt: latest?.startAt || null,
+        medicalCondition: String(medicalAppointment?.medicalCondition || '').trim() || null
     };
 };
 

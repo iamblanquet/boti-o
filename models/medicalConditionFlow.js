@@ -3,6 +3,7 @@ const StateManager = require('./conversationStateManager');
 const ClientsStorage = require('./clientes/almacenamiento');
 const AppointmentsStorage = require('./citas/almacenamiento');
 const GoogleCalendar = require('./googleCalendar');
+const ChatStore = require('./chatStore');
 const { getMessage } = require('../utils/systemMessageLoader');
 
 const MEDICAL_CONDITION_INTENT = 'medical_condition';
@@ -43,6 +44,13 @@ const saveCondition = async (phoneNumber, appointmentId, condition) => {
         ...client,
         phoneNumber,
         notes: appendMedicalConditionNote(client.notes, condition)
+    });
+
+    ChatStore.setAlert(phoneNumber, {
+        type: 'medical_condition',
+        severity: 'warning',
+        title: 'Información médica relevante',
+        message: condition
     });
 
     if(savedAppointment?.eventId) {

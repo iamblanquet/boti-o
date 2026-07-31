@@ -197,6 +197,7 @@ const toLocalCalendarEvent = (appointment) => ({
     serviceName: appointment.serviceName || 'Otros',
     people: appointment.people || 1,
     participantNames: toParticipantNames(appointment.participantNames),
+    medicalCondition: appointment.medicalCondition || null,
     status: appointment.status,
     htmlLink: appointment.eventId
         ? `https://calendar.google.com/calendar/event?eid=${encodeURIComponent(appointment.eventId)}`
@@ -328,6 +329,8 @@ const getConfirmedAppointments = async (req, res) => {
                 const participantNames = appointment?.participantNames?.length
                     ? appointment.participantNames
                     : getGoogleEventValue(event, 'participantNames', 'Participantes');
+                const medicalCondition = appointment?.medicalCondition
+                    || getGoogleEventValue(event, 'medicalCondition', 'Información médica relevante');
 
                 return {
                     ...event,
@@ -342,6 +345,7 @@ const getConfirmedAppointments = async (req, res) => {
                         || getGoogleEventValue(event, 'people', 'Personas')
                         || 1,
                     participantNames: toParticipantNames(participantNames),
+                    medicalCondition: medicalCondition || null,
                     status
                 };
             })

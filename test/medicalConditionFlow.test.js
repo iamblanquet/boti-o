@@ -6,6 +6,7 @@ const StateManager = require('../models/conversationStateManager');
 const ClientsStorage = require('../models/clientes/almacenamiento');
 const AppointmentsStorage = require('../models/citas/almacenamiento');
 const GoogleCalendar = require('../models/googleCalendar');
+const ChatStore = require('../models/chatStore');
 const MedicalConditionFlow = require('../models/medicalConditionFlow');
 
 test('medical condition flow saves the response in CRM and the confirmed calendar appointment', async () => {
@@ -17,13 +18,15 @@ test('medical condition flow saves the response in CRM and the confirmed calenda
         saveClient: ClientsStorage.saveClient,
         getAppointment: AppointmentsStorage.getAppointment,
         saveAppointment: AppointmentsStorage.saveAppointment,
-        updateAppointmentEvent: GoogleCalendar.updateAppointmentEvent
+        updateAppointmentEvent: GoogleCalendar.updateAppointmentEvent,
+        setAlert: ChatStore.setAlert
     };
     const savedStates = [];
     const savedAppointments = [];
     const savedClients = [];
     const calendarUpdates = [];
     const sent = [];
+    const alerts = [];
     const phoneNumber = '5219990000000';
     const appointment = {
         id: 'appointment-1',
@@ -50,6 +53,7 @@ test('medical condition flow saves the response in CRM and the confirmed calenda
         calendarUpdates.push(payload);
         return payload;
     };
+    ChatStore.setAlert = (phone, alert) => alerts.push({ phone, alert });
 
     try {
         const actionId = MedicalConditionFlow.getMedicalConditionActionId(appointment.id);
@@ -72,6 +76,8 @@ test('medical condition flow saves the response in CRM and the confirmed calenda
         assert.match(savedClients[0].notes, /Información médica relevante/);
         assert.match(savedClients[0].notes, /almendras/);
         assert.equal(calendarUpdates[0].appointment.medicalCondition, 'Alergia al aceite de almendras');
+        assert.equal(alerts[0].alert.type, 'medical_condition');
+        assert.equal(alerts[0].alert.message, 'Alergia al aceite de almendras');
         assert.match(sent.at(-1).text, /Ya registramos esta información/i);
     } finally {
         Messages.sendTextMessage = originals.sendTextMessage;
@@ -82,5 +88,6 @@ test('medical condition flow saves the response in CRM and the confirmed calenda
         AppointmentsStorage.getAppointment = originals.getAppointment;
         AppointmentsStorage.saveAppointment = originals.saveAppointment;
         GoogleCalendar.updateAppointmentEvent = originals.updateAppointmentEvent;
+        ChatStore.setAlert = originals.setAlert;
     }
 });

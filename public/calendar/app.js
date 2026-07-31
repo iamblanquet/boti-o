@@ -214,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const mapEvent = (appointment) => {
         const serviceName = appointment.serviceName || 'Otros';
+        const medicalCondition = String(appointment.medicalCondition || '').trim();
         return {
             id: appointment.id || appointment.eventId,
             title: `${appointment.clientName || 'Cliente'} · ${serviceName}`,
@@ -230,6 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 participantNames: Array.isArray(appointment.participantNames)
                     ? appointment.participantNames
                     : [],
+                medicalCondition,
                 status: appointment.status || 'confirmada',
                 htmlLink: appointment.htmlLink || null,
                 source: appointment.source || 'local'
@@ -350,6 +352,10 @@ document.addEventListener('DOMContentLoaded', function() {
             : props.clientName || 'Sin participantes registrados';
         document.getElementById('modalStatus').textContent = props.status;
         document.getElementById('modalSource').textContent = props.source === 'google-calendar' ? 'Google Calendar' : 'Registro local';
+        const medicalAlert = document.getElementById('modalMedicalAlert');
+        const medicalCondition = String(props.medicalCondition || '').trim();
+        document.getElementById('modalMedicalCondition').textContent = medicalCondition;
+        medicalAlert.classList.toggle('hidden', !medicalCondition);
         document.getElementById('modalHeaderColor').style.backgroundColor = getColor(props.serviceName);
         const phone = document.getElementById('modalPhone');
         phone.textContent = props.phoneNumber || 'Sin telefono';
