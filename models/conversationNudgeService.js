@@ -21,7 +21,6 @@ const arm = (phoneNumber, dueAt) => {
         timers.delete(phoneNumber);
         sendDueNudge(phoneNumber).catch((error) => console.log('No se pudo enviar seguimiento conversacional:', error.message));
     }, waitMs);
-    timer.unref?.();
     timers.set(phoneNumber, timer);
 };
 const isQuestion = (text) => /[?¿]/.test(String(text || ''));
@@ -63,6 +62,7 @@ const schedule = async ({ phoneNumber, text, type, buttonPayload, listPayload, s
     };
     await StateStore.set(key(phoneNumber), JSON.stringify(entry), NUDGE_TTL_SECONDS);
     arm(phoneNumber, entry.dueAt);
+    console.log('Empujón conversacional programado', { phoneNumber, dueAt: entry.dueAt, type });
     return entry;
 };
 
@@ -122,6 +122,7 @@ const isAppointmentPayload = (payload) => {
     }
     if(result) {
         await cancel(phoneNumber);
+        console.log('Empujón conversacional enviado', { phoneNumber });
     }
     return Boolean(result);
 };
