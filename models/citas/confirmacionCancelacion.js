@@ -18,8 +18,14 @@ const {
     hasCancelIntent
 } = require('./reglas');
 const { sendButtonMessage } = require('./mensajesWhatsapp');
+const { getMessage } = require('../../utils/systemMessageLoader');
 
 const sendTextMessage = (phoneNumber, message) => Messages.sendTextMessage(message, phoneNumber);
+
+const sendAppointmentConfirmationCare = async (phoneNumber) => {
+    const message = getMessage('appointment_confirmation_care');
+    if(message.trim()) await sendTextMessage(phoneNumber, message);
+};
 
 const sendCalendarInvite = async (phoneNumber, appointment) => {
     const googleCalendarUrl = await getShortGoogleCalendarUrl(appointment);
@@ -103,6 +109,8 @@ const confirmAppointmentById = async (phoneNumber, appointmentId) => {
     }
 
     // Invitar a registrar datos de promociones (correo y cumpleaños) si aplica
+    await sendAppointmentConfirmationCare(phoneNumber);
+
     const PromoFlow = require('./promoFlow');
     await PromoFlow.iniciarSiAplica(phoneNumber);
 
@@ -182,6 +190,7 @@ const startCancelFlow = async (phoneNumber) => {
 
 module.exports = {
     sendConfirmButtons,
+    sendAppointmentConfirmationCare,
     confirmAppointmentById,
     cancelAppointmentById,
     confirmLatestAppointment,

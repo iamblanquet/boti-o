@@ -20,6 +20,7 @@ const DEFAULT_MESSAGES = {
   slot_expired: "Ese horario ya paso. Te muestro opciones disponibles para elegir otra hora.",
   reschedule_success: "Listo. Reprogramamos tu cita para {{datetime}}.",
   booking_success: "Listo. Apartamos tu cita de {{service}} para {{datetime}} a nombre de {{name}}.",
+  appointment_confirmation_care: "Para que disfrutes al máximo tu experiencia, te recomendamos:\n• Llegar entre 10 y 15 minutos antes de tu cita.\n• Usar ropa cómoda.\n• Informarnos con anticipación si presentas alguna condición médica, embarazo o lesión.\n\nAsí podremos brindarte una atención personalizada.",
   
   // Catálogo (Services Catalog)
   catalog_category_intro: "Elige una categoria y te comparto los servicios disponibles:",
