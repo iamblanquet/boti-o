@@ -101,12 +101,8 @@
 
               <form id="apptMessagesForm" class="flex flex-col gap-6">
                 <div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col gap-4">
-                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">1. Mensajes de Bienvenida</h3>
-                  <p class="text-xs text-slate-500">El bot conserva los botones del menú configurado y cambia solo este texto según sea el primer contacto o un regreso.</p>
-                  <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
-                    Primera bienvenida
-                    <textarea name="welcome_first_time" rows="3" placeholder="Puedes usar {{name}}" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>
-                  </label>
+                  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">1. Mensaje de Reingreso</h3>
+                  <p class="text-xs text-slate-500">La primera bienvenida y los botones se editan en el paso 0 del flujo general. Aquí solo se configura el texto para clientes que vuelven a escribir.</p>
                   <label class="flex flex-col gap-1.5 text-xs font-bold text-slate-500">
                     Bienvenida de regreso
                     <textarea name="welcome_returning" rows="3" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-normal outline-none focus:border-emerald-500 transition text-slate-800"></textarea>

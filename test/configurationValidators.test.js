@@ -17,8 +17,4 @@ test('configuration validators reject malformed flow and missing placeholders', 
         () => validateSystemMessages({ welcome_returning: '   ' }),
         /no puede estar vacio/
     );
-    assert.doesNotThrow(() => validateSystemMessages(
-        { welcome_first_time: 'Bienvenida sin nombre personalizado.' },
-        { welcome_first_time: 'Hola {{name}}' }
-    ));
 });

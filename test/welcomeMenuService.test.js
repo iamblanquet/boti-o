@@ -30,10 +30,7 @@ test('welcome menu sends configured first and returning texts with the same menu
         sent.push(payload);
         return { data: { messages: [{ id: 'outgoing-message' }] } };
     };
-    Configuration.getSystemMessageOverrides = async () => ({
-        welcome_first_time: 'Hola {{name}}, bienvenida por primera vez.',
-        welcome_returning: 'Qué gusto tenerte de nuevo.'
-    });
+    Configuration.getSystemMessageOverrides = async () => ({ welcome_returning: 'Qué gusto tenerte de nuevo.' });
 
     try {
         await StateStore.del(WelcomeMenu.welcomeSeenKey(phoneNumber));
@@ -42,7 +39,7 @@ test('welcome menu sends configured first and returning texts with the same menu
         await WelcomeMenu.sendWelcomeMenu({ phoneNumber, messageId: 'returning', buttonPayload: menuPayload });
 
         assert.equal(sent.length, 2);
-        assert.equal(sent[0].buttonPayload.body.text, 'Hola {{name}}, bienvenida por primera vez.');
+        assert.equal(sent[0].buttonPayload.body.text, 'Texto anterior que no debe enviarse');
         assert.equal(sent[1].buttonPayload.body.text, 'Qué gusto tenerte de nuevo.');
         assert.deepEqual(sent[0].buttonPayload.action.buttons, menuPayload.action.buttons);
         assert.deepEqual(sent[1].buttonPayload.action.buttons, menuPayload.action.buttons);

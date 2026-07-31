@@ -22,10 +22,10 @@ const validateSystemMessages = (value, defaults = {}) => {
 
     Object.entries(value).forEach(([key, message]) => {
         if(typeof message !== 'string') throw new Error(`El campo ${key} debe ser una cadena de texto.`);
-        if(['welcome_first_time', 'welcome_returning'].includes(key) && !message.trim()) {
+        if(key === 'welcome_returning' && !message.trim()) {
             throw new Error(`El campo ${key} no puede estar vacio.`);
         }
-        const required = ['welcome_first_time', 'welcome_returning'].includes(key)
+        const required = key === 'welcome_returning'
             ? []
             : String(defaults[key] || '').match(/{{[a-zA-Z0-9_]+}}/g) || [];
         required.forEach((placeholder) => {

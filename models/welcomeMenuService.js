@@ -6,10 +6,9 @@ const { DEFAULT_MESSAGES } = require('../utils/systemMessageLoader');
 const WELCOME_SEEN_TTL_SECONDS = 90 * 24 * 60 * 60;
 const welcomeSeenKey = (phoneNumber) => `${phoneNumber}:welcome_menu_seen`;
 
-const getWelcomeText = async (hasSeenWelcome) => {
+const getReturningWelcomeText = async () => {
     const overrides = await Configuration.getSystemMessageOverrides();
-    const key = hasSeenWelcome ? 'welcome_returning' : 'welcome_first_time';
-    return overrides?.[key] || DEFAULT_MESSAGES[key];
+    return overrides?.welcome_returning || DEFAULT_MESSAGES.welcome_returning;
 };
 
 const withWelcomeText = (buttonPayload, text) => ({
@@ -26,7 +25,9 @@ const sendWelcomeMenu = async ({ phoneNumber, messageId, buttonPayload }) => {
     }
 
     const hasSeenWelcome = Boolean(await StateStore.get(welcomeSeenKey(phoneNumber)));
-    const text = await getWelcomeText(hasSeenWelcome);
+    const text = hasSeenWelcome
+        ? await getReturningWelcomeText()
+        : buttonPayload.body?.text;
     const result = await Messages.sendMessage({
         text: '',
         type: 'button',
