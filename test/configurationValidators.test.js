@@ -13,4 +13,12 @@ test('configuration validators reject malformed flow and missing placeholders', 
         () => validateSystemMessages({ booking_success: 'Cita creada' }, { booking_success: '{{service}} {{datetime}}' }),
         /{{service}}/
     );
+    assert.throws(
+        () => validateSystemMessages({ welcome_returning: '   ' }),
+        /no puede estar vacio/
+    );
+    assert.doesNotThrow(() => validateSystemMessages(
+        { welcome_first_time: 'Bienvenida sin nombre personalizado.' },
+        { welcome_first_time: 'Hola {{name}}' }
+    ));
 });

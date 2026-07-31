@@ -102,6 +102,12 @@ const sendMessageSteps = async (message, phoneNumber, messageId) => {
         localFile
     } = key;
 
+    if(isGreetingCommand && type === 'button' && buttonPayload) {
+        const WelcomeMenu = require('./welcomeMenuService');
+        await WelcomeMenu.sendWelcomeMenu({ phoneNumber, messageId, buttonPayload });
+        return true;
+    }
+
     if(key.function === 'gemini') {
         await setActiveTool(phoneNumber, 'gemini');
         await Messages.sendTextMessage(response.join(''), phoneNumber);

@@ -192,6 +192,8 @@ test.describe('Flow Admin API', () => {
 
   test('POST /api/flow/system-messages - saves custom messages successfully', async () => {
     const payload = {
+      welcome_first_time: 'Hola y bienvenida a THESSA Spa.',
+      welcome_returning: 'Qué gusto tenerte de nuevo en THESSA Spa.',
       service_category_intro: 'Custom Category Choice',
       booking_success: 'Cita de {{service}} agendada para {{datetime}} a nombre de {{name}}',
       promo_birthday_invitation: 'Custom club de beneficios invitation'
@@ -213,6 +215,8 @@ test.describe('Flow Admin API', () => {
     assert.equal(statusCalledWith, 200);
 
     const saved = await Configuration.getSystemMessageOverrides();
+    assert.equal(saved.welcome_first_time, 'Hola y bienvenida a THESSA Spa.');
+    assert.equal(saved.welcome_returning, 'Qué gusto tenerte de nuevo en THESSA Spa.');
     assert.equal(saved.service_category_intro, 'Custom Category Choice');
     assert.equal(saved.booking_success, 'Cita de {{service}} agendada para {{datetime}} a nombre de {{name}}');
     assert.equal(saved.promo_birthday_invitation, 'Custom club de beneficios invitation');

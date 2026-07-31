@@ -22,7 +22,12 @@ const validateSystemMessages = (value, defaults = {}) => {
 
     Object.entries(value).forEach(([key, message]) => {
         if(typeof message !== 'string') throw new Error(`El campo ${key} debe ser una cadena de texto.`);
-        const required = String(defaults[key] || '').match(/{{[a-zA-Z0-9_]+}}/g) || [];
+        if(['welcome_first_time', 'welcome_returning'].includes(key) && !message.trim()) {
+            throw new Error(`El campo ${key} no puede estar vacio.`);
+        }
+        const required = ['welcome_first_time', 'welcome_returning'].includes(key)
+            ? []
+            : String(defaults[key] || '').match(/{{[a-zA-Z0-9_]+}}/g) || [];
         required.forEach((placeholder) => {
             if(!message.includes(placeholder)) {
                 throw new Error(`El campo ${key} debe contener la variable obligatoria ${placeholder}.`);
