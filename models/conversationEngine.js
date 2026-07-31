@@ -327,6 +327,7 @@ const recordIncomingMessage = async ({ phoneNumber, name, messageText, messageId
 
     await CustomerProfile.rememberName(phoneNumber, name, 'whatsapp');
     await CustomerProfile.rememberFromMessage(phoneNumber, messageText);
+    await require('./conversationNudgeService').recordCustomerMessage(phoneNumber, storedMessage?.createdAt);
 
     return {
         phoneNumber,

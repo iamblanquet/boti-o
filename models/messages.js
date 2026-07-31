@@ -207,6 +207,16 @@ const sendMessage = async (options) => {
         CampaignFunnel.markContacted(phoneNumber).catch((error) => {
             console.log('No se pudo registrar contacto de campana:', error.message);
         });
+        if(source !== 'nudge') {
+            require('./conversationNudgeService').schedule({
+                phoneNumber,
+                text: outboundText,
+                type,
+                buttonPayload: body.interactive,
+                listPayload: body.interactive,
+                source
+            }).catch((error) => console.log('No se pudo programar seguimiento conversacional:', error.message));
+        }
         return result
     } catch (error) {
         console.log('error', error?.response?.data);

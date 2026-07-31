@@ -3,6 +3,7 @@ const Configuration = require('../models/configuration/repository');
 const DEFAULT_MESSAGES = {
   // Bienvenida
   welcome_returning: "¡Qué gusto tenerte de nuevo en THESSA Spa!\n¿En qué podemos acompañarte hoy?",
+  conversation_nudge: "Cuando gustes, aquí estoy para continuar. Quedé pendiente de: {{prompt}}",
 
   // Citas (Appointment Booking)
   service_category_intro: "Claro, te ayudo a agendar. Primero elige la categoria que te interesa:",

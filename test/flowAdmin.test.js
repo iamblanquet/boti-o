@@ -188,6 +188,7 @@ test.describe('Flow Admin API', () => {
     assert.ok(responseData.promo_birthday_invitation);
     assert.ok(responseData.promo_birthday_ask);
     assert.ok(responseData.promo_email_ask);
+    assert.match(responseData.conversation_nudge, /{{prompt}}/);
   });
 
   test('POST /api/flow/system-messages - saves custom messages successfully', async () => {
