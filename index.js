@@ -7,6 +7,7 @@ const http = require('http');
 const apiRouter = require('./routes/index');
 const { startAppointmentReminders } = require('./models/citas/recordatorios');
 const { startServiceFollowupReminders } = require('./models/serviceFollowup');
+const { startConversationNudgeScheduler } = require('./models/conversationNudgeService');
 const { warmCalendarAgendaCache } = require('./controllers/calendarController');
 const { refreshSystemMessages } = require('./utils/systemMessageLoader');
 
@@ -52,6 +53,7 @@ server.listen(port, ()=> {
     console.log(`Servidor listo en el puerto ${port}`);
     startAppointmentReminders();
     startServiceFollowupReminders();
+    startConversationNudgeScheduler();
     refreshSystemMessages().catch((error) => console.log('No se pudo cargar configuracion de mensajes:', error.message));
     warmCalendarAgendaCache()
         .then(() => console.log('Cache de agenda precargado.'))

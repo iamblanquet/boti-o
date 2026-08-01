@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const Nudge = require('../models/conversationNudgeService');
 const StateStore = require('../models/stateStore');
 const Messages = require('../models/messages');
+const ResponseGuard = require('../utils/responseGuard');
 
 test('only bot questions and interactive messages can schedule a conversation nudge', () => {
     assert.equal(Nudge.isWaitingForReply({ type: 'text', text: '¿Qué día te conviene?', source: 'bot' }), true);
@@ -34,6 +35,28 @@ test('sends only one nudge and cancels it when the customer answers', async () =
     } finally {
         Messages.sendTextMessage = original;
         await StateStore.del(Nudge.key(phoneNumber));
+    }
+});
+
+test('sends a due nudge even when the originating response token has expired', async () => {
+    const phoneNumber = '5219990000084';
+    const original = Messages.sendTextMessage;
+    const sent = [];
+    Messages.sendTextMessage = async (...args) => { sent.push(args); return { data: {} }; };
+    try {
+        await Nudge.recordCustomerMessage(phoneNumber, new Date().toISOString());
+        await Nudge.schedule({ phoneNumber, type: 'text', text: 'Quieres continuar?', source: 'bot' });
+        const entry = await Nudge.get(phoneNumber);
+        await ResponseGuard.run({
+            phoneNumber,
+            token: 'expired-token',
+            stateKey: `${phoneNumber}:missing-batch`,
+            stateStore: StateStore
+        }, () => Nudge.sendDueNudge(phoneNumber, new Date(new Date(entry.dueAt).getTime() + 1)));
+        assert.equal(sent.length, 1);
+    } finally {
+        Messages.sendTextMessage = original;
+        await Nudge.cancel(phoneNumber);
     }
 });
 
