@@ -128,6 +128,14 @@ const isAppointmentPayload = (payload) => {
     return [...buttons, ...rows].some((item) => String(item?.reply?.id || item?.id || '').startsWith('appt_'));
 };
 
+const buildNudgeInteractivePayload = (payload) => {
+    const nextPayload = JSON.parse(JSON.stringify(payload));
+    if(nextPayload?.body) {
+        nextPayload.body.text = '¿Te gustaría continuar? Elige una opción:';
+    }
+    return nextPayload;
+};
+
 const sendDueNudge = async (phoneNumber, now = new Date()) => {
     if(sending.has(phoneNumber)) return false;
     sending.add(phoneNumber);
@@ -146,25 +154,26 @@ const sendDueNudge = async (phoneNumber, now = new Date()) => {
         }
 
         const result = await ResponseGuard.run(null, async () => {
-            const nudgeResult = await Messages.sendTextMessage(getMessage('conversation_nudge', {
-                prompt: entry.prompt || 'tu respuesta'
-            }), phoneNumber, { source: 'nudge', personalize: false });
-
-            let resumed = false;
-            if(nudgeResult && entry.resendInteractive && isAppointmentPayload(entry.interactivePayload)) {
-                resumed = await resumeAppointmentFlow(phoneNumber);
+            if(entry.resendInteractive && isAppointmentPayload(entry.interactivePayload)) {
+                const resumed = await resumeAppointmentFlow(phoneNumber);
+                if(resumed) return true;
             }
-            if(nudgeResult && entry.resendInteractive && !resumed && entry.replyType && entry.interactivePayload) {
+
+            if(entry.resendInteractive && entry.replyType && entry.interactivePayload) {
                 await Messages.sendMessage({
                     text: '',
                     phoneNumber,
                     type: entry.replyType,
-                    [entry.replyType === 'button' ? 'buttonPayload' : 'listPayload']: entry.interactivePayload,
+                    [entry.replyType === 'button' ? 'buttonPayload' : 'listPayload']: buildNudgeInteractivePayload(entry.interactivePayload),
                     source: 'nudge',
                     personalize: false
                 });
+                return true;
             }
-            return nudgeResult;
+
+            return Messages.sendTextMessage(getMessage('conversation_nudge', {
+                prompt: entry.prompt || 'tu respuesta'
+            }), phoneNumber, { source: 'nudge', personalize: false });
         });
 
         if(result) {

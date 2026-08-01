@@ -65,7 +65,8 @@ test('re-sends the pending interactive control with the nudge', async () => {
     const originalText = Messages.sendTextMessage;
     const originalMessage = Messages.sendMessage;
     const interactive = [];
-    Messages.sendTextMessage = async () => ({ data: {} });
+    const textNudges = [];
+    Messages.sendTextMessage = async (...args) => { textNudges.push(args); return { data: {} }; };
     Messages.sendMessage = async (payload) => { interactive.push(payload); return { data: {} }; };
     try {
         await Nudge.recordCustomerMessage(phoneNumber, new Date().toISOString());
@@ -80,6 +81,8 @@ test('re-sends the pending interactive control with the nudge', async () => {
         assert.equal(interactive.length, 1);
         assert.equal(interactive[0].type, 'list');
         assert.equal(interactive[0].listPayload.action.button, 'Ver servicios');
+        assert.equal(interactive[0].listPayload.body.text, '¿Te gustaría continuar? Elige una opción:');
+        assert.equal(textNudges.length, 0);
     } finally {
         Messages.sendTextMessage = originalText;
         Messages.sendMessage = originalMessage;
