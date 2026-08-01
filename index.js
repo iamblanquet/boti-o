@@ -13,7 +13,13 @@ const { refreshSystemMessages } = require('./utils/systemMessageLoader');
 const port = process.env.PORT || 3000;
 const app = express();
 
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({
+    limit: '50mb',
+    verify: (req, res, buffer) => {
+        // Meta firma el cuerpo original del webhook, no su representación JSON.
+        if(req.originalUrl === '/bot/webhook') req.rawBody = Buffer.from(buffer);
+    }
+}));
 app.use(cors());
 const { requireAuth, requireSuperAdmin, checkPermissionStatic } = require('./middleware/auth');
 
