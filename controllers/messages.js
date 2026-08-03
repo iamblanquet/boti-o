@@ -40,6 +40,8 @@ const messageInfo = async (req, res) => {
             name: incoming.name,
             type: incoming.type,
             messageText: incoming.messageText,
+            displayText: incoming.displayText,
+            interactiveReplyId: incoming.interactiveReplyId,
             messageId: incoming.messageId
         });
 

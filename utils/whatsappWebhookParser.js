@@ -5,22 +5,42 @@ const normalizeWhatsappRecipient = (phoneNumber) => {
     return phoneNumber;
 }
 
-const getIncomingText = (message) => {
+const getIncomingMessageContent = (message) => {
     if(!message) return null;
 
-    if(message.type === 'text') return message.text?.body || '';
+    if(message.type === 'text') {
+        const text = message.text?.body || '';
+        return { messageText: text, displayText: text };
+    }
 
     if(message.type === 'button') {
-        return message.button?.payload || message.button?.text || '';
+        const messageText = message.button?.payload || message.button?.text || '';
+        return {
+            messageText,
+            displayText: message.button?.text || messageText,
+            interactiveReplyId: message.button?.payload || null
+        };
     }
 
     if(message.type === 'interactive') {
         const interactiveType = message.interactive?.type;
         if(interactiveType === 'button_reply') {
-            return message.interactive?.button_reply?.id || message.interactive?.button_reply?.title || '';
+            const reply = message.interactive?.button_reply || {};
+            const messageText = reply.id || reply.title || '';
+            return {
+                messageText,
+                displayText: reply.title || messageText,
+                interactiveReplyId: reply.id || null
+            };
         }
         if(interactiveType === 'list_reply') {
-            return message.interactive?.list_reply?.id || message.interactive?.list_reply?.title || '';
+            const reply = message.interactive?.list_reply || {};
+            const messageText = reply.id || reply.title || '';
+            return {
+                messageText,
+                displayText: reply.title || messageText,
+                interactiveReplyId: reply.id || null
+            };
         }
     }
 
@@ -34,8 +54,8 @@ const parseIncomingMessage = (requestBody) => {
     const message = messages[0];
     if(!message) return null;
 
-    const messageText = getIncomingText(message);
-    if(messageText === null) {
+    const content = getIncomingMessageContent(message);
+    if(content === null) {
         return {
             unsupportedType: message.type
         };
@@ -51,12 +71,15 @@ const parseIncomingMessage = (requestBody) => {
         waId: contact.wa_id,
         name: contact.profile?.name,
         type: message.type,
-        messageText,
+        messageText: content.messageText,
+        displayText: content.displayText,
+        interactiveReplyId: content.interactiveReplyId,
         messageId: message.id
     };
 }
 
 module.exports = {
     normalizeWhatsappRecipient,
+    getIncomingMessageContent,
     parseIncomingMessage
 };

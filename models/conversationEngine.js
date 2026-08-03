@@ -304,8 +304,8 @@ const handleHybridServicesMessage = async ({ phoneNumber, messageText }) => {
     return null;
 }
 
-const recordIncomingMessage = async ({ phoneNumber, name, messageText, messageId, type }) => {
-    const originalMessage = messageText;
+const recordIncomingMessage = async ({ phoneNumber, name, messageText, displayText = null, interactiveReplyId = null, messageId, type }) => {
+    const originalMessage = displayText || messageText;
     const clientResult = await clientModel.verifyStoreClient(
         phoneNumber,
         name,
@@ -321,9 +321,10 @@ const recordIncomingMessage = async ({ phoneNumber, name, messageText, messageId
         type,
         text: originalMessage,
         messageId,
-        metadata: clientResult?.attribution ? {
-            campaignAttribution: clientResult.attribution
-        } : {}
+        metadata: {
+            ...(clientResult?.attribution ? { campaignAttribution: clientResult.attribution } : {}),
+            ...(interactiveReplyId ? { interactiveReplyId } : {})
+        }
     });
 
     await CustomerProfile.rememberName(phoneNumber, name, 'whatsapp');
@@ -335,6 +336,8 @@ const recordIncomingMessage = async ({ phoneNumber, name, messageText, messageId
         name,
         messageText,
         originalMessage,
+        displayText: originalMessage,
+        interactiveReplyId,
         messageId,
         type,
         createdAt: storedMessage?.createdAt || new Date().toISOString(),
