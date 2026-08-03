@@ -43,6 +43,8 @@ class MessageDebouncer {
             name: incoming.name,
             type: incoming.type,
             messageText: incoming.messageText,
+            displayText: incoming.displayText,
+            interactiveReplyId: incoming.interactiveReplyId,
             messageId: incoming.messageId
         });
 

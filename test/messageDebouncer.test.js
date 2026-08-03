@@ -168,6 +168,33 @@ test('flushes pending text before interactive messages and preserves order', asy
     assert.equal(engine.calls.responses[1].messageText, 'menu_appointment');
 });
 
+test('preserves interactive display text separately from its technical reply id', async () => {
+    const engine = createEngineMock();
+    const debouncer = new MessageDebouncer({
+        engine,
+        chatStore: createChatStoreMock(engine),
+        stateStore: createStateStoreMock(),
+        debounceMs: 20,
+        maxWaitMs: 100
+    });
+
+    await debouncer.handleIncoming({
+        phoneNumber: '5219990000010',
+        name: 'Ana',
+        type: 'interactive',
+        messageText: 'appt_manage_cancel_yes_4ba6420e-b53c-4233-a488-68bc20004953',
+        displayText: 'Si, cancelar',
+        interactiveReplyId: 'appt_manage_cancel_yes_4ba6420e-b53c-4233-a488-68bc20004953',
+        messageId: 'button-confirm-cancel'
+    });
+    await debouncer.flushAll();
+
+    assert.equal(engine.calls.recorded[0].messageText, 'appt_manage_cancel_yes_4ba6420e-b53c-4233-a488-68bc20004953');
+    assert.equal(engine.calls.recorded[0].displayText, 'Si, cancelar');
+    assert.equal(engine.calls.recorded[0].interactiveReplyId, 'appt_manage_cancel_yes_4ba6420e-b53c-4233-a488-68bc20004953');
+    assert.equal(engine.calls.responses[0].messageText, 'appt_manage_cancel_yes_4ba6420e-b53c-4233-a488-68bc20004953');
+});
+
 test('ignores stale text timers when a newer batch token exists', async () => {
     const engine = createEngineMock();
     const stateStore = createStateStoreMock();
