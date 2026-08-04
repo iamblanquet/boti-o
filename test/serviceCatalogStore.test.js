@@ -73,12 +73,14 @@ test('service catalog store persists service prices on create and update', async
             preciosPersonas: [
                 { personas: 1, precio: 275, exclusivo: false }
             ],
-            descripcion: 'Servicio de depilacion laser.'
+            descripcion: 'Servicio de depilacion laser.',
+            cuidadosPosteriores: 'Después de {{service}}, usa protector solar.'
         });
 
         let catalog = await CatalogStore.readEditableCatalog();
         let service = catalog.services.find((item) => item.id === 'depilacion-laser-medio-brazo');
         assert.equal(service.precio, 275);
+        assert.equal(service.cuidadosPosteriores, 'Después de {{service}}, usa protector solar.');
         assert.deepEqual(service.preciosPersonas.map((item) => item.precio), [275]);
 
         await CatalogStore.updateService('depilacion-laser-medio-brazo', {
@@ -89,7 +91,8 @@ test('service catalog store persists service prices on create and update', async
                 { personas: 1, precio: 350, exclusivo: false },
                 { personas: 2, precio: 600, exclusivo: true }
             ],
-            descripcion: 'Servicio de depilacion laser actualizado.'
+            descripcion: 'Servicio de depilacion laser actualizado.',
+            cuidadosPosteriores: 'Evita el sol después de tu {{service}}.'
         });
 
         catalog = await CatalogStore.readEditableCatalog();
@@ -103,6 +106,7 @@ test('service catalog store persists service prices on create and update', async
             ]
         );
         assert.equal(supabase.db.service_prices.length, 2);
+        assert.equal(service.cuidadosPosteriores, 'Evita el sol después de tu {{service}}.');
     } finally {
         CatalogStore.__setTestClient(null);
     }

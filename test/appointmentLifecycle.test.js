@@ -6,8 +6,10 @@ const {
 } = require('../models/citas/almacenamiento');
 const {
     shouldSendOneHourReminder,
-    shouldSendPostAppointmentCare
+    shouldSendPostAppointmentCare,
+    getPostAppointmentCareMessage
 } = require('../models/citas/recordatorios');
+const ServicesRepository = require('../models/servicesRepository');
 
 const now = new Date('2026-07-30T12:00:00.000Z');
 
@@ -54,4 +56,37 @@ test('post-appointment care is sent once the confirmed appointment has ended', (
         ...appointment,
         reminders: { ...appointment.reminders, postAppointmentCareSentAt: now.toISOString() }
     }, now), false);
+});
+
+test('post-appointment care uses the service message and replaces its variables', async () => {
+    const originalGetServiceById = ServicesRepository.getServiceById;
+    ServicesRepository.getServiceById = async () => ({
+        cuidadosPosteriores: 'Hola {{name}}, después de {{service}} del {{datetime}} toma agua.'
+    });
+
+    try {
+        const message = await getPostAppointmentCareMessage({
+            serviceId: 'masaje',
+            serviceName: 'Masaje relajante',
+            name: 'Ana',
+            startAt: '2026-07-30T12:00:00.000Z'
+        });
+        assert.match(message, /Hola Ana/);
+        assert.match(message, /Masaje relajante/);
+        assert.doesNotMatch(message, /{{name}}|{{service}}|{{datetime}}/);
+    } finally {
+        ServicesRepository.getServiceById = originalGetServiceById;
+    }
+});
+
+test('post-appointment care falls back to the global message when the service has none', async () => {
+    const originalGetServiceById = ServicesRepository.getServiceById;
+    ServicesRepository.getServiceById = async () => ({ cuidadosPosteriores: '' });
+
+    try {
+        const message = await getPostAppointmentCareMessage({ serviceId: 'sin-cuidados' });
+        assert.match(message, /mantenerte bien hidratado/i);
+    } finally {
+        ServicesRepository.getServiceById = originalGetServiceById;
+    }
 });

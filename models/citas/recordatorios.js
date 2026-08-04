@@ -7,6 +7,7 @@ const {
 } = require('./almacenamiento');
 const { formatHumanDateTime } = require('../../utils/dateTime');
 const { getMessage } = require('../../utils/systemMessageLoader');
+const ServicesRepository = require('../servicesRepository');
 
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
 const ONE_HOUR_MS = 60 * 60 * 1000;
@@ -129,8 +130,32 @@ const shouldSendPostAppointmentCare = (appointment, now = new Date()) => {
         && dueAt <= now.getTime();
 };
 
+const applyPostCareVariables = (message, appointment = {}) => {
+    const startAt = new Date(appointment.startAt);
+    const dateTime = Number.isNaN(startAt.getTime()) ? '' : formatHumanDateTime(startAt);
+
+    return String(message || '')
+        .replace(/{{name}}/g, appointment.name || 'cliente')
+        .replace(/{{service}}/g, appointment.serviceName || 'tu servicio')
+        .replace(/{{datetime}}/g, dateTime);
+};
+
+const getPostAppointmentCareMessage = async (appointment) => {
+    const fallback = getMessage('appointment_post_care');
+    if(!appointment?.serviceId) return applyPostCareVariables(fallback, appointment || {});
+
+    try {
+        const service = await ServicesRepository.getServiceById(appointment.serviceId);
+        const serviceMessage = String(service?.cuidadosPosteriores || '').trim();
+        return applyPostCareVariables(serviceMessage || fallback, appointment);
+    } catch (error) {
+        console.error(`No se pudo obtener el cuidado posterior del servicio ${appointment.serviceId}:`, error.message);
+        return applyPostCareVariables(fallback, appointment);
+    }
+};
+
 const sendPostAppointmentCare = async (appointment) => Messages.sendTextMessage(
-    getMessage('appointment_post_care'),
+    await getPostAppointmentCareMessage(appointment),
     appointment.phoneNumber,
     { source: 'bot', personalize: false }
 );
@@ -216,5 +241,6 @@ module.exports = {
     startAppointmentReminders,
     checkAppointmentReminders,
     shouldSendOneHourReminder,
-    shouldSendPostAppointmentCare
+    shouldSendPostAppointmentCare,
+    getPostAppointmentCareMessage
 }

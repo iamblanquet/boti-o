@@ -138,6 +138,7 @@ create table if not exists services (
   category_id text not null references service_categories(id) on delete cascade,
   name text not null,
   description text not null default '',
+  post_care_message text not null default '',
   duration_minutes int,
   price numeric(12,2),
   image text not null default '',
@@ -149,6 +150,9 @@ create table if not exists services (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table services
+add column if not exists post_care_message text not null default '';
 
 create unique index if not exists idx_services_category_name_unique
 on services(category_id, name);

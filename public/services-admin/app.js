@@ -38,6 +38,7 @@ const serviceImagePreview = document.getElementById('serviceImagePreview');
 const removeServiceImageButton = document.getElementById('removeServiceImageButton');
 const descriptionInput = document.getElementById('descriptionInput');
 const benefitsInput = document.getElementById('benefitsInput');
+const postCareMessageInput = document.getElementById('postCareMessageInput');
 const deleteServiceButton = document.getElementById('deleteServiceButton');
 const saveServiceButton = document.getElementById('saveServiceButton');
 
@@ -698,6 +699,7 @@ const openServiceDrawer = (service = null) => {
   setServiceImage(service?.imagen || '');
   descriptionInput.value = service?.descripcion || '';
   benefitsInput.value = (service?.beneficios || []).join('\n');
+  postCareMessageInput.value = service?.cuidadosPosteriores || '';
   deleteServiceButton.hidden = !service;
   editorDrawer.classList.add('open');
   editorDrawer.setAttribute('aria-hidden', 'false');
@@ -757,7 +759,8 @@ const saveService = async () => {
       preciosPersonas: prices,
       imagen: imageFile || serviceImageValue.value || currentService?.imagen || '',
       descripcion: descriptionInput.value.trim(),
-      beneficios: benefitsInput.value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean)
+      beneficios: benefitsInput.value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean),
+      cuidadosPosteriores: postCareMessageInput.value.trim()
     };
     const response = await fetch(url, {
       method: state.editingServiceId ? 'PUT' : 'POST',

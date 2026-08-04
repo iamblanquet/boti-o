@@ -94,6 +94,15 @@ const normalizeServicePayload = (payload = {}, fallback = {}) => {
             category_id: String(payload.categoryId || payload.category_id || fallback.category_id || slug(categoryName, 'categoria')).trim(),
             name,
             description: String(payload.descripcion || payload.description || fallback.descripcion || fallback.description || '').trim(),
+            post_care_message: String(
+                payload.cuidadosPosteriores
+                ?? payload.postCareMessage
+                ?? payload.post_care_message
+                ?? fallback.cuidadosPosteriores
+                ?? fallback.postCareMessage
+                ?? fallback.post_care_message
+                ?? ''
+            ).trim(),
             duration_minutes: cleanNumber(payload.duracionMinutos ?? payload.duration_minutes ?? fallback.duracionMinutos ?? fallback.duration_minutes),
             price: prices.length ? firstPrice : explicitPrice,
             image: String(payload.imagen || payload.image || fallback.imagen || fallback.image || '').trim(),
@@ -153,6 +162,7 @@ const mapService = (service, categoryById, pricesByService) => {
         categoria: categoryName,
         nombre: service.name,
         descripcion: service.description || '',
+        cuidadosPosteriores: service.post_care_message || '',
         duracionMinutos: service.duration_minutes === null || service.duration_minutes === undefined ? null : Number(service.duration_minutes),
         precio: service.price === null || service.price === undefined ? null : Number(service.price),
         preciosPersonas: prices,
@@ -301,6 +311,7 @@ const updateService = async (id, payload) => {
         categoria: current.categoria,
         name: current.nombre,
         description: current.descripcion,
+        post_care_message: current.cuidadosPosteriores,
         duration_minutes: current.duracionMinutos,
         price: current.precio,
         image: current.imagen,
