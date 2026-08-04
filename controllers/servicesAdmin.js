@@ -1,12 +1,12 @@
 const CatalogStore = require('../models/serviceCatalogStore');
-const fs = require('fs');
-const path = require('path');
-const { normalizeText } = require('../utils/configCitas');
+const { randomUUID } = require('crypto');
+const getSupabase = require('../config/supabase');
 
-const SERVICE_MEDIA_DIR = path.join(__dirname, '..', 'mediaFiles', 'services');
+const SERVICE_IMAGE_BUCKET = 'service-images';
 const IMAGE_TYPES = {
     'image/jpeg': 'jpg',
-    'image/png': 'png'
+    'image/png': 'png',
+    'image/webp': 'webp'
 };
 
 const sendError = (res, error) => {
@@ -77,12 +77,12 @@ const deleteCategory = async (req, res) => {
     }
 }
 
-const uploadServiceImage = (req, res) => {
+const uploadServiceImage = async (req, res) => {
     try {
-        const { fileName, dataUrl } = req.body || {};
-        const match = String(dataUrl || '').match(/^data:(image\/(?:jpeg|png));base64,(.+)$/);
+        const { dataUrl } = req.body || {};
+        const match = String(dataUrl || '').match(/^data:(image\/(?:jpeg|png|webp));base64,(.+)$/);
         if(!match) {
-            return res.status(400).json({ error: 'Imagen invalida. Usa JPG o PNG.' });
+            return res.status(400).json({ error: 'Imagen invalida. Usa JPG, PNG o WEBP.' });
         }
 
         const mimeType = match[1];
@@ -93,18 +93,31 @@ const uploadServiceImage = (req, res) => {
             return res.status(400).json({ error: 'La imagen supera 6 MB.' });
         }
 
-        const baseName = normalizeText(path.parse(String(fileName || 'servicio')).name)
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-|-$/g, '') || 'servicio';
-        const filename = `${baseName}-${Date.now()}.${extension}`;
-        const relativePath = `services/${filename}`;
+        const supabase = getSupabase();
+        if(!supabase) {
+            const error = new Error('Supabase no esta configurado para almacenar imagenes.');
+            error.status = 503;
+            throw error;
+        }
 
-        fs.mkdirSync(SERVICE_MEDIA_DIR, { recursive: true });
-        fs.writeFileSync(path.join(SERVICE_MEDIA_DIR, filename), buffer);
+        const objectPath = `services/${randomUUID()}.${extension}`;
+        const { error: uploadError } = await supabase.storage
+            .from(SERVICE_IMAGE_BUCKET)
+            .upload(objectPath, buffer, {
+                contentType: mimeType,
+                cacheControl: '31536000',
+                upsert: false
+            });
+        if(uploadError) throw uploadError;
+
+        const { data } = supabase.storage
+            .from(SERVICE_IMAGE_BUCKET)
+            .getPublicUrl(objectPath);
+        if(!data?.publicUrl) throw new Error('No se pudo obtener la URL publica de la imagen.');
 
         return res.status(201).json({
-            file: relativePath,
-            url: `/mediaFiles/${relativePath}`
+            file: objectPath,
+            url: data.publicUrl
         });
     } catch (error) {
         return sendError(res, error);

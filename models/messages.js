@@ -40,9 +40,11 @@ const getPublicMediaUrl = (filename) => {
 }
 
 const sendLocalMedia = async (filename, phoneNumber, options = {}) => {
-    const url = getPublicMediaUrl(filename);
+    const url = /^https?:\/\//i.test(String(filename || ''))
+        ? filename
+        : getPublicMediaUrl(filename);
     if(!url) {
-        console.log(`PUBLIC_BASE_URL no configurado. No se envio media local: ${filename}`);
+        console.log(`No se pudo obtener una URL publica para el medio: ${filename}`);
         return null;
     }
 

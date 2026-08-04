@@ -148,7 +148,9 @@ const showToast = (message, type = 'ok') => {
   showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2600);
 };
 
-const getMediaUrl = (file) => file ? `/mediaFiles/${file}` : '';
+const getMediaUrl = (file) => /^https?:\/\//i.test(String(file || ''))
+  ? file
+  : file ? `/mediaFiles/${file}` : '';
 
 const setServiceImage = (file) => {
   serviceImageValue.value = file || '';
@@ -185,7 +187,7 @@ const uploadSelectedServiceImage = async () => {
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error || 'No se pudo subir la imagen');
-  return data.file;
+  return data.url;
 };
 
 const roundedRect = (x, y, w, h, r) => {

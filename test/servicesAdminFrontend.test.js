@@ -12,6 +12,14 @@ test('services admin price rows use the class collected by saveService', () => {
     assert.match(source, /amountValue === '' \? null : Number\(amountValue\)/);
 });
 
+test('services admin persists the public URL returned by the image upload', () => {
+    const filePath = path.join(__dirname, '..', 'public', 'services-admin', 'app.js');
+    const source = fs.readFileSync(filePath, 'utf8');
+
+    assert.match(source, /return data\.url;/);
+    assert.match(source, /\^https\?:\\\/\\\//i);
+});
+
 test('dashboard assisted appointment flow sends the selected service id', () => {
     const appPath = path.join(__dirname, '..', 'public', 'dashboard', 'app.js');
     const htmlPath = path.join(__dirname, '..', 'public', 'dashboard', 'index.html');
