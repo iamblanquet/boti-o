@@ -235,8 +235,7 @@ const buildAppointmentExtendedProperties = (appointment = {}) => {
         people: appointment.people,
         participantNames: Array.isArray(appointment.participantNames)
             ? appointment.participantNames.join(' | ')
-            : null,
-        medicalCondition: appointment.medicalCondition || null
+            : null
     };
 
     const normalized = Object.entries(privateProperties).reduce((acc, [key, value]) => {
@@ -262,9 +261,8 @@ const createAppointmentEvent = async ({ appointment, start, end }) => {
                     `Telefono WhatsApp: ${appointment.phoneNumber}`,
                     `Servicio: ${appointment.serviceName}`,
                     `Personas: ${appointment.people}`,
-                    appointment.medicalCondition ? `Información médica relevante: ${appointment.medicalCondition}` : null,
                     'Estado: pendiente de confirmacion'
-                ].filter(Boolean).join('\n'),
+                ].join('\n'),
                 extendedProperties: buildAppointmentExtendedProperties(appointment),
                 start: { dateTime: start.toISOString(), timeZone: TIMEZONE },
                 end: { dateTime: end.toISOString(), timeZone: TIMEZONE },
@@ -299,9 +297,8 @@ const updateAppointmentEvent = async ({ eventId, appointment, start, end }) => {
                     `Telefono WhatsApp: ${appointment.phoneNumber}`,
                     `Servicio: ${appointment.serviceName}`,
                     `Personas: ${appointment.people}`,
-                    appointment.medicalCondition ? `Información médica relevante: ${appointment.medicalCondition}` : null,
                     `Estado: ${appointment.status}`
-                ].filter(Boolean).join('\n'),
+                ].join('\n'),
                 extendedProperties: buildAppointmentExtendedProperties(appointment),
                 start: { dateTime: start.toISOString(), timeZone: TIMEZONE },
                 end: { dateTime: end.toISOString(), timeZone: TIMEZONE }

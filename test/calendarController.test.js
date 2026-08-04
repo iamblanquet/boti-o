@@ -102,7 +102,6 @@ test('calendar endpoint shows confirmed Google events even without local appoint
                     'Telefono WhatsApp: 5219990000000',
                     'Servicio: Limpieza Facial',
                     'Personas: 1',
-                    'Información médica relevante: Alergia a fragancias',
                     'Estado: confirmada'
                 ].join('\n'),
                 startAt: '2099-07-10T16:00:00.000Z',
@@ -128,7 +127,6 @@ test('calendar endpoint shows confirmed Google events even without local appoint
         assert.equal(result.body.events[0].eventId, 'google-1');
         assert.equal(result.body.events[0].status, 'confirmada');
         assert.equal(result.body.events[0].clientName, 'Cliente desde CRM');
-        assert.equal(result.body.events[0].medicalCondition, 'Alergia a fragancias');
         assert.deepEqual(calls.range, {
             start: '2099-07-01T00:00:00.000Z',
             end: '2099-07-31T00:00:00.000Z'
