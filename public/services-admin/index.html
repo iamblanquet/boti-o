@@ -139,7 +139,13 @@
         </label>
 
         <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 mb-6">
-          Cuidados posteriores
+          Cuidados antes de la cita
+          <span class="text-xs font-normal text-slate-500">Se envían al confirmar una cita. Puedes usar {{name}}, {{service}} y {{datetime}}.</span>
+          <textarea id="preCareMessageInput" rows="5" placeholder="Ej. Antes de tu {{service}}, llega 10 minutos antes." class="px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition font-normal resize-none"></textarea>
+        </label>
+
+        <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 mb-6">
+          Cuidados después de la cita
           <span class="text-xs font-normal text-slate-500">Se envían al terminar una cita confirmada. Puedes usar {{name}}, {{service}} y {{datetime}}.</span>
           <textarea id="postCareMessageInput" rows="5" placeholder="Ej. Después de tu {{service}}, toma agua y descansa si lo necesitas." class="px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition font-normal resize-none"></textarea>
         </label>

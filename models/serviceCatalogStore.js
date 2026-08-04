@@ -94,6 +94,15 @@ const normalizeServicePayload = (payload = {}, fallback = {}) => {
             category_id: String(payload.categoryId || payload.category_id || fallback.category_id || slug(categoryName, 'categoria')).trim(),
             name,
             description: String(payload.descripcion || payload.description || fallback.descripcion || fallback.description || '').trim(),
+            pre_care_message: String(
+                payload.cuidadosPrevios
+                ?? payload.preCareMessage
+                ?? payload.pre_care_message
+                ?? fallback.cuidadosPrevios
+                ?? fallback.preCareMessage
+                ?? fallback.pre_care_message
+                ?? ''
+            ).trim(),
             post_care_message: String(
                 payload.cuidadosPosteriores
                 ?? payload.postCareMessage
@@ -162,6 +171,7 @@ const mapService = (service, categoryById, pricesByService) => {
         categoria: categoryName,
         nombre: service.name,
         descripcion: service.description || '',
+        cuidadosPrevios: service.pre_care_message || '',
         cuidadosPosteriores: service.post_care_message || '',
         duracionMinutos: service.duration_minutes === null || service.duration_minutes === undefined ? null : Number(service.duration_minutes),
         precio: service.price === null || service.price === undefined ? null : Number(service.price),
@@ -311,6 +321,7 @@ const updateService = async (id, payload) => {
         categoria: current.categoria,
         name: current.nombre,
         description: current.descripcion,
+        pre_care_message: current.cuidadosPrevios,
         post_care_message: current.cuidadosPosteriores,
         duration_minutes: current.duracionMinutos,
         price: current.precio,

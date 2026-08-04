@@ -10,6 +10,7 @@ const {
     getPostAppointmentCareMessage
 } = require('../models/citas/recordatorios');
 const ServicesRepository = require('../models/servicesRepository');
+const { getServiceCareMessage } = require('../models/citas/cuidadosServicio');
 
 const now = new Date('2026-07-30T12:00:00.000Z');
 
@@ -74,6 +75,24 @@ test('post-appointment care uses the service message and replaces its variables'
         assert.match(message, /Hola Ana/);
         assert.match(message, /Masaje relajante/);
         assert.doesNotMatch(message, /{{name}}|{{service}}|{{datetime}}/);
+    } finally {
+        ServicesRepository.getServiceById = originalGetServiceById;
+    }
+});
+
+test('pre-appointment care uses its own service message', async () => {
+    const originalGetServiceById = ServicesRepository.getServiceById;
+    ServicesRepository.getServiceById = async () => ({
+        cuidadosPrevios: 'Hola {{name}}, antes de {{service}} llega con tiempo.'
+    });
+
+    try {
+        const message = await getServiceCareMessage({
+            serviceId: 'facial',
+            serviceName: 'Limpieza facial',
+            name: 'Ana'
+        }, 'before');
+        assert.equal(message, 'Hola Ana, antes de Limpieza facial llega con tiempo.');
     } finally {
         ServicesRepository.getServiceById = originalGetServiceById;
     }

@@ -19,11 +19,14 @@ const {
 } = require('./reglas');
 const { sendButtonMessage } = require('./mensajesWhatsapp');
 const { getMessage } = require('../../utils/systemMessageLoader');
+const { getServiceCareMessage } = require('./cuidadosServicio');
 
 const sendTextMessage = (phoneNumber, message) => Messages.sendTextMessage(message, phoneNumber);
 
-const sendAppointmentConfirmationCare = async (phoneNumber) => {
-    const message = getMessage('appointment_confirmation_care');
+const sendAppointmentConfirmationCare = async (phoneNumber, appointment = null) => {
+    const message = appointment
+        ? await getServiceCareMessage(appointment, 'before')
+        : getMessage('appointment_confirmation_care');
     if(message.trim()) await sendTextMessage(phoneNumber, message);
 };
 
@@ -117,7 +120,7 @@ const confirmAppointmentById = async (phoneNumber, appointmentId) => {
     }
 
     // Enviar recomendaciones y ofrecer el registro de promociones si aplica.
-    await sendAppointmentConfirmationCare(phoneNumber);
+    await sendAppointmentConfirmationCare(phoneNumber, confirmedAppointment);
 
     const PromoFlow = require('./promoFlow');
     await PromoFlow.iniciarSiAplica(phoneNumber);
