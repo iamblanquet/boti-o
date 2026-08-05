@@ -2,6 +2,7 @@ const getSupabase = require('../config/supabase');
 const { normalizeText } = require('../utils/configCitas');
 
 const CATALOG_UNAVAILABLE_MESSAGE = 'Dame un momentito, quiero confirmarte la informacion correcta con el equipo para orientarte bien.';
+const SERVICE_IMAGE_BUCKET = 'service-images';
 
 let testClient = null;
 
@@ -40,6 +41,35 @@ const cleanNumber = (value) => {
     if(value === null || value === undefined || value === '') return null;
     const number = Number(String(value).replace(/[^\d.]/g, ''));
     return Number.isFinite(number) ? number : null;
+}
+
+const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value || {}, key);
+
+// El catálogo solo conserva URLs públicas. Así evitamos volver a usar rutas
+// locales como /mediaFiles/... para imágenes de servicios.
+const normalizeRemoteImage = (value) => {
+    const image = String(value || '').trim();
+    return /^https?:\/\/\S+$/i.test(image) ? image : '';
+}
+
+const getServiceImagePath = (imageUrl) => {
+    try {
+        const url = new URL(imageUrl);
+        const prefix = `/storage/v1/object/public/${SERVICE_IMAGE_BUCKET}/`;
+        if(!url.pathname.startsWith(prefix)) return null;
+        const objectPath = decodeURIComponent(url.pathname.slice(prefix.length));
+        return objectPath.startsWith('services/') ? objectPath : null;
+    } catch {
+        return null;
+    }
+}
+
+const removeStoredServiceImage = async (supabase, imageUrl) => {
+    const objectPath = getServiceImagePath(imageUrl);
+    if(!objectPath || !supabase.storage) return;
+
+    const { error } = await supabase.storage.from(SERVICE_IMAGE_BUCKET).remove([objectPath]);
+    if(error) console.log('No se pudo eliminar la imagen anterior del servicio:', error.message);
 }
 
 const normalizePersonPrices = (items, fallbackPrice = null) => {
@@ -87,6 +117,11 @@ const normalizeServicePayload = (payload = {}, fallback = {}) => {
     );
     const firstPrice = prices[0]?.precio;
     const explicitPrice = cleanNumber(payload.precio ?? payload.price ?? fallback.precio ?? fallback.price);
+    const requestedImage = hasOwn(payload, 'imagen')
+        ? payload.imagen
+        : hasOwn(payload, 'image')
+            ? payload.image
+            : (fallback.imagen ?? fallback.image ?? '');
 
     return {
         service: {
@@ -114,7 +149,7 @@ const normalizeServicePayload = (payload = {}, fallback = {}) => {
             ).trim(),
             duration_minutes: cleanNumber(payload.duracionMinutos ?? payload.duration_minutes ?? fallback.duracionMinutos ?? fallback.duration_minutes),
             price: prices.length ? firstPrice : explicitPrice,
-            image: String(payload.imagen || payload.image || fallback.imagen || fallback.image || '').trim(),
+            image: normalizeRemoteImage(requestedImage),
             benefits: normalizeArray(payload.beneficios ?? payload.benefits ?? fallback.beneficios ?? fallback.benefits),
             problems: normalizeArray(payload.problemas ?? payload.problems ?? fallback.problemas ?? fallback.problems),
             keywords: normalizeArray(payload.keywords ?? fallback.keywords),
@@ -176,7 +211,7 @@ const mapService = (service, categoryById, pricesByService) => {
         duracionMinutos: service.duration_minutes === null || service.duration_minutes === undefined ? null : Number(service.duration_minutes),
         precio: service.price === null || service.price === undefined ? null : Number(service.price),
         preciosPersonas: prices,
-        imagen: service.image || '',
+        imagen: normalizeRemoteImage(service.image),
         activo: service.active !== false,
         problemas: normalizeArray(service.problems),
         keywords: normalizeArray(service.keywords),
@@ -345,13 +380,19 @@ const updateService = async (id, payload) => {
     const { error } = await supabase.from('services').update(service).eq('id', id);
     assertNoError(error);
     await replaceServicePrices(id, prices);
+    if(current.imagen && current.imagen !== service.image) {
+        await removeStoredServiceImage(supabase, current.imagen);
+    }
     return readEditableCatalog();
 }
 
 const deleteService = async (id) => {
     const supabase = requireClient();
+    const catalog = await loadCatalog({ allowEmpty: true });
+    const current = catalog.services.find((service) => service.id === id);
     const { error } = await supabase.from('services').delete().eq('id', id);
     assertNoError(error);
+    if(current?.imagen) await removeStoredServiceImage(supabase, current.imagen);
     return readEditableCatalog();
 }
 

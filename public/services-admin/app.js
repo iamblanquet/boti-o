@@ -148,9 +148,7 @@ const showToast = (message, type = 'ok') => {
   showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2600);
 };
 
-const getMediaUrl = (file) => /^https?:\/\//i.test(String(file || ''))
-  ? file
-  : file ? `/mediaFiles/${file}` : '';
+const getMediaUrl = (file) => /^https?:\/\//i.test(String(file || '')) ? file : '';
 
 const setServiceImage = (file) => {
   serviceImageValue.value = file || '';
@@ -752,16 +750,13 @@ const saveService = async () => {
   try {
     const imageFile = await uploadSelectedServiceImage();
     const prices = collectPriceRows();
-    const currentService = state.editingServiceId
-      ? state.services.find((service) => service.id === state.editingServiceId)
-      : null;
     const payload = {
       nombre: nameInput.value.trim(),
       categoria: categoryInput.value,
       duracionMinutos: durationInput.value ? Number(durationInput.value) : null,
       precio: prices[0]?.precio ?? null,
       preciosPersonas: prices,
-      imagen: imageFile || serviceImageValue.value || currentService?.imagen || '',
+      imagen: imageFile,
       descripcion: descriptionInput.value.trim(),
       beneficios: benefitsInput.value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean),
       cuidadosPrevios: preCareMessageInput.value.trim(),

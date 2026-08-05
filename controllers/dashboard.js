@@ -15,6 +15,7 @@ const {
 } = require('../utils/dashboardFileUpload');
 const { normalizeDashboardAudioUpload, transcodeAudioToMp3 } = require('../utils/dashboardAudioTranscoder');
 const WhatsappMedia = require('../models/whatsappMedia');
+const { uploadPublicMedia } = require('../utils/supabasePublicMedia');
 const fs = require('fs');
 const path = require('path');
 
@@ -255,29 +256,33 @@ const sendMessage = async (req, res) => {
                 return res.status(400).json({ error: 'El archivo supera el límite de 16 MB.' });
             }
 
-            const uploadsDir = path.join(__dirname, '..', 'mediaFiles', 'uploads');
-            fs.mkdirSync(uploadsDir, { recursive: true });
-
             const filename = buildSafeUploadFilename(finalName, mimeType);
-
-            fs.writeFileSync(path.join(uploadsDir, filename), buffer);
+            const type = resolveDashboardMessageType(mimeType, finalName);
+            const imageUrl = type === 'image'
+                ? await uploadPublicMedia({ folder: 'dashboard', buffer, filename, mimeType })
+                : null;
 
             let dashboardFilename = filename;
+            if (!imageUrl) {
+                const uploadsDir = path.join(__dirname, '..', 'mediaFiles', 'uploads');
+                fs.mkdirSync(uploadsDir, { recursive: true });
+                fs.writeFileSync(path.join(uploadsDir, filename), buffer);
+            }
             if (voice) {
                 const previewFile = await transcodeAudioToMp3({
                     buffer,
                     name: finalName
                 });
                 dashboardFilename = buildSafeUploadFilename(previewFile.name, previewFile.mimeType);
+                const uploadsDir = path.join(__dirname, '..', 'mediaFiles', 'uploads');
+                fs.mkdirSync(uploadsDir, { recursive: true });
                 fs.writeFileSync(path.join(uploadsDir, dashboardFilename), previewFile.buffer);
             }
 
             const baseUrl = process.env.PUBLIC_BASE_URL || `${req.protocol}://${req.get('host')}`;
-            const fileUrl = `${baseUrl.replace(/\/$/, '')}/mediaFiles/uploads/${filename}`;
-            const dashboardFileUrl = `${baseUrl.replace(/\/$/, '')}/mediaFiles/uploads/${dashboardFilename}`;
-            const relativeUrl = `/mediaFiles/uploads/${dashboardFilename}`;
-
-            const type = resolveDashboardMessageType(mimeType, finalName);
+            const fileUrl = imageUrl || `${baseUrl.replace(/\/$/, '')}/mediaFiles/uploads/${filename}`;
+            const dashboardFileUrl = imageUrl || `${baseUrl.replace(/\/$/, '')}/mediaFiles/uploads/${dashboardFilename}`;
+            const relativeUrl = imageUrl || `/mediaFiles/uploads/${dashboardFilename}`;
             const mediaId = type === 'audio'
                 ? await WhatsappMedia.uploadMedia({
                     buffer,

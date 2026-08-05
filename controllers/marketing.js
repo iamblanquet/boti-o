@@ -2,8 +2,8 @@ const MarketingModel = require('../models/marketing');
 const Messages = require('../models/messages');
 const ServicesRepository = require('../models/servicesRepository');
 const ChatStore = require('../models/chatStore');
-const fs = require('fs');
 const path = require('path');
+const { uploadPublicMedia } = require('../utils/supabasePublicMedia');
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -38,7 +38,7 @@ const getAudience = async (req, res) => {
     }
 };
 
-const processMediaFile = (file) => {
+const processMediaFile = async (file) => {
     if (!file) return null;
     const { name, dataUrl } = file;
     const match = String(dataUrl || '').match(/^data:([^;]+);base64,(.+)$/);
@@ -47,28 +47,12 @@ const processMediaFile = (file) => {
     const mimeType = match[1];
     const buffer = Buffer.from(match[2], 'base64');
     
-    const uploadsDir = path.join(__dirname, '..', 'mediaFiles', 'uploads');
-    fs.mkdirSync(uploadsDir, { recursive: true });
-
-    const parsedPath = path.parse(String(name || 'archivo'));
-    const safeBaseName = parsedPath.name.replace(/[^a-zA-Z0-9]+/g, '-') || 'archivo';
-    let safeExtension = parsedPath.ext;
-    
-    if (!safeExtension || safeExtension === '.') {
-        if (mimeType === 'image/jpeg') safeExtension = '.jpg';
-        else if (mimeType === 'image/png') safeExtension = '.png';
-        else if (mimeType === 'image/webp') safeExtension = '.webp';
-        else if (mimeType === 'video/mp4') safeExtension = '.mp4';
-        else if (mimeType === 'application/pdf') safeExtension = '.pdf';
-        else safeExtension = '.bin';
-    }
-
-    const uniqueFilename = `${safeBaseName}-${Date.now()}${safeExtension}`;
-    const filePath = path.join(uploadsDir, uniqueFilename);
-    fs.writeFileSync(filePath, buffer);
-
-    const baseUrl = process.env.PUBLIC_BASE_URL || `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3000}`;
-    return `${baseUrl.replace(/\/$/, '')}/mediaFiles/uploads/${uniqueFilename}`;
+    return uploadPublicMedia({
+        folder: 'marketing',
+        buffer,
+        filename: name,
+        mimeType
+    });
 };
 
 const sendCampaign = async (req, res) => {
@@ -86,7 +70,7 @@ const sendCampaign = async (req, res) => {
             return res.status(400).json({ error: 'La audiencia está vacía' });
         }
 
-        const mediaUrl = processMediaFile(file);
+        const mediaUrl = await processMediaFile(file);
         
         const executeCampaign = async () => {
             console.log(`Iniciando campaña de marketing a ${audience.length} usuarios...`);

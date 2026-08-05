@@ -115,3 +115,23 @@ test('service catalog store persists service prices on create and update', async
         CatalogStore.__setTestClient(null);
     }
 });
+
+test('service catalog removes an image when an empty image value is saved', async () => {
+    const supabase = createMemorySupabase();
+    CatalogStore.__setTestClient(supabase);
+
+    try {
+        await CatalogStore.createService({
+            id: 'servicio-con-imagen',
+            nombre: 'Servicio con imagen',
+            categoria: 'Servicios',
+            imagen: 'https://example.supabase.co/storage/v1/object/public/service-images/services/image.jpg'
+        });
+        await CatalogStore.updateService('servicio-con-imagen', { imagen: '' });
+
+        const catalog = await CatalogStore.readEditableCatalog();
+        assert.equal(catalog.services.find((service) => service.id === 'servicio-con-imagen').imagen, '');
+    } finally {
+        CatalogStore.__setTestClient(null);
+    }
+});
