@@ -33,12 +33,14 @@ const getRelevantKnowledgeBase = async (message) => {
         'fisioterapia'
     ];
     const matchedKeywords = serviceKeywords.filter((keyword) => normalizedMessage.includes(normalizeText(keyword)));
+    const messageTerms = normalizedMessage.split(/\s+/).filter((term) => term.length > 3);
 
-    if(!matchedKeywords.length) return blocks.slice(0, 2).join('\n\n');
+    if(!matchedKeywords.length && !messageTerms.length) return blocks.slice(0, 2).join('\n\n');
 
     const selected = blocks.filter((block) => {
         const normalizedBlock = normalizeText(block);
-        return matchedKeywords.some((keyword) => normalizedBlock.includes(normalizeText(keyword)));
+        return matchedKeywords.some((keyword) => normalizedBlock.includes(normalizeText(keyword))) ||
+            messageTerms.some((term) => normalizedBlock.includes(term));
     });
 
     return (selected.length ? selected : blocks.slice(0, 2)).join('\n\n');
@@ -47,6 +49,7 @@ const getRelevantKnowledgeBase = async (message) => {
 const buildInstructions = (knowledgeBase, customerName = null) => [
     buildSpaExpertToneInstructions(customerName),
     'Usa exclusivamente la informacion de la base de conocimiento para responder sobre servicios, precios e inclusiones.',
+    'Menciona los productos utilizados solo cuando la pregunta del cliente sea sobre productos, ingredientes, alergias o sensibilidades.',
     'Si el cliente pregunta por disponibilidad, horarios para cita o agendar, responde de forma natural sobre el servicio y cierra invitandole a reservar, pero nunca le pidas tocar "Agendar cita" en el menu. El sistema enviara el boton correcto para iniciar la cita con el servicio recomendado.',
     'Si el cliente menciona una fecha relativa como "manana", "hoy" o un dia de la semana, reconoce el dia con naturalidad. No lo redirijas al menu ni le digas que toque botones: el sistema enviara las opciones de cita correspondientes.',
     'No incluyas etiquetas como [cite: 1] en la respuesta final.',

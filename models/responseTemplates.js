@@ -84,6 +84,15 @@ const serviceExact = (service, requestedField = 'general') => {
         ].join('\n');
     }
 
+    if(requestedField === 'productos' && service.productos?.length) {
+        return [
+            `Para ${service.nombre} utilizamos: ${service.productos.join(', ')}.`,
+            'Si tienes alguna alergia, sensibilidad o duda sobre un producto, cuéntanoslo antes de tu cita para orientarte mejor.',
+            '',
+            closingAppointmentInvite()
+        ].join('\n');
+    }
+
     const parts = [
         `Te cuento, ${service.nombre}: es una opcion pensada para darte un resultado cuidado, comodo y profesional.`,
         warmServiceDescription(service)

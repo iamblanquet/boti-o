@@ -32,9 +32,7 @@ const parseAppointmentButtonPayload = (message) => {
 const parseNameText = (message) => {
     const text = String(message || '').trim();
     const patterns = [
-        /\ba\s+nombre\s+de\s+([a-záéíóúñü\s]{2,60})(?=,|\.|$|\s+para\s+\d|\s+\d+\s*(?:persona|personas|pax))/i,
-        /\bme\s+llamo\s+([a-záéíóúñü\s]{2,60})(?=,|\.|$|\s+para\s+\d|\s+\d+\s*(?:persona|personas|pax))/i,
-        /\bsoy\s+([a-záéíóúñü\s]{2,60})(?=,|\.|$|\s+para\s+\d|\s+\d+\s*(?:persona|personas|pax))/i
+        /\b(?:a\s+nombre\s+de|me\s+llamo|mi\s+nombre\s+es)\s+([\p{L}\s]{2,60})(?=,|\.|$|\s+para\s+\d|\s+\d+\s*(?:persona|personas|pax))/iu
     ];
 
     for(const pattern of patterns) {
@@ -129,7 +127,7 @@ const extractAppointmentDetails = async ({ message, currentData = {}, waitingFor
         'Devuelve solamente JSON valido, sin markdown ni explicaciones.',
         'Si un dato no aparece, usa null.',
         'No inventes datos.',
-        'El nombre del cliente solo debe llenarse si el mensaje dice claramente "a nombre de", "me llamo", "soy" o una frase similar.',
+        'El nombre del cliente solo debe llenarse si el mensaje dice claramente "a nombre de", "me llamo" o "mi nombre es".',
         'Nunca uses "Thessa" como nombre del cliente.',
         'Servicios validos:',
         servicesText,

@@ -28,13 +28,13 @@ const cleanName = (name) => {
 const extractNameFromMessage = (message) => {
     const text = normalize(message);
     const patterns = [
-        /\b(?:me llamo|mi nombre es|soy)\s+([\p{L}'.-]+(?:\s+[\p{L}'.-]+){0,2})/iu,
+        /\b(?:me llamo|mi nombre es)\s+([\p{L}'.-]+(?:\s+[\p{L}'.-]+){0,2})/iu,
         /\b(?:a nombre de)\s+([\p{L}'.-]+(?:\s+[\p{L}'.-]+){0,2})/iu
     ];
 
     for(const pattern of patterns) {
-        const match = text.match(pattern);
-        if(match?.[1]) return cleanName(match[1]);
+        const candidate = text.match(pattern)?.[1];
+        if(candidate) return cleanName(candidate);
     }
 
     return null;
@@ -118,6 +118,7 @@ const personalizeText = async (phoneNumber, text) => {
 module.exports = {
     rememberName,
     rememberFromMessage,
+    extractNameFromMessage,
     getDisplayName,
     getFirstName,
     personalizeText

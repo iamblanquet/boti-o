@@ -18,6 +18,7 @@ const DATA_FIELDS = {
     PRECIO: 'precio',
     DURACION: 'duracion',
     BENEFICIOS: 'beneficios',
+    PRODUCTOS: 'productos',
     DESCRIPCION: 'descripcion',
     GENERAL: 'general'
 };
@@ -70,6 +71,7 @@ const detectRequestedField = (message) => {
     if(hasAny(value, ['precio', 'cuanto cuesta', 'cuesta', 'costo', 'vale'])) return DATA_FIELDS.PRECIO;
     if(hasAny(value, ['duracion', 'cuanto dura', 'tiempo tarda', 'tarda'])) return DATA_FIELDS.DURACION;
     if(hasAny(value, ['beneficio', 'beneficios', 'para que sirve'])) return DATA_FIELDS.BENEFICIOS;
+    if(hasAny(value, ['producto', 'productos', 'que usan', 'que utilizan', 'con que lo realizan'])) return DATA_FIELDS.PRODUCTOS;
     if(hasAny(value, ['que es', 'como funciona', 'informacion', 'info', 'incluye', 'que incluye'])) return DATA_FIELDS.DESCRIPCION;
     return DATA_FIELDS.GENERAL;
 }
@@ -184,7 +186,7 @@ const buildPrompt = (message) => [
     '  "intent": "consultar_servicio|recomendar_servicio|agendar_cita|faq|promociones|desconocido",',
     '  "servicio": string|null,',
     '  "problema": string|null,',
-    '  "dato_solicitado": "precio|duracion|beneficios|descripcion|general"|null',
+    '  "dato_solicitado": "precio|duracion|beneficios|productos|descripcion|general"|null',
     '}',
     '',
     `Mensaje: ${message}`

@@ -18,7 +18,8 @@ const listActiveServices = async () => {
             ...service,
             problemas: normalizeArray(service.problemas),
             keywords: normalizeArray(service.keywords),
-            beneficios: Array.isArray(service.beneficios) ? service.beneficios : []
+            beneficios: Array.isArray(service.beneficios) ? service.beneficios : [],
+            productos: Array.isArray(service.productos) ? service.productos : []
         }))
         .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
 }
@@ -225,7 +226,8 @@ const buildKnowledgeBase = async () => {
         service.duracionMinutos ? `Duracion: ${service.duracionMinutos} minutos` : null,
         service.precio ? `Precio desde: $${service.precio}` : null,
         service.preciosPersonas?.length ? `Precios: ${service.preciosPersonas.map((item) => `${item.personas} persona${item.personas === 1 ? '' : 's'} $${item.precio}`).join(', ')}` : null,
-        service.beneficios?.length ? `Beneficios: ${service.beneficios.join(', ')}` : null
+        service.beneficios?.length ? `Beneficios: ${service.beneficios.join(', ')}` : null,
+        service.productos?.length ? `Productos utilizados: ${service.productos.join(', ')}` : null
     ].filter(Boolean).join('\n')).join('\n\n');
     const faqLines = catalog.faqs.map((faq) => `P: ${faq.pregunta}\nR: ${faq.respuesta}`).join('\n\n');
 
