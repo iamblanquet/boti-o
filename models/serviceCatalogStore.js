@@ -199,6 +199,9 @@ const normalizeServicePayload = (payload = {}, fallback = {}) => {
     );
     const firstPrice = prices[0]?.precio;
     const explicitPrice = cleanNumber(payload.precio ?? payload.price ?? fallback.precio ?? fallback.price);
+    const packages = (Array.isArray(payload.paquetes) ? payload.paquetes : (fallback.paquetes || []))
+        .map((item, index) => ({ name: String(item.nombre ?? item.name ?? '').trim(), sessions: Number(item.sesiones ?? item.sessions), price: cleanNumber(item.precio ?? item.price), description: String(item.descripcion ?? item.description ?? '').trim(), active: item.activo ?? item.active ?? true, sort_order: index }))
+        .filter((item) => item.name && Number.isInteger(item.sessions) && item.sessions > 1 && item.price !== null);
     const requestedImage = hasOwn(payload, 'imagen')
         ? payload.imagen
         : hasOwn(payload, 'image')
@@ -239,7 +242,8 @@ const normalizeServicePayload = (payload = {}, fallback = {}) => {
             sort_order: cleanNumber(payload.sortOrder ?? payload.sort_order ?? fallback.sort_order) ?? 0
         },
         categoryName,
-        prices
+        prices,
+        packages
     };
 }
 
@@ -271,7 +275,7 @@ const mapCategories = (rows = [], services = []) => {
         }));
 }
 
-const mapService = (service, categoryById, pricesByService) => {
+const mapService = (service, categoryById, pricesByService, packagesByService = new Map()) => {
     const categoryName = categoryById.get(service.category_id)?.name || service.category_id || 'Servicios';
     const prices = (pricesByService.get(service.id) || [])
         .sort((a, b) => Number(a.people) - Number(b.people))
@@ -293,6 +297,7 @@ const mapService = (service, categoryById, pricesByService) => {
         duracionMinutos: service.duration_minutes === null || service.duration_minutes === undefined ? null : Number(service.duration_minutes),
         precio: service.price === null || service.price === undefined ? null : Number(service.price),
         preciosPersonas: prices,
+        paquetes: (packagesByService.get(service.id) || []).filter((item) => item.active !== false).map((item) => ({ id: item.id, nombre: item.name, sesiones: Number(item.sessions), precio: Number(item.price), descripcion: item.description || '' })),
         imagen: normalizeRemoteImage(service.image),
         activo: service.active !== false,
         problemas: normalizeArray(service.problems),
@@ -304,11 +309,12 @@ const mapService = (service, categoryById, pricesByService) => {
 
 const loadCatalog = async (options = {}) => {
     const allowEmpty = options.allowEmpty === true;
-    const [categoriesRaw, servicesRaw, pricesRaw, faqsRaw] = await Promise.all([
+    const [categoriesRaw, servicesRaw, pricesRaw, faqsRaw, packagesRaw] = await Promise.all([
         selectAll('service_categories'),
         selectAll('services'),
         selectAll('service_prices'),
-        selectAll('service_faqs')
+        selectAll('service_faqs'),
+        selectAll('service_packages')
     ]);
     const hasActiveCategories = categoriesRaw.some((category) => category.active !== false);
     const hasActiveServices = servicesRaw.some((service) => service.active !== false);
@@ -322,9 +328,14 @@ const loadCatalog = async (options = {}) => {
         result.get(price.service_id).push(price);
         return result;
     }, new Map());
+    const packagesByService = packagesRaw.reduce((result, item) => {
+        if(!result.has(item.service_id)) result.set(item.service_id, []);
+        result.get(item.service_id).push(item);
+        return result;
+    }, new Map());
 
     const services = servicesRaw
-        .map((service) => mapService(service, categoryById, pricesByService))
+        .map((service) => mapService(service, categoryById, pricesByService, packagesByService))
         .filter((service) => service.activo !== false)
         .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0) || a.nombre.localeCompare(b.nombre, 'es'));
 
@@ -391,8 +402,17 @@ const replaceServicePrices = async (serviceId, prices) => {
     }
 }
 
+const replaceServicePackages = async (serviceId, packages) => {
+    const supabase = requireClient();
+    const { error: deleteError } = await supabase.from('service_packages').delete().eq('service_id', serviceId);
+    assertNoError(deleteError);
+    if(!packages.length) return;
+    const { error } = await supabase.from('service_packages').insert(packages.map((item) => ({ ...item, service_id: serviceId })));
+    assertNoError(error);
+}
+
 const createService = async (payload) => {
-    const { service, categoryName, prices } = normalizeServicePayload(payload);
+    const { service, categoryName, prices, packages } = normalizeServicePayload(payload);
     if(!service.name) {
         const error = new Error('Nombre requerido');
         error.status = 400;
@@ -404,11 +424,12 @@ const createService = async (payload) => {
     const { error } = await supabase.from('services').insert(service);
     assertNoError(error);
     await replaceServicePrices(service.id, prices);
+    await replaceServicePackages(service.id, packages);
     return readEditableCatalog();
 }
 
 const upsertService = async (payload) => {
-    const { service, categoryName, prices } = normalizeServicePayload(payload);
+    const { service, categoryName, prices, packages } = normalizeServicePayload(payload);
     if(!service.name) {
         const error = new Error('Nombre requerido');
         error.status = 400;
@@ -420,6 +441,7 @@ const upsertService = async (payload) => {
     const { error } = await supabase.from('services').upsert(service, { onConflict: 'id' });
     assertNoError(error);
     await replaceServicePrices(service.id, prices);
+    await replaceServicePackages(service.id, packages);
     return service;
 }
 
@@ -432,7 +454,7 @@ const updateService = async (id, payload) => {
         throw error;
     }
 
-    const { service, categoryName, prices } = normalizeServicePayload(payload, {
+    const { service, categoryName, prices, packages } = normalizeServicePayload(payload, {
         id,
         category_id: current.categoriaId,
         categoria: current.categoria,
@@ -447,7 +469,8 @@ const updateService = async (id, payload) => {
         problems: current.problemas,
         keywords: current.keywords,
         active: current.activo,
-        service_prices: current.preciosPersonas
+        service_prices: current.preciosPersonas,
+        paquetes: current.paquetes
     });
     service.id = id;
 
@@ -462,6 +485,7 @@ const updateService = async (id, payload) => {
     const { error } = await supabase.from('services').update(service).eq('id', id);
     assertNoError(error);
     await replaceServicePrices(id, prices);
+    await replaceServicePackages(id, packages);
     if(current.imagen && current.imagen !== service.image) {
         await removeStoredServiceImage(supabase, current.imagen);
     }

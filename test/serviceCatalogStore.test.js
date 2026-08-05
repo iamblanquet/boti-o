@@ -7,6 +7,7 @@ const createMemorySupabase = () => {
         service_categories: [],
         services: [],
         service_prices: [],
+        service_packages: [],
         service_faqs: []
     };
 

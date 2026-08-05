@@ -34,6 +34,7 @@ const basePriceInput = document.getElementById('basePriceInput');
 const priceRows = document.getElementById('priceRows');
 const addPriceButton = document.getElementById('addPriceButton');
 const peoplePricingEnabled = document.getElementById('peoplePricingEnabled');
+const packagesInput = document.getElementById('packagesInput');
 const serviceImageInput = document.getElementById('serviceImageInput');
 const serviceImageValue = document.getElementById('serviceImageValue');
 const serviceImagePreview = document.getElementById('serviceImagePreview');
@@ -724,6 +725,7 @@ const openServiceDrawer = (service = null) => {
   categoryInput.value = service?.categoria || getCategoryName(state.selectedCategoryId) || state.categories[0]?.nombre || '';
   durationInput.value = service?.duracionMinutos || '';
   renderPriceRows(service);
+  packagesInput.value = (service?.paquetes || []).map((item) => [item.nombre, item.sesiones, item.precio, item.descripcion].filter((part) => part !== undefined && part !== '').join(' | ')).join('\n');
   serviceImageInput.value = '';
   setServiceImage(service?.imagen || '');
   descriptionInput.value = service?.descripcion || '';
@@ -778,6 +780,7 @@ const saveService = async () => {
   try {
     const imageFile = await uploadSelectedServiceImage();
     const prices = peoplePricingEnabled.checked ? collectPriceRows() : [];
+    const paquetes = packagesInput.value.split(/\r?\n/).map((line) => line.split('|').map((part) => part.trim())).map(([nombre, sesiones, precio, descripcion]) => ({ nombre, sesiones: Number(sesiones), precio: Number(precio), descripcion })).filter((item) => item.nombre && item.sesiones > 1 && Number.isFinite(item.precio));
     const currentService = state.editingServiceId
       ? state.services.find((service) => service.id === state.editingServiceId)
       : null;
@@ -787,6 +790,7 @@ const saveService = async () => {
       duracionMinutos: durationInput.value ? Number(durationInput.value) : null,
       precio: basePriceInput.value === '' ? (prices[0]?.precio ?? null) : Number(basePriceInput.value),
       preciosPersonas: prices,
+      paquetes,
       imagen: state.serviceImageRemoved
         ? ''
         : (imageFile || serviceImageValue.value || currentService?.imagen || ''),

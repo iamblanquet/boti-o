@@ -2,6 +2,7 @@ const Messages = require('./messages');
 const ServicesRepository = require('./servicesRepository');
 const ResponseTemplates = require('./responseTemplates');
 const ServiceFollowup = require('./serviceFollowup');
+const AppointmentFlow = require('./citas/flujo');
 const { getMessage } = require('../utils/systemMessageLoader');
 
 const MAX_ROWS_PER_LIST = 10;
@@ -132,6 +133,16 @@ const sendServicesByCategory = async (phoneNumber, categoryName) => {
 }
 
 const handlePayload = async (phoneNumber, messageText) => {
+    const packageMatch = String(messageText || '').match(/^package_(.+)_([a-f0-9-]+)$/i);
+    if(packageMatch) {
+        const service = await ServicesRepository.getServiceById(packageMatch[1]);
+        const selectedPackage = service?.paquetes?.find((item) => item.id === packageMatch[2]);
+        if(!service || !selectedPackage) return false;
+        return AppointmentFlow.iniciarConServicio(phoneNumber, {
+            ...service,
+            paquete: selectedPackage
+        });
+    }
     const categoryMatch = String(messageText || '').match(/^category_(.+)$/);
     if(categoryMatch) {
         let category = null;
@@ -164,6 +175,19 @@ const handlePayload = async (phoneNumber, messageText) => {
         await Messages.sendTextMessage(ResponseTemplates.serviceExact(service, 'general'), phoneNumber);
         if(service.imagen) {
             await Messages.sendLocalMedia(service.imagen, phoneNumber, { source: 'bot' });
+        }
+        if(service.paquetes?.length) {
+            await sendList({
+                phoneNumber,
+                body: 'También contamos con paquetes de sesiones para este servicio.',
+                button: 'Ver paquetes',
+                sectionTitle: 'Paquetes',
+                rows: service.paquetes.slice(0, MAX_ROWS_PER_LIST).map((item) => ({
+                    id: `package_${service.id}_${item.id}`,
+                    title: truncate(item.nombre, 24),
+                    description: truncate(`${item.sesiones} sesiones · ${ResponseTemplates.formatPrice(item.precio)}`, 72)
+                }))
+            });
         }
         await ServiceFollowup.sendOfferDecisionButtons(phoneNumber, service);
         return true;

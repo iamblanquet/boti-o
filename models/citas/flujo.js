@@ -79,7 +79,11 @@ const iniciarConServicio = async (phoneNumber, service, message = '') => {
             serviceName: service.nombre,
             durationMinutes: service.duracionMinutos,
             price: service.precio,
-            personPrices: service.preciosPersonas || service.personPrices || []
+            personPrices: service.preciosPersonas || service.personPrices || [],
+            packageName: service.paquete?.nombre || null,
+            packageSessions: service.paquete?.sesiones || null,
+            packagePrice: service.paquete?.precio || null,
+            packageSessionNumber: service.paquete ? 1 : null
         },
         waitingFor: null
     });

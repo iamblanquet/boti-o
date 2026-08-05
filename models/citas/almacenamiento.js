@@ -88,6 +88,10 @@ const toDbAppointment = (appointment) => {
         participantNames: appointment.participantNames,
         expiredAt: appointment.expiredAt,
         calendarSyncStatus: appointment.calendarSyncStatus
+        , packageName: appointment.packageName,
+        packageSessions: appointment.packageSessions,
+        packagePrice: appointment.packagePrice,
+        packageSessionNumber: appointment.packageSessionNumber
     };
 
     Object.keys(metadata).forEach((key) => {
