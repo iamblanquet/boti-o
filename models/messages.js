@@ -1,6 +1,9 @@
 const axios = require('axios');
+const fs = require('fs/promises');
+const path = require('path');
 const StateStore = require('./stateStore');
 const Whatsapp = require('../config/whatsapp');
+const WhatsappMedia = require('./whatsappMedia');
 const ChatStore = require('./chatStore');
 const CustomerProfile = require('./customerProfile');
 const CampaignFunnel = require('./campaigns/funnelService');
@@ -33,25 +36,48 @@ const sendTextMessage = async (text, phoneNumber, options = {}) => {
 
 
 
-const getPublicMediaUrl = (filename) => {
-    const baseUrl = process.env.PUBLIC_BASE_URL;
-    if(!baseUrl) return null;
-    return `${baseUrl.replace(/\/$/, '')}/mediaFiles/${filename}`;
+const IMAGE_MIME_TYPES = {
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.webp': 'image/webp'
+};
+
+const getImageUpload = async (source) => {
+    const value = String(source || '').trim();
+    if(/^https?:\/\//i.test(value)) {
+        const response = await axios.get(value, {
+            responseType: 'arraybuffer',
+            maxContentLength: 16 * 1024 * 1024,
+            maxBodyLength: 16 * 1024 * 1024
+        });
+        const urlPath = new URL(value).pathname;
+        return {
+            buffer: Buffer.from(response.data),
+            filename: path.basename(urlPath) || 'service-image.jpg',
+            mimeType: String(response.headers?.['content-type'] || IMAGE_MIME_TYPES[path.extname(urlPath).toLowerCase()] || 'image/jpeg').split(';')[0]
+        };
+    }
+
+    const mediaRoot = path.resolve(__dirname, '..', 'mediaFiles');
+    const filePath = path.resolve(mediaRoot, value.replace(/^\/?mediaFiles\//i, ''));
+    if(!filePath.startsWith(`${mediaRoot}${path.sep}`)) throw new Error('Ruta de imagen no permitida.');
+    return {
+        buffer: await fs.readFile(filePath),
+        filename: path.basename(filePath),
+        mimeType: IMAGE_MIME_TYPES[path.extname(filePath).toLowerCase()] || 'image/jpeg'
+    };
 }
 
 const sendLocalMedia = async (filename, phoneNumber, options = {}) => {
-    const url = /^https?:\/\//i.test(String(filename || ''))
-        ? filename
-        : getPublicMediaUrl(filename);
-    if(!url) {
-        console.log(`No se pudo obtener una URL publica para el medio: ${filename}`);
-        return null;
-    }
+    const media = await getImageUpload(filename);
+    const mediaId = await WhatsappMedia.uploadMedia(media);
 
     return sendMessage({
-        text: url,
+        text: options.caption || '',
         phoneNumber,
         type: 'image',
+        mediaId,
         source: options.source
     });
 }
@@ -138,9 +164,7 @@ const sendMessage = async (options) => {
                 break;
             case 'image':
                 body.type = 'image';
-                body.image = {
-                    link: outboundText
-                }
+                body.image = mediaId ? { id: mediaId } : { link: outboundText };
                 break;
             case 'audio':
                 body.type = 'audio';

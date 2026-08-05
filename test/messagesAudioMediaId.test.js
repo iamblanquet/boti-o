@@ -129,3 +129,22 @@ test('sendMessage can mark audio media id as a WhatsApp voice message', async ()
         cleanup();
     }
 });
+
+test('sendMessage sends an image by WhatsApp media id when available', async () => {
+    const { Messages, calls, cleanup } = loadMessagesWithMocks();
+
+    try {
+        await Messages.sendMessage({
+            phoneNumber: '5219990000000',
+            type: 'image',
+            source: 'bot',
+            text: '',
+            mediaId: 'service-image-123'
+        });
+
+        assert.equal(calls.post.body.type, 'image');
+        assert.deepEqual(calls.post.body.image, { id: 'service-image-123' });
+    } finally {
+        cleanup();
+    }
+});
