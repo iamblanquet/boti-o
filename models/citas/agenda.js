@@ -95,7 +95,7 @@ const createOrReschedule = async ({ phoneNumber, flow }) => {
 
     const appointment = {
         ...data,
-        price: data.selectedPrice ?? data.price ?? null,
+        price: data.packagePrice ?? data.selectedPrice ?? data.price ?? null,
         phoneNumber,
         createdAt: new Date().toISOString(),
         startAt: start.toISOString(),
@@ -149,13 +149,17 @@ const createOrReschedule = async ({ phoneNumber, flow }) => {
         datetime: formatHumanDateTime(start),
         name: data.name
     });
-    const priceSummary = data.selectedPrice !== null && data.selectedPrice !== undefined
-        ? `Inversión total: ${formatPrice(data.selectedPrice)}.`
+    const packageSummary = data.packageName
+        ? `Paquete: ${data.packageName}. Sesión ${data.packageSessionNumber || 1} de ${data.packageSessions}.`
+        : '';
+    const finalPrice = data.packagePrice ?? data.selectedPrice;
+    const priceSummary = finalPrice !== null && finalPrice !== undefined
+        ? `Inversión total: ${formatPrice(finalPrice)}.`
         : '';
     await sendConfirmButtons(
         phoneNumber,
         savedAppointment.id,
-        [confirmationText, priceSummary].filter(Boolean).join('\n\n')
+        [confirmationText, packageSummary, priceSummary].filter(Boolean).join('\n\n')
     );
     return true;
 }

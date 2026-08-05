@@ -712,7 +712,9 @@ const showAppointmentModal = (appointmentIndex) => {
     timeStr = `${startStr} - ${endStr}`;
   }
   document.getElementById('modalAppointmentTime').textContent = timeStr;
-  document.getElementById('modalAppointmentService').textContent = apt.serviceName || 'No especificado';
+  document.getElementById('modalAppointmentService').textContent = apt.packageName
+    ? `${apt.serviceName || 'Servicio'} · ${apt.packageName} · Sesión ${apt.packageSessionNumber || 1} de ${apt.packageSessions || '?'}`
+    : (apt.serviceName || 'No especificado');
   
   const statusEl = document.getElementById('modalAppointmentStatus');
   statusEl.textContent = (apt.status || 'Pendiente').toUpperCase();
@@ -773,7 +775,7 @@ const renderClientAppointments = () => {
       nextContainer.innerHTML = `
         <div onclick="showAppointmentModal(${index})" class="flex flex-col p-3 bg-emerald-50 rounded-xl border border-emerald-200 hover:bg-emerald-100 transition cursor-pointer group shadow-sm">
           <strong class="text-sm text-emerald-800">${capDay} ${timeStr}</strong>
-          <span class="text-xs text-emerald-600 mt-1 line-clamp-1 font-medium">${escapeHtml(apt.serviceName || 'Cita')} • ${apt.status || 'pendiente'}</span>
+          <span class="text-xs text-emerald-600 mt-1 line-clamp-1 font-medium">${escapeHtml(apt.serviceName || 'Cita')}${apt.packageName ? ` · ${escapeHtml(apt.packageName)} · Sesión ${apt.packageSessionNumber || 1}/${apt.packageSessions || '?'}` : ''} • ${apt.status || 'pendiente'}</span>
         </div>
       `;
     }
@@ -802,7 +804,7 @@ const renderClientAppointments = () => {
       html += `
         <div onclick="showAppointmentModal(${originalIndex})" class="flex flex-col p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-emerald-200 transition cursor-pointer group">
           <strong class="text-sm text-slate-800 group-hover:text-emerald-700">${capDay} ${timeStr}</strong>
-          <span class="text-xs text-slate-500 mt-1 line-clamp-1">${escapeHtml(apt.serviceName || 'Cita')} • ${apt.status || 'pendiente'}</span>
+          <span class="text-xs text-slate-500 mt-1 line-clamp-1">${escapeHtml(apt.serviceName || 'Cita')}${apt.packageName ? ` · ${escapeHtml(apt.packageName)} · Sesión ${apt.packageSessionNumber || 1}/${apt.packageSessions || '?'}` : ''} • ${apt.status || 'pendiente'}</span>
         </div>
       `;
     });

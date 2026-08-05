@@ -158,3 +158,24 @@ test('service catalog keeps a base price without creating people price tiers', a
         CatalogStore.__setTestClient(null);
     }
 });
+
+test('service catalog persists packages independently from people prices', async () => {
+    const supabase = createMemorySupabase();
+    CatalogStore.__setTestClient(supabase);
+    try {
+        await CatalogStore.createService({
+            id: 'limpieza-profunda',
+            nombre: 'Limpieza profunda',
+            categoria: 'Faciales',
+            precio: 800,
+            paquetes: [{ nombre: 'Paquete 3 sesiones', sesiones: 3, precio: 2250, descripcion: 'Primera sesión agendada' }]
+        });
+        const catalog = await CatalogStore.readEditableCatalog();
+        const service = catalog.services.find((item) => item.id === 'limpieza-profunda');
+        assert.equal(service.paquetes[0].nombre, 'Paquete 3 sesiones');
+        assert.equal(service.paquetes[0].sesiones, 3);
+        assert.equal(service.paquetes[0].precio, 2250);
+    } finally {
+        CatalogStore.__setTestClient(null);
+    }
+});

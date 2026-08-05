@@ -196,6 +196,10 @@ const toLocalCalendarEvent = (appointment) => ({
     phoneNumber: appointment.phoneNumber || null,
     serviceName: appointment.serviceName || 'Otros',
     people: appointment.people || 1,
+    packageName: appointment.packageName || null,
+    packageSessions: appointment.packageSessions || null,
+    packagePrice: appointment.packagePrice ?? null,
+    packageSessionNumber: appointment.packageSessionNumber || null,
     participantNames: toParticipantNames(appointment.participantNames),
     status: appointment.status,
     htmlLink: appointment.eventId
@@ -341,6 +345,10 @@ const getConfirmedAppointments = async (req, res) => {
                     people: appointment?.people
                         || getGoogleEventValue(event, 'people', 'Personas')
                         || 1,
+                    packageName: appointment?.packageName || getGoogleEventValue(event, 'packageName', 'Paquete') || null,
+                    packageSessions: appointment?.packageSessions || getGoogleEventValue(event, 'packageSessions', 'Sesiones del paquete') || null,
+                    packagePrice: appointment?.packagePrice ?? getGoogleEventValue(event, 'packagePrice', 'Precio del paquete') ?? null,
+                    packageSessionNumber: appointment?.packageSessionNumber || getGoogleEventValue(event, 'packageSessionNumber', 'Sesion del paquete') || null,
                     participantNames: toParticipantNames(participantNames),
                     status
                 };

@@ -199,6 +199,7 @@ export const renderAppointmentsModal = (client) => {
           <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div class="min-w-0">
               <p class="truncate text-sm font-extrabold text-slate-900">${escapeHtml(appointment.serviceName || 'Servicio')}</p>
+              ${appointment.packageName ? `<p class="mt-1 text-xs font-bold text-emerald-700">${escapeHtml(appointment.packageName)} · Sesión ${appointment.packageSessionNumber || 1} de ${appointment.packageSessions || '?'}</p>` : ''}
               <p class="mt-1 text-xs font-bold text-slate-500">${escapeHtml(formatDateTime(appointment.startAt))}</p>
               <p class="mt-1 text-xs text-slate-400">${escapeHtml((appointment.people || 1) + ' persona' + (Number(appointment.people || 1) === 1 ? '' : 's'))}</p>
             </div>

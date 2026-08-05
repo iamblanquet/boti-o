@@ -223,6 +223,13 @@ const formatAppointmentParticipants = (appointment) => {
     return names.length ? names.join(' y ') : appointment?.name || '';
 };
 
+const formatAppointmentSummary = (appointment) => {
+    const packageSuffix = appointment.packageName
+        ? ` · ${appointment.packageName} (${appointment.packageSessionNumber || 1}/${appointment.packageSessions || '?'})`
+        : '';
+    return `Cita Thessa - ${appointment.serviceName}${packageSuffix}`;
+};
+
 const buildAppointmentExtendedProperties = (appointment = {}) => {
     const privateProperties = {
         app: 'thessa',
@@ -233,6 +240,10 @@ const buildAppointmentExtendedProperties = (appointment = {}) => {
         serviceName: appointment.serviceName,
         clientName: appointment.name,
         people: appointment.people,
+        packageName: appointment.packageName,
+        packageSessions: appointment.packageSessions,
+        packagePrice: appointment.packagePrice,
+        packageSessionNumber: appointment.packageSessionNumber,
         participantNames: Array.isArray(appointment.participantNames)
             ? appointment.participantNames.join(' | ')
             : null
@@ -255,14 +266,18 @@ const createAppointmentEvent = async ({ appointment, start, end }) => {
         response = await calendar.events.insert({
             calendarId: getCalendarId(),
             requestBody: {
-                summary: `Cita Thessa - ${appointment.serviceName}`,
+                summary: formatAppointmentSummary(appointment),
                 description: [
                     `Participantes: ${formatAppointmentParticipants(appointment)}`,
                     `Telefono WhatsApp: ${appointment.phoneNumber}`,
                     `Servicio: ${appointment.serviceName}`,
+                    appointment.packageName ? `Paquete: ${appointment.packageName}` : null,
+                    appointment.packageSessions ? `Sesiones del paquete: ${appointment.packageSessions}` : null,
+                    appointment.packageName ? `Sesion del paquete: ${appointment.packageSessionNumber || 1}` : null,
+                    appointment.packagePrice !== null && appointment.packagePrice !== undefined ? `Precio del paquete: $${Number(appointment.packagePrice).toLocaleString('es-MX')}` : null,
                     `Personas: ${appointment.people}`,
                     'Estado: pendiente de confirmacion'
-                ].join('\n'),
+                ].filter(Boolean).join('\n'),
                 extendedProperties: buildAppointmentExtendedProperties(appointment),
                 start: { dateTime: start.toISOString(), timeZone: TIMEZONE },
                 end: { dateTime: end.toISOString(), timeZone: TIMEZONE },
@@ -291,14 +306,18 @@ const updateAppointmentEvent = async ({ eventId, appointment, start, end }) => {
             calendarId: getCalendarId(),
             eventId,
             requestBody: {
-                summary: `Cita Thessa - ${appointment.serviceName}`,
+                summary: formatAppointmentSummary(appointment),
                 description: [
                     `Participantes: ${formatAppointmentParticipants(appointment)}`,
                     `Telefono WhatsApp: ${appointment.phoneNumber}`,
                     `Servicio: ${appointment.serviceName}`,
+                    appointment.packageName ? `Paquete: ${appointment.packageName}` : null,
+                    appointment.packageSessions ? `Sesiones del paquete: ${appointment.packageSessions}` : null,
+                    appointment.packageName ? `Sesion del paquete: ${appointment.packageSessionNumber || 1}` : null,
+                    appointment.packagePrice !== null && appointment.packagePrice !== undefined ? `Precio del paquete: $${Number(appointment.packagePrice).toLocaleString('es-MX')}` : null,
                     `Personas: ${appointment.people}`,
                     `Estado: ${appointment.status}`
-                ].join('\n'),
+                ].filter(Boolean).join('\n'),
                 extendedProperties: buildAppointmentExtendedProperties(appointment),
                 start: { dateTime: start.toISOString(), timeZone: TIMEZONE },
                 end: { dateTime: end.toISOString(), timeZone: TIMEZONE }

@@ -169,6 +169,10 @@ document.addEventListener('DOMContentLoaded', function() {
             ? `https://wa.me/${props.phoneNumber.replace(/\D/g, '')}`
             : '#';
         document.getElementById('nextAppointmentService').textContent = props.serviceName || 'Sin servicio';
+        const packageText = props.packageName ? `${props.packageName} · Sesión ${props.packageSessionNumber || 1} de ${props.packageSessions || '?'}` : '';
+        document.getElementById('nextAppointmentPackage').textContent = packageText;
+        document.getElementById('nextAppointmentPackage').classList.toggle('hidden', !packageText);
+        document.getElementById('nextAppointmentPackageLabel').classList.toggle('hidden', !packageText);
         document.getElementById('nextAppointmentPeople').textContent = props.people || 1;
         document.getElementById('nextAppointmentStatus').textContent = normalize(props.status) === 'confirmada'
             ? '✓ Confirmada'
@@ -341,6 +345,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('modalAppointmentDatetime').textContent = `${date} · ${time}${endTime ? ` - ${endTime}` : ''}`;
         document.getElementById('modalClient').textContent = props.clientName;
         document.getElementById('modalService').textContent = props.serviceName;
+        const packageText = props.packageName ? `${props.packageName} · Sesión ${props.packageSessionNumber || 1} de ${props.packageSessions || '?'}` : '';
+        document.getElementById('modalPackage').textContent = packageText;
+        document.getElementById('modalPackage').classList.toggle('hidden', !packageText);
+        document.getElementById('modalPackageLabel').classList.toggle('hidden', !packageText);
         document.getElementById('modalPeople').textContent = props.people;
         const participantNames = Array.isArray(props.participantNames)
             ? props.participantNames.filter(Boolean)
