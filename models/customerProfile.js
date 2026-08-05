@@ -9,6 +9,7 @@ const isUsableName = (name) => {
     if(!value || value.length < 2 || value.length > 60) return false;
     if(/^\+?\d+$/.test(value)) return false;
     if(/^(usuario|cliente|paciente|whatsapp)$/i.test(value)) return false;
+    if(/^(alergico|alergica|alergicos|alergicas|alergia|alergias)$/i.test(value)) return false;
     return true;
 }
 
@@ -66,7 +67,8 @@ const rememberName = async (phoneNumber, name, source = 'whatsapp') => {
     if(!clean) return null;
 
     const current = await getProfile(phoneNumber);
-    if(current.name && source === 'whatsapp') return current.name;
+    const currentName = cleanName(current.name);
+    if(currentName && source === 'whatsapp') return currentName;
 
     await saveProfile(phoneNumber, {
         ...current,

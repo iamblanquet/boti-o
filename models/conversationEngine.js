@@ -303,6 +303,20 @@ const handleHybridServicesMessage = async ({ phoneNumber, messageText }) => {
     return null;
 }
 
+const handleContextualServiceQuestion = async ({ phoneNumber, messageText, activeState }) => {
+    const ruleIntent = ServiceIntentDetector.detectRuleIntent(messageText);
+    if(ruleIntent.intent !== INTENTS.CONSULTAR_SERVICIO || !ruleIntent.dato_solicitado || ruleIntent.dato_solicitado === DATA_FIELDS.GENERAL) return null;
+
+    const directService = await ServicesRepository.findServiceByName(messageText);
+    if(directService) return null;
+
+    const service = await ServiceFollowup.getContextService(phoneNumber, activeState);
+    if(!service?.id) return null;
+
+    await sendServiceTemplate(phoneNumber, service, ruleIntent.dato_solicitado);
+    return { handledBy: 'service-context-template' };
+}
+
 const recordIncomingMessage = async ({ phoneNumber, name, messageText, displayText = null, interactiveReplyId = null, messageId, type }) => {
     const originalMessage = displayText || messageText;
     const clientResult = await clientModel.verifyStoreClient(
@@ -428,6 +442,13 @@ const respondToIncomingMessageInternal = async ({ phoneNumber, messageText, mess
         const handledByAppointmentManagement = await FlujoCitas.iniciarGestion(phoneNumber);
         if(handledByAppointmentManagement) return { handledBy: 'appointment-management' };
     }
+
+    const handledByContextualServiceQuestion = await handleContextualServiceQuestion({
+        phoneNumber,
+        messageText,
+        activeState
+    });
+    if(handledByContextualServiceQuestion) return handledByContextualServiceQuestion;
 
     const handledByServiceFollowup = await ServiceFollowup.handleMessage({
         phoneNumber,

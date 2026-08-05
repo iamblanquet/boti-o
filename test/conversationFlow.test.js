@@ -31,6 +31,7 @@ const catalogFixture = {
             benefits: ['Resultados duraderos', 'Procedimiento indoloro'],
             problems: ['vello'],
             keywords: ['depilacion laser - medio brazo', 'depilacion', 'laser', 'medio', 'brazo'],
+            products: ['Laser diodo'],
             active: true,
             sort_order: 1
         },
@@ -45,6 +46,7 @@ const catalogFixture = {
             benefits: ['Piel suave', 'Resultados duraderos'],
             problems: ['vello en manos'],
             keywords: ['depilacion laser - manos', 'depilacion', 'laser', 'manos'],
+            products: ['Laser diodo'],
             active: true,
             sort_order: 2
         },
@@ -59,6 +61,7 @@ const catalogFixture = {
             benefits: ['Relajacion profunda'],
             problems: ['relajacion'],
             keywords: ['masaje relajante', 'relajacion'],
+            products: ['Aceite neutro'],
             active: true,
             sort_order: 1
         }
@@ -220,6 +223,85 @@ test('a service selected from the catalog receives its own appointment action', 
         Messages.sendTextMessage = originals.sendTextMessage;
         Messages.sendLocalMedia = originals.sendLocalMedia;
         ServiceFollowup.sendOfferDecisionButtons = originals.sendOfferDecisionButtons;
+    }
+});
+
+test('product follow-up question uses the current offered service context', async () => {
+    const StateStore = require('../models/stateStore');
+    const StateManager = require('../models/conversationStateManager');
+    const Messages = require('../models/messages');
+    const ChatStore = require('../models/chatStore');
+    const CustomerProfile = require('../models/customerProfile');
+    const Clients = require('../models/clients');
+    const ServiceFollowup = require('../models/serviceFollowup');
+    const Gemini = require('../models/gemini');
+    const ConversationEngine = require('../models/conversationEngine');
+
+    const originals = {
+        sendTextMessage: Messages.sendTextMessage,
+        sendLocalMedia: Messages.sendLocalMedia,
+        addMessage: ChatStore.addMessage,
+        rememberName: CustomerProfile.rememberName,
+        rememberFromMessage: CustomerProfile.rememberFromMessage,
+        verifyStoreClient: Clients.verifyStoreClient,
+        sendOfferDecisionButtons: ServiceFollowup.sendOfferDecisionButtons,
+        geminiProccess: Gemini.geminiProccess
+    };
+
+    const phoneNumber = `5219990000098${Date.now()}`;
+    const sent = [];
+    let geminiCalls = 0;
+
+    Messages.sendTextMessage = async (text, phone) => {
+        sent.push({ type: 'text', text, phoneNumber: phone });
+    };
+    Messages.sendLocalMedia = async () => null;
+    ChatStore.addMessage = () => {};
+    CustomerProfile.rememberName = async () => {};
+    CustomerProfile.rememberFromMessage = async () => {};
+    Clients.verifyStoreClient = async () => {};
+    ServiceFollowup.sendOfferDecisionButtons = async () => true;
+    Gemini.geminiProccess = async () => {
+        geminiCalls += 1;
+        return { answer: 'AI fallback' };
+    };
+
+    try {
+        await StateStore.del(`${phoneNumber}:tool`);
+        await StateManager.saveState({
+            phone: phoneNumber,
+            intent: ServiceFollowup.SERVICE_FOLLOWUP_INTENT,
+            step: ServiceFollowup.STEP_ASK_AGENDA,
+            data: {
+                service: {
+                    id: 'masaje-relajante',
+                    nombre: 'Masaje Relajante'
+                }
+            }
+        });
+
+        const result = await ConversationEngine.processIncomingMessage({
+            phoneNumber,
+            name: 'Mau',
+            messageText: 'Y con que productos se realiza?',
+            messageId: 'incoming-products-context',
+            type: 'text'
+        });
+
+        assert.equal(result.handledBy, 'service-context-template');
+        assert.equal(geminiCalls, 0);
+        assert.match(sent[0].text, /Para Masaje Relajante utilizamos: Aceite neutro/i);
+    } finally {
+        Messages.sendTextMessage = originals.sendTextMessage;
+        Messages.sendLocalMedia = originals.sendLocalMedia;
+        ChatStore.addMessage = originals.addMessage;
+        CustomerProfile.rememberName = originals.rememberName;
+        CustomerProfile.rememberFromMessage = originals.rememberFromMessage;
+        Clients.verifyStoreClient = originals.verifyStoreClient;
+        ServiceFollowup.sendOfferDecisionButtons = originals.sendOfferDecisionButtons;
+        Gemini.geminiProccess = originals.geminiProccess;
+        await StateManager.clearState(phoneNumber);
+        await StateStore.del(`${phoneNumber}:tool`);
     }
 });
 

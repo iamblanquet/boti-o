@@ -174,6 +174,14 @@ const getFollowupService = async (phoneNumber, activeState) => {
     return null;
 };
 
+const getContextService = async (phoneNumber, activeState = null) => {
+    const service = await getFollowupService(phoneNumber, activeState);
+    if(!service?.id) return null;
+
+    const fullService = await ServicesRepository.getServiceById(service.id);
+    return fullService || service;
+};
+
 const saveOfferState = async (phoneNumber, service) => {
     const followupService = toFollowupService(service);
     await StateManager.saveState({
@@ -470,6 +478,7 @@ module.exports = {
     parseOfferActionPayload,
     saveOfferState,
     sendOfferDecisionButtons,
+    getContextService,
     handleMessage,
     startServiceFollowupReminders,
     stopServiceFollowupReminders,
