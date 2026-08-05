@@ -10,6 +10,7 @@ const { startServiceFollowupReminders } = require('./models/serviceFollowup');
 const { startConversationNudgeScheduler } = require('./models/conversationNudgeService');
 const { warmCalendarAgendaCache } = require('./controllers/calendarController');
 const { refreshSystemMessages } = require('./utils/systemMessageLoader');
+const { migrateLegacyServiceImages } = require('./models/serviceCatalogStore');
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -55,6 +56,11 @@ server.listen(port, ()=> {
     startServiceFollowupReminders();
     startConversationNudgeScheduler();
     refreshSystemMessages().catch((error) => console.log('No se pudo cargar configuracion de mensajes:', error.message));
+    migrateLegacyServiceImages()
+        .then(({ migrated, skipped }) => {
+            if(migrated || skipped) console.log(`Migracion de imagenes de servicios: ${migrated} migradas, ${skipped} omitidas.`);
+        })
+        .catch((error) => console.log('No se pudo migrar imagenes antiguas de servicios:', error.message));
     warmCalendarAgendaCache()
         .then(() => console.log('Cache de agenda precargado.'))
         .catch((error) => console.log('No se pudo precargar cache de agenda:', error.message));

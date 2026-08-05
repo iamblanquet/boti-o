@@ -1,5 +1,8 @@
 const getSupabase = require('../config/supabase');
 const { normalizeText } = require('../utils/configCitas');
+const fs = require('fs/promises');
+const path = require('path');
+const { randomUUID } = require('crypto');
 
 const CATALOG_UNAVAILABLE_MESSAGE = 'Dame un momentito, quiero confirmarte la informacion correcta con el equipo para orientarte bien.';
 const SERVICE_IMAGE_BUCKET = 'service-images';
@@ -52,6 +55,28 @@ const normalizeRemoteImage = (value) => {
     return /^https?:\/\/\S+$/i.test(image) ? image : '';
 }
 
+const getLegacyLocalImagePath = (value) => {
+    const image = String(value || '').trim();
+    if(/^https?:\/\//i.test(image)) {
+        try {
+            const url = new URL(image);
+            return url.pathname.startsWith('/mediaFiles/')
+                ? decodeURIComponent(url.pathname.slice('/mediaFiles/'.length))
+                : null;
+        } catch {
+            return null;
+        }
+    }
+    return image ? image.replace(/^\/?mediaFiles\//i, '') : null;
+}
+
+const getImageMimeType = (filename) => ({
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.webp': 'image/webp'
+}[path.extname(filename).toLowerCase()] || null);
+
 const getServiceImagePath = (imageUrl) => {
     try {
         const url = new URL(imageUrl);
@@ -70,6 +95,53 @@ const removeStoredServiceImage = async (supabase, imageUrl) => {
 
     const { error } = await supabase.storage.from(SERVICE_IMAGE_BUCKET).remove([objectPath]);
     if(error) console.log('No se pudo eliminar la imagen anterior del servicio:', error.message);
+}
+
+// Migra referencias antiguas del catálogo sin borrar los archivos fuente.
+const migrateLegacyServiceImages = async () => {
+    const supabase = getClient();
+    if(!supabase) return { migrated: 0, skipped: 0 };
+
+    const services = await selectAll('services');
+    const mediaRoot = path.resolve(__dirname, '..', 'mediaFiles');
+    let migrated = 0;
+    let skipped = 0;
+
+    for(const service of services) {
+        const relativePath = getLegacyLocalImagePath(service.image);
+        if(!relativePath || normalizeRemoteImage(service.image)) continue;
+
+        const sourcePath = path.resolve(mediaRoot, relativePath);
+        const mimeType = getImageMimeType(sourcePath);
+        if(!sourcePath.startsWith(`${mediaRoot}${path.sep}`) || !mimeType) {
+            skipped += 1;
+            continue;
+        }
+
+        try {
+            const buffer = await fs.readFile(sourcePath);
+            const objectPath = `services/${randomUUID()}${path.extname(sourcePath).toLowerCase()}`;
+            const { error: uploadError } = await supabase.storage
+                .from(SERVICE_IMAGE_BUCKET)
+                .upload(objectPath, buffer, { contentType: mimeType, cacheControl: '31536000', upsert: false });
+            if(uploadError) throw uploadError;
+
+            const { data } = supabase.storage.from(SERVICE_IMAGE_BUCKET).getPublicUrl(objectPath);
+            if(!data?.publicUrl) throw new Error('Storage no devolvió una URL pública.');
+
+            const { error: updateError } = await supabase
+                .from('services')
+                .update({ image: data.publicUrl })
+                .eq('id', service.id);
+            if(updateError) throw updateError;
+            migrated += 1;
+        } catch (error) {
+            skipped += 1;
+            console.log(`No se pudo migrar la imagen del servicio ${service.id}:`, error.message);
+        }
+    }
+
+    return { migrated, skipped };
 }
 
 const normalizePersonPrices = (items, fallbackPrice = null) => {
@@ -452,6 +524,7 @@ module.exports = {
     CATALOG_UNAVAILABLE_MESSAGE,
     ServiceCatalogUnavailableError,
     loadCatalog,
+    migrateLegacyServiceImages,
     readEditableCatalog,
     createService,
     upsertService,
