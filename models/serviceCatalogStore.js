@@ -183,9 +183,19 @@ const normalizeServicePayload = (payload = {}, fallback = {}) => {
     const categoryName = String(payload.categoria || payload.category || fallback.categoria || fallback.category || 'Servicios').trim();
     const name = String(payload.nombre || payload.name || fallback.nombre || fallback.name || '').trim();
     const fallbackPrices = normalizePersonPrices(fallback.preciosPersonas || fallback.service_prices, fallback.precio ?? fallback.price);
+    const hasExplicitPersonPrices = hasOwn(payload, 'preciosPersonas')
+        || hasOwn(payload, 'preciosPorPersona')
+        || hasOwn(payload, 'service_prices');
+    const requestedPersonPrices = hasOwn(payload, 'preciosPersonas')
+        ? payload.preciosPersonas
+        : hasOwn(payload, 'preciosPorPersona')
+            ? payload.preciosPorPersona
+            : hasOwn(payload, 'service_prices')
+                ? payload.service_prices
+                : fallbackPrices;
     const prices = normalizePersonPrices(
-        payload.preciosPersonas || payload.preciosPorPersona || payload.service_prices || fallbackPrices,
-        payload.precio ?? payload.price ?? fallback.precio ?? fallback.price
+        requestedPersonPrices,
+        hasExplicitPersonPrices ? null : (payload.precio ?? payload.price ?? fallback.precio ?? fallback.price)
     );
     const firstPrice = prices[0]?.precio;
     const explicitPrice = cleanNumber(payload.precio ?? payload.price ?? fallback.precio ?? fallback.price);

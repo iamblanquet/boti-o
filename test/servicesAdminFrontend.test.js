@@ -10,6 +10,7 @@ test('services admin price rows use the class collected by saveService', () => {
     assert.match(source, /row\.className\s*=\s*'price-row /);
     assert.match(source, /querySelectorAll\('\.price-row'\)/);
     assert.match(source, /amountValue === '' \? null : Number\(amountValue\)/);
+    assert.match(source, /peoplePricingEnabled\.checked \? collectPriceRows\(\) : \[\]/);
 });
 
 test('services admin persists the public URL returned by the image upload', () => {

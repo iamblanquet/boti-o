@@ -13,6 +13,10 @@ const formatPeoplePrices = (service) => {
     const prices = Array.isArray(service?.preciosPersonas) ? service.preciosPersonas : [];
     if(!prices.length) return formatPrice(service?.precio);
 
+    const hasSpecialPeoplePrices = prices.some((item) => item.exclusivo)
+        || new Set(prices.map((item) => Number(item.precio))).size > 1;
+    if(!hasSpecialPeoplePrices) return formatPrice(service?.precio ?? prices[0]?.precio);
+
     return prices
         .map((item) => {
             const label = item.personas === 1 ? '1 persona' : `${item.personas} personas`;

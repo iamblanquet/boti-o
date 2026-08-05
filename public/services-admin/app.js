@@ -30,8 +30,10 @@ const serviceFormSubtitle = document.getElementById('serviceFormSubtitle');
 const nameInput = document.getElementById('nameInput');
 const categoryInput = document.getElementById('categoryInput');
 const durationInput = document.getElementById('durationInput');
+const basePriceInput = document.getElementById('basePriceInput');
 const priceRows = document.getElementById('priceRows');
 const addPriceButton = document.getElementById('addPriceButton');
+const peoplePricingEnabled = document.getElementById('peoplePricingEnabled');
 const serviceImageInput = document.getElementById('serviceImageInput');
 const serviceImageValue = document.getElementById('serviceImageValue');
 const serviceImagePreview = document.getElementById('serviceImagePreview');
@@ -108,6 +110,8 @@ const formatMoney = (value) => {
 const formatServicePrices = (service) => {
   const prices = Array.isArray(service.preciosPersonas) ? service.preciosPersonas : [];
   if (!prices.length) return formatMoney(service.precio);
+  const hasSpecialPeoplePrices = prices.some((item) => item.exclusivo) || new Set(prices.map((item) => Number(item.precio))).size > 1;
+  if (!hasSpecialPeoplePrices) return formatMoney(service.precio ?? prices[0]?.precio);
   return prices.map((item) => {
     const label = item.personas === 1 ? '1 persona' : `${item.personas} personas`;
     return `${label} ${formatMoney(item.precio)}`;
@@ -118,6 +122,8 @@ const getServicePriceChips = (service) => {
   const prices = Array.isArray(service.preciosPersonas) && service.preciosPersonas.length
     ? service.preciosPersonas
     : [{ personas: 1, precio: service.precio, exclusivo: false }];
+  const hasSpecialPeoplePrices = prices.some((item) => item.exclusivo) || new Set(prices.map((item) => Number(item.precio))).size > 1;
+  if (!hasSpecialPeoplePrices) return [{ text: formatMoney(service.precio ?? prices[0]?.precio), exclusive: false }];
 
   return prices
     .filter((item) => item.precio !== null && item.precio !== undefined && item.precio !== '')
@@ -679,8 +685,21 @@ const renderPriceRows = (service = null) => {
   priceRows.innerHTML = '';
   const prices = Array.isArray(service?.preciosPersonas) && service.preciosPersonas.length
     ? service.preciosPersonas
-    : [{ personas: 1, precio: service?.precio ?? '', exclusivo: false }];
-  prices.forEach(addPriceRow);
+    : [];
+  const hasSpecialPeoplePrices = prices.some((item) => item.exclusivo) || new Set(prices.map((item) => Number(item.precio))).size > 1;
+  basePriceInput.value = service?.precio ?? prices[0]?.precio ?? '';
+  peoplePricingEnabled.checked = hasSpecialPeoplePrices;
+  if (hasSpecialPeoplePrices) prices.forEach(addPriceRow);
+  syncPeoplePricingEditor();
+};
+
+const syncPeoplePricingEditor = () => {
+  const enabled = peoplePricingEnabled.checked;
+  priceRows.hidden = !enabled;
+  addPriceButton.hidden = !enabled;
+  if (enabled && !priceRows.children.length) {
+    addPriceRow({ personas: 1, precio: basePriceInput.value === '' ? '' : Number(basePriceInput.value) });
+  }
 };
 
 const collectPriceRows = () => Array.from(priceRows.querySelectorAll('.price-row'))
@@ -758,7 +777,7 @@ const saveService = async () => {
 
   try {
     const imageFile = await uploadSelectedServiceImage();
-    const prices = collectPriceRows();
+    const prices = peoplePricingEnabled.checked ? collectPriceRows() : [];
     const currentService = state.editingServiceId
       ? state.services.find((service) => service.id === state.editingServiceId)
       : null;
@@ -766,7 +785,7 @@ const saveService = async () => {
       nombre: nameInput.value.trim(),
       categoria: categoryInput.value,
       duracionMinutos: durationInput.value ? Number(durationInput.value) : null,
-      precio: prices[0]?.precio ?? null,
+      precio: basePriceInput.value === '' ? (prices[0]?.precio ?? null) : Number(basePriceInput.value),
       preciosPersonas: prices,
       imagen: state.serviceImageRemoved
         ? ''
@@ -988,6 +1007,7 @@ searchInput.addEventListener('input', () => {
 document.getElementById('newServiceButton').addEventListener('click', () => openServiceDrawer(null));
 document.getElementById('newCategoryButton').addEventListener('click', () => openCategoryDrawer(null));
 addPriceButton.addEventListener('click', () => addPriceRow({ personas: getNextPeopleCount() }));
+peoplePricingEnabled.addEventListener('change', syncPeoplePricingEditor);
 
 serviceImageInput.addEventListener('change', () => {
   const file = serviceImageInput.files?.[0];

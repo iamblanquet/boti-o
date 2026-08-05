@@ -135,3 +135,25 @@ test('service catalog removes an image when an empty image value is saved', asyn
         CatalogStore.__setTestClient(null);
     }
 });
+
+test('service catalog keeps a base price without creating people price tiers', async () => {
+    const supabase = createMemorySupabase();
+    CatalogStore.__setTestClient(supabase);
+
+    try {
+        await CatalogStore.createService({
+            id: 'servicio-precio-base',
+            nombre: 'Servicio precio base',
+            categoria: 'Servicios',
+            precio: 800,
+            preciosPersonas: []
+        });
+
+        const catalog = await CatalogStore.readEditableCatalog();
+        const service = catalog.services.find((item) => item.id === 'servicio-precio-base');
+        assert.equal(service.precio, 800);
+        assert.deepEqual(service.preciosPersonas, []);
+    } finally {
+        CatalogStore.__setTestClient(null);
+    }
+});
