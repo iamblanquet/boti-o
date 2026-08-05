@@ -4,6 +4,7 @@ const path = require('path');
 const StateStore = require('./stateStore');
 const Whatsapp = require('../config/whatsapp');
 const WhatsappMedia = require('./whatsappMedia');
+const { normalizeForWhatsappImage } = require('../utils/whatsappImageNormalizer');
 const ChatStore = require('./chatStore');
 const CustomerProfile = require('./customerProfile');
 const CampaignFunnel = require('./campaigns/funnelService');
@@ -75,7 +76,7 @@ const getImageUpload = async (source) => {
 }
 
 const sendLocalMedia = async (filename, phoneNumber, options = {}) => {
-    const media = await getImageUpload(filename);
+    const media = await normalizeForWhatsappImage(await getImageUpload(filename));
     const mediaId = await WhatsappMedia.uploadMedia(media);
 
     return sendMessage({
