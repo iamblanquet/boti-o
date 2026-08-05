@@ -144,6 +144,7 @@ create table if not exists services (
   price numeric(12,2),
   image text not null default '',
   benefits jsonb not null default '[]'::jsonb,
+  products jsonb not null default '[]'::jsonb,
   problems jsonb not null default '[]'::jsonb,
   keywords jsonb not null default '[]'::jsonb,
   active boolean not null default true,
@@ -157,6 +158,9 @@ add column if not exists post_care_message text not null default '';
 
 alter table services
 add column if not exists pre_care_message text not null default '';
+
+alter table services
+add column if not exists products jsonb not null default '[]'::jsonb;
 
 create unique index if not exists idx_services_category_name_unique
 on services(category_id, name);

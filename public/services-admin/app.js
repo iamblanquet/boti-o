@@ -43,6 +43,7 @@ const serviceImagePreview = document.getElementById('serviceImagePreview');
 const removeServiceImageButton = document.getElementById('removeServiceImageButton');
 const descriptionInput = document.getElementById('descriptionInput');
 const benefitsInput = document.getElementById('benefitsInput');
+const productsInput = document.getElementById('productsInput');
 const preCareMessageInput = document.getElementById('preCareMessageInput');
 const postCareMessageInput = document.getElementById('postCareMessageInput');
 const deleteServiceButton = document.getElementById('deleteServiceButton');
@@ -735,6 +736,7 @@ const openServiceDrawer = (service = null) => {
   setServiceImage(service?.imagen || '');
   descriptionInput.value = service?.descripcion || '';
   benefitsInput.value = (service?.beneficios || []).join('\n');
+  productsInput.value = (service?.productos || []).join('\n');
   preCareMessageInput.value = service?.cuidadosPrevios || '';
   postCareMessageInput.value = service?.cuidadosPosteriores || '';
   deleteServiceButton.hidden = !service;
@@ -801,6 +803,7 @@ const saveService = async () => {
         : (imageFile || serviceImageValue.value || currentService?.imagen || ''),
       descripcion: descriptionInput.value.trim(),
       beneficios: benefitsInput.value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean),
+      productos: productsInput.value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean),
       cuidadosPrevios: preCareMessageInput.value.trim(),
       cuidadosPosteriores: postCareMessageInput.value.trim()
     };

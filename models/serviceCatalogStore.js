@@ -236,6 +236,7 @@ const normalizeServicePayload = (payload = {}, fallback = {}) => {
             price: prices.length ? firstPrice : explicitPrice,
             image: normalizeRemoteImage(requestedImage),
             benefits: normalizeArray(payload.beneficios ?? payload.benefits ?? fallback.beneficios ?? fallback.benefits),
+            products: normalizeArray(payload.productos ?? payload.products ?? fallback.productos ?? fallback.products),
             problems: normalizeArray(payload.problemas ?? payload.problems ?? fallback.problemas ?? fallback.problems),
             keywords: normalizeArray(payload.keywords ?? fallback.keywords),
             active: payload.activo ?? payload.active ?? fallback.activo ?? fallback.active ?? true,
@@ -303,6 +304,7 @@ const mapService = (service, categoryById, pricesByService, packagesByService = 
         problemas: normalizeArray(service.problems),
         keywords: normalizeArray(service.keywords),
         beneficios: normalizeArray(service.benefits),
+        productos: normalizeArray(service.products),
         sortOrder: service.sort_order || 0
     };
 }
@@ -466,6 +468,7 @@ const updateService = async (id, payload) => {
         price: current.precio,
         image: current.imagen,
         benefits: current.beneficios,
+        products: current.productos,
         problems: current.problemas,
         keywords: current.keywords,
         active: current.activo,
