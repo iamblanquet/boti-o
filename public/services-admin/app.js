@@ -61,6 +61,7 @@ const state = {
   categoryScroll: 0,
   hitboxes: [],
   filePath: '',
+  serviceImageRemoved: false,
   view: 'categories'
 };
 
@@ -690,6 +691,7 @@ const collectPriceRows = () => Array.from(priceRows.querySelectorAll('.price-row
 const openServiceDrawer = (service = null) => {
   syncCategoryOptions();
   state.editingServiceId = service?.id || null;
+  state.serviceImageRemoved = false;
   serviceFormTitle.textContent = service ? 'Editar servicio' : 'Nuevo servicio';
   serviceFormSubtitle.textContent = service ? service.id : 'Agrega un servicio al catalogo activo.';
   nameInput.value = service?.nombre || '';
@@ -750,13 +752,18 @@ const saveService = async () => {
   try {
     const imageFile = await uploadSelectedServiceImage();
     const prices = collectPriceRows();
+    const currentService = state.editingServiceId
+      ? state.services.find((service) => service.id === state.editingServiceId)
+      : null;
     const payload = {
       nombre: nameInput.value.trim(),
       categoria: categoryInput.value,
       duracionMinutos: durationInput.value ? Number(durationInput.value) : null,
       precio: prices[0]?.precio ?? null,
       preciosPersonas: prices,
-      imagen: imageFile,
+      imagen: state.serviceImageRemoved
+        ? ''
+        : (imageFile || serviceImageValue.value || currentService?.imagen || ''),
       descripcion: descriptionInput.value.trim(),
       beneficios: benefitsInput.value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean),
       cuidadosPrevios: preCareMessageInput.value.trim(),
@@ -983,6 +990,7 @@ serviceImageInput.addEventListener('change', () => {
   }
 
   const previewUrl = URL.createObjectURL(file);
+  state.serviceImageRemoved = false;
   serviceImagePreview.src = previewUrl;
   serviceImagePreview.hidden = false;
   removeServiceImageButton.hidden = false;
@@ -990,6 +998,7 @@ serviceImageInput.addEventListener('change', () => {
 
 removeServiceImageButton.addEventListener('click', () => {
   serviceImageInput.value = '';
+  state.serviceImageRemoved = true;
   setServiceImage('');
 });
 
