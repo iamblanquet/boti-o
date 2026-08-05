@@ -1019,8 +1019,21 @@ addPriceButton.addEventListener('click', () => addPriceRow({ personas: getNextPe
 peoplePricingEnabled.addEventListener('change', syncPeoplePricingEditor);
 const addPackageRow = (item = {}) => {
   const row = document.createElement('div');
-  row.className = 'package-row grid grid-cols-2 gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl';
-  row.innerHTML = `<input data-package-name placeholder="Nombre" value="${escapeHtml(item.nombre || '')}" class="px-2 py-1.5 border rounded-md text-sm"><input data-package-sessions type="number" min="2" placeholder="Sesiones" value="${item.sesiones || ''}" class="px-2 py-1.5 border rounded-md text-sm"><input data-package-price type="number" min="0" placeholder="Precio MXN" value="${item.precio ?? ''}" class="px-2 py-1.5 border rounded-md text-sm"><button type="button" class="package-remove text-red-600 text-sm">Quitar</button><input data-package-description placeholder="Condiciones opcionales" value="${escapeHtml(item.descripcion || '')}" class="col-span-2 px-2 py-1.5 border rounded-md text-sm">`;
+  row.className = 'package-row';
+  row.innerHTML = `
+    <div class="package-row__topline">
+      <span class="package-row__eyebrow">Configuración del paquete</span>
+      <button type="button" class="package-remove" aria-label="Quitar paquete">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" /></svg>
+        Quitar
+      </button>
+    </div>
+    <div class="package-row__fields">
+      <label class="package-field package-field--name"><span>Nombre del paquete</span><input data-package-name placeholder="Ej. Paquete bienestar" value="${escapeHtml(item.nombre || '')}"></label>
+      <label class="package-field"><span>Sesiones</span><input data-package-sessions type="number" min="2" placeholder="3" value="${item.sesiones || ''}"></label>
+      <label class="package-field"><span>Precio total (MXN)</span><input data-package-price type="number" min="0" placeholder="2250" value="${item.precio ?? ''}"></label>
+      <label class="package-field package-field--description"><span>Condiciones o descripción <em>Opcional</em></span><input data-package-description placeholder="Ej. Vigencia de 3 meses" value="${escapeHtml(item.descripcion || '')}"></label>
+    </div>`;
   row.querySelector('.package-remove').addEventListener('click', () => row.remove());
   packageRows.appendChild(row);
 };

@@ -4,3 +4,37 @@
 .drawer.open { transform: translateX(0); }
 .confirm-overlay { opacity: 0; pointer-events: none; transition: opacity 0.2s; }
 .confirm-overlay.open { opacity: 1; pointer-events: auto; }
+
+/* Service packages editor */
+.packages-editor__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.package-add-button { display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; padding: 8px 11px; border: 1px solid #bbf7d0; border-radius: 8px; background: #f0fdf4; color: #15803d; font-size: 12px; font-weight: 700; line-height: 1; cursor: pointer; transition: background .2s, border-color .2s, transform .2s; }
+.package-add-button:hover { background: #dcfce7; border-color: #86efac; }
+.package-add-button:active { transform: scale(.98); }
+.package-add-button svg { width: 15px; height: 15px; }
+.package-toggle { display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; cursor: pointer; transition: border-color .2s, background .2s; }
+.package-toggle:has(input:checked) { border-color: #86efac; background: #f0fdf4; }
+.package-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.package-toggle__control { position: relative; width: 32px; height: 18px; flex: 0 0 auto; margin-top: 1px; border-radius: 999px; background: #cbd5e1; transition: background .2s; }
+.package-toggle__control::after { content: ''; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px #64748b66; transition: transform .2s; }
+.package-toggle input:checked + .package-toggle__control { background: #16a34a; }
+.package-toggle input:checked + .package-toggle__control::after { transform: translateX(14px); }
+.package-toggle input:focus-visible + .package-toggle__control { outline: 2px solid #22c55e; outline-offset: 2px; }
+.package-toggle__title, .package-toggle__help { display: block; }
+.package-toggle__title { color: #334155; font-size: 12px; font-weight: 700; line-height: 17px; }
+.package-toggle__help { margin-top: 1px; color: #64748b; font-size: 11px; line-height: 16px; }
+.package-rows { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.package-row { padding: 14px; border: 1px solid #dbe4ee; border-radius: 12px; background: #f8fafc; box-shadow: 0 1px 2px #0f172a08; }
+.package-row__topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.package-row__eyebrow { color: #64748b; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.package-remove { display: inline-flex; align-items: center; gap: 4px; padding: 3px 5px; border: 0; border-radius: 5px; background: transparent; color: #dc2626; font-size: 11px; font-weight: 700; cursor: pointer; transition: background .2s; }
+.package-remove:hover { background: #fef2f2; }
+.package-remove svg { width: 14px; height: 14px; }
+.package-row__fields { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(100px, .7fr) minmax(120px, .9fr); gap: 10px; }
+.package-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; color: #475569; font-size: 11px; font-weight: 700; }
+.package-field span { white-space: nowrap; }
+.package-field em { color: #94a3b8; font-size: 10px; font-style: normal; font-weight: 500; }
+.package-field input { width: 100%; min-width: 0; box-sizing: border-box; padding: 8px 9px; border: 1px solid #cbd5e1; border-radius: 7px; background: #fff; color: #1e293b; font-family: inherit; font-size: 12px; outline: none; transition: border-color .2s, box-shadow .2s; }
+.package-field input::placeholder { color: #94a3b8; }
+.package-field input:focus { border-color: #22c55e; box-shadow: 0 0 0 3px #22c55e26; }
+.package-field--description { grid-column: 1 / -1; }
+@media (max-width: 540px) { .packages-editor__header { align-items: flex-end; } .package-add-button { padding: 8px; } .package-add-button svg { margin: 0; } .package-row__fields { grid-template-columns: 1fr 1fr; } .package-field--name, .package-field--description { grid-column: 1 / -1; } }
