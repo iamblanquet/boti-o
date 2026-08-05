@@ -301,6 +301,16 @@ test('recommendations and open doubts are answered by AI instead of catalog rank
 
         const appointmentButtonId = sent[0].buttonPayload.action.buttons[0].reply.id;
         const declineButtonId = sent[0].buttonPayload.action.buttons[1].reply.id;
+        assert.equal(appointmentButtonId, 'svc_offer_agendar:depilacion-laser-manos');
+        assert.equal(declineButtonId, 'svc_offer_no:depilacion-laser-manos');
+
+        // A newer offer must not change the service encoded in an older button.
+        await ServiceFollowup.sendOfferDecisionButtons(phoneNumber, {
+            id: 'masaje-relajante',
+            nombre: 'Masaje Relajante',
+            duracionMinutos: 50,
+            precio: 900
+        });
 
         sent.length = 0;
         const appointmentResult = await ConversationEngine.processIncomingMessage({

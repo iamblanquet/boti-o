@@ -31,6 +31,22 @@ const OFFER_ACTIONS = {
     DECLINE: 'svc_offer_no'
 };
 
+const buildOfferActionPayload = (action, serviceId) => `${action}:${serviceId}`;
+
+const parseOfferActionPayload = (message) => {
+    const value = String(message || '');
+    const legacyAction = Object.values(OFFER_ACTIONS).find((action) => action === value);
+    if(legacyAction) return { action: legacyAction, serviceId: null };
+
+    const separatorIndex = value.indexOf(':');
+    if(separatorIndex < 0) return null;
+
+    const action = value.slice(0, separatorIndex);
+    const serviceId = value.slice(separatorIndex + 1).trim();
+    if(!Object.values(OFFER_ACTIONS).includes(action) || !serviceId) return null;
+    return { action, serviceId };
+};
+
 let timer = null;
 let running = false;
 
@@ -180,8 +196,8 @@ const sendOfferDecisionButtons = async (phoneNumber, service) => {
         phoneNumber,
         '¿Qué te gustaría hacer?',
         [
-            { id: OFFER_ACTIONS.APPOINTMENT, title: 'Agendar cita' },
-            { id: OFFER_ACTIONS.DECLINE, title: 'No gracias' }
+            { id: buildOfferActionPayload(OFFER_ACTIONS.APPOINTMENT, service.id), title: 'Agendar cita' },
+            { id: buildOfferActionPayload(OFFER_ACTIONS.DECLINE, service.id), title: 'No gracias' }
         ]
     );
 };
@@ -311,8 +327,6 @@ const handleObjectionReason = async (phoneNumber, reasonId, service) => {
 };
 
 const isObjectionReasonPayload = (message) => Object.values(OBJECTION_REASONS).includes(String(message || ''));
-const isOfferActionPayload = (message) => Object.values(OFFER_ACTIONS).includes(String(message || ''));
-
 const getReasonFromText = (message) => {
     const value = normalizeMessage(message);
     if(value.includes('precio') || value.includes('caro') || value.includes('oferta')) return OBJECTION_REASONS.PRICE;
@@ -323,11 +337,14 @@ const getReasonFromText = (message) => {
 };
 
 const handleMessage = async ({ phoneNumber, messageText, activeState, isAffirmative, hasScheduleDetails, isNegative }) => {
-    if(isOfferActionPayload(messageText)) {
-        const service = await getFollowupService(phoneNumber, activeState);
+    const offerAction = parseOfferActionPayload(messageText);
+    if(offerAction) {
+        const service = offerAction.serviceId
+            ? await ServicesRepository.getServiceById(offerAction.serviceId)
+            : await getFollowupService(phoneNumber, activeState);
         if(!service?.id) return null;
 
-        if(messageText === OFFER_ACTIONS.APPOINTMENT) {
+        if(offerAction.action === OFFER_ACTIONS.APPOINTMENT) {
             resolvePending(phoneNumber, 'appointment_started');
             return {
                 handledBy: 'service-followup-appointment',
@@ -336,7 +353,7 @@ const handleMessage = async ({ phoneNumber, messageText, activeState, isAffirmat
             };
         }
 
-        if(messageText === OFFER_ACTIONS.DECLINE) {
+        if(offerAction.action === OFFER_ACTIONS.DECLINE) {
             await sendObjectionReasonList(phoneNumber, service);
             return { handledBy: 'service-objection-ask' };
         }
@@ -449,6 +466,8 @@ module.exports = {
     STEP_OBJECTION_REASON,
     OBJECTION_REASONS,
     OFFER_ACTIONS,
+    buildOfferActionPayload,
+    parseOfferActionPayload,
     saveOfferState,
     sendOfferDecisionButtons,
     handleMessage,
