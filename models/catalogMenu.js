@@ -133,7 +133,7 @@ const sendServicesByCategory = async (phoneNumber, categoryName) => {
 }
 
 const handlePayload = async (phoneNumber, messageText) => {
-    const packageMatch = String(messageText || '').match(/^package_(.+)_([a-f0-9-]+)$/i);
+    const packageMatch = String(messageText || '').match(/^package:([^:]+):([a-f0-9-]+)$/i);
     if(packageMatch) {
         const service = await ServicesRepository.getServiceById(packageMatch[1]);
         const selectedPackage = service?.paquetes?.find((item) => item.id === packageMatch[2]);
@@ -183,7 +183,7 @@ const handlePayload = async (phoneNumber, messageText) => {
                 button: 'Ver paquetes',
                 sectionTitle: 'Paquetes',
                 rows: service.paquetes.slice(0, MAX_ROWS_PER_LIST).map((item) => ({
-                    id: `package_${service.id}_${item.id}`,
+                    id: `package:${service.id}:${item.id}`,
                     title: truncate(item.nombre, 24),
                     description: truncate(`${item.sesiones} sesiones · ${ResponseTemplates.formatPrice(item.precio)}`, 72)
                 }))
