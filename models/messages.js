@@ -46,17 +46,22 @@ const IMAGE_MIME_TYPES = {
 const getImageUpload = async (source) => {
     const value = String(source || '').trim();
     if(/^https?:\/\//i.test(value)) {
-        const response = await axios.get(value, {
-            responseType: 'arraybuffer',
-            maxContentLength: 16 * 1024 * 1024,
-            maxBodyLength: 16 * 1024 * 1024
-        });
-        const urlPath = new URL(value).pathname;
-        return {
-            buffer: Buffer.from(response.data),
-            filename: path.basename(urlPath) || 'service-image.jpg',
-            mimeType: String(response.headers?.['content-type'] || IMAGE_MIME_TYPES[path.extname(urlPath).toLowerCase()] || 'image/jpeg').split(';')[0]
-        };
+        try {
+            const response = await axios.get(value, {
+                responseType: 'arraybuffer',
+                maxContentLength: 16 * 1024 * 1024,
+                maxBodyLength: 16 * 1024 * 1024
+            });
+            const urlPath = new URL(value).pathname;
+            return {
+                buffer: Buffer.from(response.data),
+                filename: path.basename(urlPath) || 'service-image.jpg',
+                mimeType: String(response.headers?.['content-type'] || IMAGE_MIME_TYPES[path.extname(urlPath).toLowerCase()] || 'image/jpeg').split(';')[0]
+            };
+        } catch (error) {
+            const status = error.response?.status ? `HTTP ${error.response.status}` : error.message;
+            throw new Error(`No se pudo descargar la imagen del servicio: ${status}`);
+        }
     }
 
     const mediaRoot = path.resolve(__dirname, '..', 'mediaFiles');

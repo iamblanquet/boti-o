@@ -14,14 +14,25 @@ const uploadMedia = async ({ buffer, filename, mimeType }) => {
         contentType: mimeType || 'application/octet-stream'
     });
 
-    const response = await axios.post(Whatsapp.getMediaUrl(), form, {
-        headers: {
-            ...form.getHeaders(),
-            Authorization: `Bearer ${Whatsapp.ACCESS_TOKEN}`
-        },
-        maxBodyLength: Infinity,
-        maxContentLength: Infinity
-    });
+    let response;
+    try {
+        response = await axios.post(Whatsapp.getMediaUrl(), form, {
+            headers: {
+                ...form.getHeaders(),
+                Authorization: `Bearer ${Whatsapp.ACCESS_TOKEN}`
+            },
+            maxBodyLength: Infinity,
+            maxContentLength: Infinity
+        });
+    } catch (error) {
+        const graphError = error.response?.data?.error;
+        const detail = [
+            graphError?.message || error.message,
+            graphError?.code ? `code ${graphError.code}` : '',
+            graphError?.error_data?.details || ''
+        ].filter(Boolean).join(' | ');
+        throw new Error(`WhatsApp no aceptó la imagen ${filename || ''}: ${detail}`.trim());
+    }
 
     const mediaId = response.data?.id;
     if (!mediaId) {
