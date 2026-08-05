@@ -34,7 +34,9 @@ const basePriceInput = document.getElementById('basePriceInput');
 const priceRows = document.getElementById('priceRows');
 const addPriceButton = document.getElementById('addPriceButton');
 const peoplePricingEnabled = document.getElementById('peoplePricingEnabled');
-const packagesInput = document.getElementById('packagesInput');
+const packagesEnabled = document.getElementById('packagesEnabled');
+const packageRows = document.getElementById('packageRows');
+const addPackageButton = document.getElementById('addPackageButton');
 const serviceImageInput = document.getElementById('serviceImageInput');
 const serviceImageValue = document.getElementById('serviceImageValue');
 const serviceImagePreview = document.getElementById('serviceImagePreview');
@@ -725,7 +727,10 @@ const openServiceDrawer = (service = null) => {
   categoryInput.value = service?.categoria || getCategoryName(state.selectedCategoryId) || state.categories[0]?.nombre || '';
   durationInput.value = service?.duracionMinutos || '';
   renderPriceRows(service);
-  packagesInput.value = (service?.paquetes || []).map((item) => [item.nombre, item.sesiones, item.precio, item.descripcion].filter((part) => part !== undefined && part !== '').join(' | ')).join('\n');
+  packageRows.innerHTML = '';
+  packagesEnabled.checked = (service?.paquetes || []).length > 0;
+  (service?.paquetes || []).forEach(addPackageRow);
+  syncPackagesEditor();
   serviceImageInput.value = '';
   setServiceImage(service?.imagen || '');
   descriptionInput.value = service?.descripcion || '';
@@ -780,7 +785,7 @@ const saveService = async () => {
   try {
     const imageFile = await uploadSelectedServiceImage();
     const prices = peoplePricingEnabled.checked ? collectPriceRows() : [];
-    const paquetes = packagesInput.value.split(/\r?\n/).map((line) => line.split('|').map((part) => part.trim())).map(([nombre, sesiones, precio, descripcion]) => ({ nombre, sesiones: Number(sesiones), precio: Number(precio), descripcion })).filter((item) => item.nombre && item.sesiones > 1 && Number.isFinite(item.precio));
+    const paquetes = packagesEnabled.checked ? collectPackageRows() : [];
     const currentService = state.editingServiceId
       ? state.services.find((service) => service.id === state.editingServiceId)
       : null;
@@ -1012,6 +1017,17 @@ document.getElementById('newServiceButton').addEventListener('click', () => open
 document.getElementById('newCategoryButton').addEventListener('click', () => openCategoryDrawer(null));
 addPriceButton.addEventListener('click', () => addPriceRow({ personas: getNextPeopleCount() }));
 peoplePricingEnabled.addEventListener('change', syncPeoplePricingEditor);
+const addPackageRow = (item = {}) => {
+  const row = document.createElement('div');
+  row.className = 'package-row grid grid-cols-2 gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl';
+  row.innerHTML = `<input data-package-name placeholder="Nombre" value="${escapeHtml(item.nombre || '')}" class="px-2 py-1.5 border rounded-md text-sm"><input data-package-sessions type="number" min="2" placeholder="Sesiones" value="${item.sesiones || ''}" class="px-2 py-1.5 border rounded-md text-sm"><input data-package-price type="number" min="0" placeholder="Precio MXN" value="${item.precio ?? ''}" class="px-2 py-1.5 border rounded-md text-sm"><button type="button" class="package-remove text-red-600 text-sm">Quitar</button><input data-package-description placeholder="Condiciones opcionales" value="${escapeHtml(item.descripcion || '')}" class="col-span-2 px-2 py-1.5 border rounded-md text-sm">`;
+  row.querySelector('.package-remove').addEventListener('click', () => row.remove());
+  packageRows.appendChild(row);
+};
+const collectPackageRows = () => Array.from(packageRows.querySelectorAll('.package-row')).map((row) => ({ nombre: row.querySelector('[data-package-name]').value.trim(), sesiones: Number(row.querySelector('[data-package-sessions]').value), precio: Number(row.querySelector('[data-package-price]').value), descripcion: row.querySelector('[data-package-description]').value.trim() })).filter((item) => item.nombre && item.sesiones > 1 && Number.isFinite(item.precio));
+const syncPackagesEditor = () => { packageRows.hidden = !packagesEnabled.checked; addPackageButton.hidden = !packagesEnabled.checked; if(packagesEnabled.checked && !packageRows.children.length) addPackageRow(); };
+addPackageButton.addEventListener('click', () => addPackageRow());
+packagesEnabled.addEventListener('change', syncPackagesEditor);
 
 serviceImageInput.addEventListener('change', () => {
   const file = serviceImageInput.files?.[0];
