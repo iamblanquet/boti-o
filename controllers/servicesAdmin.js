@@ -5,6 +5,7 @@ const getSupabase = require('../config/supabase');
 const SERVICE_IMAGE_BUCKET = 'service-images';
 const IMAGE_TYPES = {
     'image/jpeg': 'jpg',
+    'image/jpg': 'jpg',
     'image/png': 'png',
     'image/webp': 'webp'
 };
@@ -80,7 +81,7 @@ const deleteCategory = async (req, res) => {
 const uploadServiceImage = async (req, res) => {
     try {
         const { dataUrl } = req.body || {};
-        const match = String(dataUrl || '').match(/^data:(image\/(?:jpeg|png|webp));base64,(.+)$/);
+        const match = String(dataUrl || '').match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,([A-Za-z0-9+/=\s]+)$/);
         if(!match) {
             return res.status(400).json({ error: 'Imagen invalida. Usa JPG, PNG o WEBP.' });
         }
@@ -88,9 +89,9 @@ const uploadServiceImage = async (req, res) => {
         const mimeType = match[1];
         const extension = IMAGE_TYPES[mimeType];
         const buffer = Buffer.from(match[2], 'base64');
-        const maxSize = 6 * 1024 * 1024;
+        const maxSize = 16 * 1024 * 1024;
         if(buffer.length > maxSize) {
-            return res.status(400).json({ error: 'La imagen supera 6 MB.' });
+            return res.status(400).json({ error: 'La imagen supera 16 MB.' });
         }
 
         const supabase = getSupabase();

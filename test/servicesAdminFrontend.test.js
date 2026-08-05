@@ -18,6 +18,7 @@ test('services admin persists the public URL returned by the image upload', () =
 
     assert.match(source, /return data\.url;/);
     assert.match(source, /\^https\?:\\\/\\\//i);
+    assert.match(source, /const escapeHtml =/);
     assert.doesNotMatch(source, /`\/mediaFiles\/\$\{file\}`/);
     assert.match(source, /serviceImageRemoved\s*\?\s*''/);
     assert.match(source, /imageFile \|\| serviceImageValue\.value \|\| currentService\?\.imagen/);
