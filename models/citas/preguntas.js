@@ -145,7 +145,7 @@ const sendAvailableTimeButtons = async (phoneNumber, data) => {
                 service: getServiceLabel(data),
                 hours: getBusinessHoursText()
             }));
-            return true;
+            return sendAvailableDayButtons(phoneNumber, data);
         }
 
         await sendListMessage(phoneNumber, {
