@@ -1,4 +1,4 @@
-import { fetchClientInsights, updateClientResponsible } from './api.js';
+import { fetchClientInsights, updateClientResponsible, updateClientData } from './api.js';
 import { DEFAULT_RESPONSIBLE, escapeHtml, normalize } from './formatters.js';
 import { renderAppointmentsModal, renderClientDetail, renderClientsTable } from './render.js';
 
@@ -107,6 +107,84 @@ const closeAppointmentsModal = () => {
   document.getElementById('appointmentsModal').classList.add('hidden');
 };
 
+const openEditClientModal = (phoneNumber) => {
+  const client = state.clients.find((item) => item.phoneNumber === phoneNumber);
+  if (!client) return;
+
+  document.getElementById('editClientPhone').value = client.phoneNumber;
+  document.getElementById('editClientName').value = client.name || '';
+  document.getElementById('editClientEmail').value = client.email || '';
+  document.getElementById('editBirthdayDay').value = client.birthdayDay || '';
+  document.getElementById('editBirthdayMonth').value = client.birthdayMonth || '';
+  document.getElementById('editClientCampaign').value = client.campaignId || '';
+  document.getElementById('editClientNotes').value = client.notes || '';
+
+  document.getElementById('editClientModal').classList.remove('hidden');
+};
+
+const closeEditClientModal = () => {
+  document.getElementById('editClientModal').classList.add('hidden');
+};
+
+const handleEditClientSubmit = async (event) => {
+  event.preventDefault();
+  const phoneNumber = document.getElementById('editClientPhone').value;
+  if (!phoneNumber) return;
+
+  const saveBtn = document.getElementById('saveEditClientBtn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Guardando...';
+
+  const name = document.getElementById('editClientName').value.trim() || null;
+  const email = document.getElementById('editClientEmail').value.trim() || null;
+  const dayRaw = document.getElementById('editBirthdayDay').value.trim();
+  const monthRaw = document.getElementById('editBirthdayMonth').value;
+  const campaignId = document.getElementById('editClientCampaign').value.trim() || null;
+  const notes = document.getElementById('editClientNotes').value.trim() || null;
+
+  const birthdayDay = dayRaw ? Number(dayRaw) : null;
+  const birthdayMonth = monthRaw ? Number(monthRaw) : null;
+
+  if ((birthdayDay && !birthdayMonth) || (!birthdayDay && birthdayMonth)) {
+    saveBtn.disabled = false;
+    saveBtn.textContent = 'Guardar cambios';
+    return window.showCustomAlert('Para guardar la fecha de cumpleaños debes seleccionar tanto el día como el mes.');
+  }
+
+  try {
+    const updatedClient = await updateClientData(phoneNumber, {
+      name,
+      email,
+      birthdayDay,
+      birthdayMonth,
+      campaignId,
+      notes
+    });
+
+    state.clients = state.clients.map((c) => (
+      c.phoneNumber === phoneNumber
+        ? {
+            ...c,
+            ...updatedClient,
+            birthday: updatedClient.birthday || (birthdayDay && birthdayMonth ? `${String(birthdayDay).padStart(2, '0')}/${String(birthdayMonth).padStart(2, '0')}` : null)
+          }
+        : c
+    ));
+
+    closeEditClientModal();
+    render();
+    if (window.showCustomAlert) {
+      window.showCustomAlert('Datos del cliente actualizados correctamente.');
+    }
+  } catch (error) {
+    console.error('Error al guardar cliente:', error);
+    window.showCustomAlert(error.message || 'No se pudieron actualizar los datos del cliente');
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = 'Guardar cambios';
+  }
+};
+
 const handleResponsibleChange = async (input) => {
   const phoneNumber = input.dataset.phone;
   const responsible = input.value.trim() || DEFAULT_RESPONSIBLE;
@@ -177,12 +255,10 @@ const bindEvents = () => {
     state.selectedPhone = selectButton.dataset.selectClient;
     render();
 
-    // START: MOBILE RESPONSIVE OPEN DRAWER
     const detailEl = document.getElementById('clientDetail');
     if (detailEl) {
       detailEl.classList.add('mobile-open');
     }
-    // END: MOBILE RESPONSIVE OPEN DRAWER
   });
 
   document.getElementById('clientsTableBody').addEventListener('change', (event) => {
@@ -199,7 +275,6 @@ const bindEvents = () => {
   });
 
   document.getElementById('clientDetail').addEventListener('click', (event) => {
-    // START: MOBILE RESPONSIVE CLOSE DRAWER
     const closeBtn = event.target.closest('#closeClientDetailBtn');
     if (closeBtn) {
       const detailEl = document.getElementById('clientDetail');
@@ -208,7 +283,12 @@ const bindEvents = () => {
       }
       return;
     }
-    // END: MOBILE RESPONSIVE CLOSE DRAWER
+
+    const editBtn = event.target.closest('[data-open-edit-client]');
+    if (editBtn) {
+      openEditClientModal(editBtn.dataset.openEditClient);
+      return;
+    }
 
     const appointmentsButton = event.target.closest('[data-open-appointments]');
     if (!appointmentsButton) return;
@@ -220,8 +300,18 @@ const bindEvents = () => {
     if (event.target.id === 'appointmentsModal') closeAppointmentsModal();
   });
 
+  document.getElementById('closeEditClientModal').addEventListener('click', closeEditClientModal);
+  document.getElementById('cancelEditClientBtn').addEventListener('click', closeEditClientModal);
+  document.getElementById('editClientForm').addEventListener('submit', handleEditClientSubmit);
+  document.getElementById('editClientModal').addEventListener('click', (event) => {
+    if (event.target.id === 'editClientModal') closeEditClientModal();
+  });
+
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeAppointmentsModal();
+    if (event.key === 'Escape') {
+      closeAppointmentsModal();
+      closeEditClientModal();
+    }
   });
 };
 

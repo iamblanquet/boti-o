@@ -162,7 +162,13 @@ export const renderClientDetail = (client) => {
       </div>
 
       <div class="border-b border-slate-100 p-4">
-        <h3 class="text-xs font-extrabold uppercase tracking-wide text-slate-400">Datos del cliente</h3>
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-extrabold uppercase tracking-wide text-slate-400">Datos del cliente</h3>
+          <button type="button" data-open-edit-client="${escapeHtml(client.phoneNumber)}" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-bold text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700">
+            <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+            Editar datos
+          </button>
+        </div>
         <div class="mt-3 grid gap-2">
           ${detailField('Correo', client.email)}
           ${detailField('Cumpleaños', client.birthday)}
