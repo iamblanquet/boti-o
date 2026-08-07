@@ -35,7 +35,7 @@ This project should stay simple:
 
 - One Node.js service.
 - Supabase as managed Postgres.
-- Redis optional for short-lived conversation state.
+- `StateStore` (Supabase `bot_state` + RAM memory) for short-lived conversation state.
 - Google Calendar and WhatsApp as external integrations.
 - Docker Compose for internal deployment.
 

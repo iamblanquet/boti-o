@@ -26,6 +26,7 @@ const readBackup = () => {
 }
 
 const writeBackup = (backup) => {
+    if (getSupabase()) return;
     try {
         fs.mkdirSync(BACKUP_DIR, { recursive: true });
         fs.writeFileSync(BACKUP_FILE, JSON.stringify(backup, null, 2));

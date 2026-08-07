@@ -21,7 +21,7 @@ flowchart TD
     K --> L[Guardar salida en chat y programar seguimiento si espera respuesta]
 ```
 
-La aplicación es un servicio Node.js/Express. WhatsApp es la entrada y salida; Supabase conserva datos del catálogo, chats, citas y controles. Redis/`StateStore` conserva estado temporal cuando está disponible.
+La aplicación es un servicio Node.js/Express. WhatsApp es la entrada y salida; Supabase conserva datos del catálogo, chats, citas y controles. `StateStore` conserva estado temporal en Supabase (`bot_state`) con fallback en memoria RAM.
 
 ## 2. Inicio de la aplicación
 
@@ -288,7 +288,7 @@ Los eventos de campaña también pueden registrar cita creada y cita confirmada 
 | Catálogo, categorías, precios, paquetes, beneficios y productos utilizados | Supabase (`services`, tablas relacionadas) | Consultas, catálogo, administración y base de conocimiento de IA. |
 | Mensajes y alertas de chat | `ChatStore` / Supabase | Dashboard y auditoría. |
 | Citas y flujos de cita | Almacenamiento de citas (Supabase con respaldo local) | Reserva, confirmación, reprogramación y recordatorios. |
-| Estado corto de conversación y herramientas IA | `StateStore`/Redis | Pasos guiados, contexto, debounce, nudges y herramientas activas. |
+| Estado corto de conversación y herramientas IA | `StateStore` (Supabase `bot_state` / RAM) | Pasos guiados, contexto, debounce, nudges y herramientas activas. |
 | Control humano | Supabase `conversation_controls`, con respaldo en memoria | Pausa del bot y flujo asistido. |
 | Seguimiento de servicios | `data/service_followups.json` | Oferta pendiente y recordatorio de servicio. |
 
@@ -298,7 +298,7 @@ Los eventos de campaña también pueden registrar cita creada y cita confirmada 
 | --- | --- |
 | Meta WhatsApp Cloud API | Recibir webhook y enviar mensajes. |
 | Supabase | Catálogo, chats, datos de clientes, controles y datos persistentes. |
-| Redis / StateStore | Estado de corta duración; el proyecto mantiene alternativas locales según módulo. |
+| StateStore | Estado de corta duración utilizando Supabase (`bot_state`) y `Map` en memoria RAM. |
 | Google Calendar | Disponibilidad, creación, actualización y cancelación de eventos. |
 | Gemini | IA principal de respuesta y clasificación. |
 | DeepSeek | Respaldo de la IA de respuesta. |

@@ -5,9 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const apiRouter = require('./routes/index');
-const { startAppointmentReminders } = require('./models/citas/recordatorios');
-const { startServiceFollowupReminders } = require('./models/serviceFollowup');
-const { startConversationNudgeScheduler } = require('./models/conversationNudgeService');
+const { startScheduler } = require('./services/schedulerOrchestrator');
 const { warmCalendarAgendaCache } = require('./controllers/calendarController');
 const { refreshSystemMessages } = require('./utils/systemMessageLoader');
 const { migrateLegacyServiceImages } = require('./models/serviceCatalogStore');
@@ -52,9 +50,7 @@ const server = http.Server(app);
 
 server.listen(port, ()=> {
     console.log(`Servidor listo en el puerto ${port}`);
-    startAppointmentReminders();
-    startServiceFollowupReminders();
-    startConversationNudgeScheduler();
+    startScheduler();
     refreshSystemMessages().catch((error) => console.log('No se pudo cargar configuracion de mensajes:', error.message));
     migrateLegacyServiceImages()
         .then(({ migrated, skipped }) => {
