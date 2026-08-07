@@ -52,7 +52,7 @@ const findAvailableSlotsForDate = async (data, limit = 9, options = {}) => {
     return slots;
 }
 
-const getCandidateBusinessDates = (now = new Date(), daysToCheck = 14) => {
+const getCandidateBusinessDates = (now = new Date(), daysToCheck = 30) => {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const days = [];
 
@@ -66,8 +66,8 @@ const getCandidateBusinessDates = (now = new Date(), daysToCheck = 14) => {
 }
 
 const findAvailableDaysThisWeek = async (data, options = {}) => {
-    const candidateDates = getCandidateBusinessDates(options.now, options.daysToCheck || 14);
-    const maxResults = options.maxResults || 6;
+    const candidateDates = getCandidateBusinessDates(options.now, options.daysToCheck || 30);
+    const maxResults = options.maxResults || 10;
     const appointments = options.appointments || await listActiveAppointments();
     const days = [];
 

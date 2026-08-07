@@ -44,16 +44,47 @@ const parseDateText = (text, now = new Date()) => {
     }
 
     const isoMatch = value.match(/\b(20\d{2})[-/](\d{1,2})[-/](\d{1,2})\b/);
-    if(isoMatch) return `${isoMatch[1]}-${pad(isoMatch[2])}-${pad(isoMatch[3])}`;
+    if(isoMatch) {
+        const parsedDate = new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]));
+        if(parsedDate < today) return null;
+        return `${isoMatch[1]}-${pad(isoMatch[2])}-${pad(isoMatch[3])}`;
+    }
 
     const slashMatch = value.match(/\b(\d{1,2})[/-](\d{1,2})(?:[/-](20\d{2}))?\b/);
     if(slashMatch) {
-        let year = Number(slashMatch[3] || now.getFullYear());
+        const year = Number(slashMatch[3] || now.getFullYear());
         const month = Number(slashMatch[2]);
         const day = Number(slashMatch[1]);
         const parsedDate = new Date(year, month - 1, day);
-        if(!slashMatch[3] && parsedDate < today) year += 1;
+        if(parsedDate < today) return null;
         return `${year}-${pad(month)}-${pad(day)}`;
+    }
+
+    const MONTHS_SPANISH = {
+        enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6,
+        julio: 7, agosto: 8, septiembre: 9, setiembre: 9, octubre: 10, noviembre: 11, diciembre: 12
+    };
+
+    const monthMatch = value.match(new RegExp(`\\b(\\d{1,2})\\s*(?:de\\s*)?(${Object.keys(MONTHS_SPANISH).join('|')})\\b`));
+    if(monthMatch) {
+        const day = Number(monthMatch[1]);
+        const month = MONTHS_SPANISH[monthMatch[2]];
+        const year = now.getFullYear();
+        const parsedDate = new Date(year, month - 1, day);
+        if(parsedDate < today) return null;
+        return `${year}-${pad(month)}-${pad(day)}`;
+    }
+
+    const singleDayMatch = value.match(/\b(?:el|dia|para\s+el)?\s*(\d{1,2})\b/);
+    if(singleDayMatch) {
+        const day = Number(singleDayMatch[1]);
+        if(day >= 1 && day <= 31) {
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const parsedDate = new Date(year, month - 1, day);
+            if(parsedDate < today) return null;
+            return `${year}-${pad(month)}-${pad(day)}`;
+        }
     }
 
     return null;
