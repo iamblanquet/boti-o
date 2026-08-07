@@ -48,7 +48,7 @@ const sendButtonGroups = async (phoneNumber, text, buttons) => {
     return true;
 }
 
-const sendListMessage = (phoneNumber, { body, button, sectionTitle, rows }) => Messages.sendMessage({
+const sendListMessage = (phoneNumber, { body, button, sectionTitle, rows, sections }) => Messages.sendMessage({
     phoneNumber,
     type: 'list',
     text: body,
@@ -57,7 +57,7 @@ const sendListMessage = (phoneNumber, { body, button, sectionTitle, rows }) => M
         body: { text: body },
         action: {
             button: truncateListText(button, 20),
-            sections: [{
+            sections: sections || [{
                 title: truncateListText(sectionTitle, 24),
                 rows
             }]

@@ -5,7 +5,7 @@ const ChatStore = require('./chatStore');
 const StateManager = require('./conversationStateManager');
 const ServicesRepository = require('./servicesRepository');
 const ResponseTemplates = require('./responseTemplates');
-const { sendButtonGroups, truncateListText } = require('./citas/mensajesWhatsapp');
+const { sendButtonGroups, sendListMessage, truncateListText } = require('./citas/mensajesWhatsapp');
 const { findAvailableDaysThisWeek } = require('./citas/disponibilidad');
 const { formatDayButtonTitle, getServiceLabel } = require('./citas/formato');
 const { saveFlow } = require('./citas/almacenamiento');
@@ -199,6 +199,47 @@ const sendOfferDecisionButtons = async (phoneNumber, service) => {
     if(!phoneNumber || !service?.id) return false;
 
     await saveOfferState(phoneNumber, service);
+
+    if (service.paquetes?.length > 0) {
+        const packageRows = service.paquetes.slice(0, 8).map((item) => ({
+            id: `package:${service.id}:${item.id}`,
+            title: truncateListText(item.nombre, 24),
+            description: truncateListText(`${item.sesiones} sesiones · ${ResponseTemplates.formatPrice(item.precio)}`, 72)
+        }));
+
+        const sections = [
+            {
+                title: 'Reserva individual',
+                rows: [
+                    {
+                        id: buildOfferActionPayload(OFFER_ACTIONS.APPOINTMENT, service.id),
+                        title: 'Agendar cita',
+                        description: 'Reservar 1 sesión individual'
+                    }
+                ]
+            },
+            {
+                title: 'Paquetes de sesiones',
+                rows: packageRows
+            },
+            {
+                title: 'Otras opciones',
+                rows: [
+                    {
+                        id: buildOfferActionPayload(OFFER_ACTIONS.DECLINE, service.id),
+                        title: 'No por el momento',
+                        description: 'Por ahora no deseo agendar'
+                    }
+                ]
+            }
+        ];
+
+        return sendListMessage(phoneNumber, {
+            body: '¿Qué te gustaría hacer con este servicio?',
+            button: 'Ver opciones',
+            sections
+        });
+    }
 
     return sendButtonGroups(
         phoneNumber,

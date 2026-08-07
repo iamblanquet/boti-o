@@ -176,19 +176,6 @@ const handlePayload = async (phoneNumber, messageText) => {
         if(service.imagen) {
             await Messages.sendLocalMedia(service.imagen, phoneNumber, { source: 'bot' });
         }
-        if(service.paquetes?.length) {
-            await sendList({
-                phoneNumber,
-                body: 'También contamos con paquetes de sesiones para este servicio.',
-                button: 'Ver paquetes',
-                sectionTitle: 'Paquetes',
-                rows: service.paquetes.slice(0, MAX_ROWS_PER_LIST).map((item) => ({
-                    id: `package:${service.id}:${item.id}`,
-                    title: truncate(item.nombre, 24),
-                    description: truncate(`${item.sesiones} sesiones · ${ResponseTemplates.formatPrice(item.precio)}`, 72)
-                }))
-            });
-        }
         await ServiceFollowup.sendOfferDecisionButtons(phoneNumber, service);
         return true;
     }
