@@ -110,15 +110,25 @@ const sendAvailableDayButtons = async (phoneNumber, data) => {
             return true;
         }
 
-        await sendListMessage(phoneNumber, {
-            body: getMessage('date_select_intro', { service: getServiceLabel(data) }),
-            button: 'Ver fechas',
-            sectionTitle: 'Fechas disponibles',
-            rows: days.map((day) => ({
-                id: `appt_date_${day.date}`,
-                title: day.title
-            }))
-        });
+        const MAX_ROWS_PER_LIST = 10;
+        const totalPages = Math.ceil(days.length / MAX_ROWS_PER_LIST);
+
+        for(let index = 0; index < days.length; index += MAX_ROWS_PER_LIST) {
+            const chunk = days.slice(index, index + MAX_ROWS_PER_LIST);
+            const page = Math.floor(index / MAX_ROWS_PER_LIST) + 1;
+
+            await sendListMessage(phoneNumber, {
+                body: page === 1
+                    ? getMessage('date_select_intro', { service: getServiceLabel(data) })
+                    : `Fechas adicionales disponibles para tu cita de ${getServiceLabel(data)}:`,
+                button: totalPages > 1 ? `Ver fechas ${page}/${totalPages}` : 'Ver fechas',
+                sectionTitle: totalPages > 1 ? `Fechas dispon. ${page}/${totalPages}` : 'Fechas disponibles',
+                rows: chunk.map((day) => ({
+                    id: `appt_date_${day.date}`,
+                    title: day.title
+                }))
+            });
+        }
         return true;
     } catch (error) {
         console.error('Available days error:', error.message);

@@ -67,7 +67,7 @@ const getCandidateBusinessDates = (now = new Date(), daysToCheck = 30) => {
 
 const findAvailableDaysThisWeek = async (data, options = {}) => {
     const candidateDates = getCandidateBusinessDates(options.now, options.daysToCheck || 30);
-    const maxResults = options.maxResults || 10;
+    const maxResults = options.maxResults || 30;
     const appointments = options.appointments || await listActiveAppointments();
     const days = [];
 
