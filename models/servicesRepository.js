@@ -216,7 +216,15 @@ const getActivePromotions = async (serviceId = null) => {
         }));
 }
 
-const buildKnowledgeBase = async () => {
+const cacheManager = require('../utils/cacheManager');
+const KNOWLEDGE_BASE_CACHE_KEY = 'ai_knowledge_base';
+
+const buildKnowledgeBase = async (forceRefresh = false) => {
+    if (!forceRefresh) {
+        const cached = cacheManager.get(KNOWLEDGE_BASE_CACHE_KEY);
+        if (cached) return cached;
+    }
+
     const catalog = await CatalogStore.loadCatalog();
     const categoryLines = catalog.categories.map((category) => `Categoria: ${category.nombre}`).join('\n');
     const serviceLines = catalog.services.map((service) => [
@@ -224,15 +232,18 @@ const buildKnowledgeBase = async () => {
         `Categoria: ${service.categoria}`,
         service.descripcion ? `Descripcion: ${service.descripcion}` : null,
         service.duracionMinutos ? `Duracion: ${service.duracionMinutos} minutos` : null,
-        service.precio ? `Precio desde: $${service.precio}` : null,
-        service.preciosPersonas?.length ? `Precios: ${service.preciosPersonas.map((item) => `${item.personas} persona${item.personas === 1 ? '' : 's'} $${item.precio}`).join(', ')}` : null,
+        service.precio ? `Precio base: $${service.precio}` : null,
+        service.preciosPersonas?.length ? `Precios: ${service.preciosPersonas.map((item) => `${item.personas} persona${item.personas === 1 ? '' : 's'} $${item.precio}${item.nota ? ` (${item.nota})` : ''}`).join(', ')}` : null,
+        service.paquetes?.length ? `Paquetes: ${service.paquetes.map((item) => `${item.nombre} (${item.sesiones} sesiones por $${item.precio})`).join(', ')}` : null,
         service.beneficios?.length ? `Beneficios: ${service.beneficios.join(', ')}` : null,
-        service.productos?.length ? `Productos utilizados: ${service.productos.join(', ')}` : null
+        service.productos?.length ? `Productos utilizados: ${service.productos.join(', ')}` : null,
+        service.cuidadosPrevios ? `Cuidados previos: ${service.cuidadosPrevios}` : null,
+        service.cuidadosPosteriores ? `Cuidados posteriores: ${service.cuidadosPosteriores}` : null
     ].filter(Boolean).join('\n')).join('\n\n');
     const faqLines = catalog.faqs.map((faq) => `P: ${faq.pregunta}\nR: ${faq.respuesta}`).join('\n\n');
 
-    return [
-        'Thessa - base de conocimiento',
+    const result = [
+        'Thessa Clinica Integral de Belleza y Salud - base de conocimiento',
         categoryLines,
         '',
         'Servicios',
@@ -241,6 +252,9 @@ const buildKnowledgeBase = async () => {
         'Preguntas frecuentes',
         faqLines
     ].join('\n').trim();
+
+    cacheManager.set(KNOWLEDGE_BASE_CACHE_KEY, result, 5 * 60 * 1000);
+    return result;
 }
 
 module.exports = {

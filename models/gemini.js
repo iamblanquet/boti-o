@@ -14,36 +14,7 @@ const ResponseGuard = require('../utils/responseGuard');
 
 
 const getRelevantKnowledgeBase = async (message) => {
-    const knowledgeBase = await ServicesRepository.buildKnowledgeBase();
-    const normalizedMessage = normalizeText(message);
-    const blocks = knowledgeBase.split(/\n\s*\n(?=P:)/);
-    const serviceKeywords = [
-        'thessa',
-        'servicios',
-        'facial',
-        'faciales',
-        'masaje',
-        'masajes',
-        'corporal',
-        'corporales',
-        'depilacion',
-        'depilaciones',
-        'laser',
-        'medicina estetica',
-        'fisioterapia'
-    ];
-    const matchedKeywords = serviceKeywords.filter((keyword) => normalizedMessage.includes(normalizeText(keyword)));
-    const messageTerms = normalizedMessage.split(/\s+/).filter((term) => term.length > 3);
-
-    if(!matchedKeywords.length && !messageTerms.length) return blocks.slice(0, 2).join('\n\n');
-
-    const selected = blocks.filter((block) => {
-        const normalizedBlock = normalizeText(block);
-        return matchedKeywords.some((keyword) => normalizedBlock.includes(normalizeText(keyword))) ||
-            messageTerms.some((term) => normalizedBlock.includes(term));
-    });
-
-    return (selected.length ? selected : blocks.slice(0, 2)).join('\n\n');
+    return ServicesRepository.buildKnowledgeBase();
 }
 
 const buildInstructions = (knowledgeBase, customerName = null) => [
@@ -118,7 +89,7 @@ const askGemini = async ({ instructions, history, message }) => {
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
     const response = await ai.models.generateContent({
         model,
         contents: buildGeminiPrompt(instructions, history, message)

@@ -4,6 +4,7 @@ const StateStore = require('./stateStore');
 const CustomerProfile = require('./customerProfile');
 const { buildSpaExpertToneInstructions, cleanWhatsappText } = require('./aiResponseStyle');
 const ResponseGuard = require('../utils/responseGuard');
+const ServicesRepository = require('./servicesRepository');
 
 let openai = null;
 
@@ -22,21 +23,29 @@ const chatgpt = async (message, phoneNumber, messageId) => {
     const gptContextKey = `${phoneNumber}:chatgpt:context`;
     try {
         const customerName = await CustomerProfile.getFirstName(phoneNumber);
+        const knowledgeBase = await ServicesRepository.buildKnowledgeBase();
         const context = await StateStore.get(gptContextKey);
         if(context) messagesGpt = JSON.parse(context);
         messagesGpt = messagesGpt.filter((item) => item.role !== 'system');
+        const systemPrompt = [
+            buildSpaExpertToneInstructions(customerName),
+            'Usa exclusivamente la informacion de la base de conocimiento para responder sobre servicios, precios e inclusiones.',
+            '',
+            'Base de conocimiento:',
+            knowledgeBase
+        ].join('\n');
         messagesGpt.unshift({
             role: 'system',
-            content: buildSpaExpertToneInstructions(customerName)
+            content: systemPrompt
         });
         messagesGpt.push({
             role: 'user',
             content: message
-        })
+        });
         const result = await getOpenAi().chat.completions.create({
             messages: messagesGpt,
-            model: 'gpt-3.5-turbo'
-        })
+            model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
+        });
         console.log('result', JSON.stringify(result));
         const responseText = cleanWhatsappText(result.choices[0].message.content);
         if(!await ResponseGuard.shouldSend({ phoneNumber })) {
