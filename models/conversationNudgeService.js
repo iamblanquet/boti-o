@@ -208,6 +208,8 @@ module.exports = {
     cancel,
     get,
     sendDueNudge,
+    checkDueNudges,
+    checkConversationNudges: checkDueNudges,
     startConversationNudgeScheduler,
     recordCustomerMessage,
     isWaitingForReply,
