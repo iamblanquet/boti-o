@@ -86,10 +86,10 @@ const buildClientInsight = async ({ client, conversation }) => {
         return start && start <= now;
     });
 
-    const valuedPastConfirmed = await Promise.all(pastConfirmed.map(getAppointmentValue));
-    const totalSpent = valuedPastConfirmed.reduce((sum, appointment) => sum + Number(appointment.estimatedAmount || 0), 0);
+    const valuedConfirmed = await Promise.all(confirmedAppointments.map(getAppointmentValue));
+    const totalSpent = valuedConfirmed.reduce((sum, appointment) => sum + Number(appointment.estimatedAmount || 0), 0);
     const lastAppointment = appointments[0] || null;
-    const lastVisit = pastConfirmed[0] || null;
+    const lastVisit = pastConfirmed[0] || confirmedAppointments[0] || null;
 
     return {
         phoneNumber,

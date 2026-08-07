@@ -147,10 +147,20 @@ const getSupabaseClientByPhone = async (phoneNumber) => {
     const supabase = getSupabaseClient();
     if (!supabase) return null;
 
+    const raw = String(phoneNumber || '').trim();
+    const clean = normalizePhoneNumber(raw);
+    const variants = Array.from(new Set([
+        raw,
+        clean,
+        clean.startsWith('52') && clean.length === 12 ? '521' + clean.slice(2) : null,
+        clean.startsWith('521') && clean.length === 13 ? '52' + clean.slice(3) : null
+    ].filter(Boolean)));
+
     const { data, error } = await supabase
         .from('clients')
         .select('*')
-        .eq('phone_number', phoneNumber)
+        .in('phone_number', variants)
+        .limit(1)
         .maybeSingle();
 
     if (error) {
