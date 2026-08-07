@@ -8,6 +8,7 @@
     "citas:migrar": "node scripts/migrarCitasASupabase.js",
     "configuracion:migrar": "node scripts/migrarConfiguracionBotASupabase.js",
     "clientes:migrar": "node scripts/migrarClientes.js",
+    "tratamientos:importar": "node scripts/importarTratamientosExcel.js",
     "build:css": "npx @tailwindcss/cli -i ./src/input.css -o ./public/tailwind.css",
     "dev:css": "npx @tailwindcss/cli -i ./src/input.css -o ./public/tailwind.css --watch",
     "test": "node --test"
@@ -26,7 +27,8 @@
     "form-data": "^4.0.6",
     "googleapis": "^172.0.0",
     "openai": "^4.26.1",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.0",
