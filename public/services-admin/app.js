@@ -362,18 +362,23 @@ const closeConfirmDialog = (value) => {
   if (resolve) resolve(value);
 };
 
-const confirmCanvasDialog = ({ title, message, confirmLabel = 'Aceptar', cancelLabel = 'Cancelar', danger = false }) => new Promise((resolve) => {
-  confirmState.open = true;
-  confirmState.title = title;
-  confirmState.message = message;
-  confirmState.confirmLabel = confirmLabel;
-  confirmState.cancelLabel = cancelLabel;
-  confirmState.danger = danger;
-  confirmState.resolve = resolve;
-  confirmOverlay.classList.add('open');
-  confirmOverlay.setAttribute('aria-hidden', 'false');
-  resizeConfirmCanvas();
-});
+const confirmCanvasDialog = ({ title, message, confirmLabel = 'Aceptar', cancelLabel = 'Cancelar', danger = false }) => {
+  if (typeof window.showCustomConfirm === 'function') {
+    return window.showCustomConfirm(message, title, { confirmText: confirmLabel, cancelText: cancelLabel, danger });
+  }
+  return new Promise((resolve) => {
+    confirmState.open = true;
+    confirmState.title = title;
+    confirmState.message = message;
+    confirmState.confirmLabel = confirmLabel;
+    confirmState.cancelLabel = cancelLabel;
+    confirmState.danger = danger;
+    confirmState.resolve = resolve;
+    confirmOverlay.classList.add('open');
+    confirmOverlay.setAttribute('aria-hidden', 'false');
+    resizeConfirmCanvas();
+  });
+};
 
 const addHitbox = (box) => {
   state.hitboxes.push(box);
