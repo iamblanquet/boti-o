@@ -212,8 +212,11 @@ const detectWithGemini = async (message) => {
     const ai = getGemini();
     if(!ai) return null;
 
+    let model = process.env.GEMINI_INTENT_MODEL || process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+    if (!model || model.includes('2.5')) model = 'gemini-2.0-flash';
+
     const response = await ai.models.generateContent({
-        model: process.env.GEMINI_INTENT_MODEL || process.env.GEMINI_MODEL || 'gemini-2.0-flash',
+        model,
         contents: buildPrompt(message)
     });
 

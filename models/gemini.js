@@ -89,7 +89,8 @@ const askGemini = async ({ instructions, history, message }) => {
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+    let model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+    if (!model || model.includes('2.5')) model = 'gemini-2.0-flash';
     const response = await ai.models.generateContent({
         model,
         contents: buildGeminiPrompt(instructions, history, message)
