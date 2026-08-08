@@ -1,5 +1,0 @@
-◇ injected env (26) from .env // tip: ⌘ enable debugging { debug: true }
-MySQL no configurado. El bot funcionara sin guardar clientes.
-Servidor listo en el puerto 3000
-Recordatorios de citas activos cada 60000ms
-Seguimiento de servicios activo cada 60000ms

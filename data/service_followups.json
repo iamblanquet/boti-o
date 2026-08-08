@@ -1,1122 +1,398 @@
 {
-  "529811695579": {
-    "phoneNumber": "529811695579",
+  "52199900000041786034139049": {
+    "phoneNumber": "52199900000041786034139049",
     "service": {
-      "id": "depilacion-laser-contorno-bikini",
-      "nombre": "Depilación Láser - Contorno Bikini",
-      "duracionMinutos": 35,
-      "precio": 450
-    },
-    "status": "appointment_started",
-    "offeredAt": "2026-07-01T17:50:59.028Z",
-    "reminderDueAt": "2026-07-01T19:50:59.028Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-07-01T17:51:03.255Z"
-  },
-  "5219990000001": {
-    "phoneNumber": "5219990000001",
-    "service": {
-      "id": "depilacion-laser-abdomen-completo",
-      "nombre": "Depilación Láser - Abdomen Completo",
-      "duracionMinutos": 35,
-      "precio": 450
-    },
-    "status": "expired",
-    "offeredAt": "2026-06-17T19:52:55.004Z",
-    "reminderDueAt": "2026-06-17T21:52:55.004Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-18T15:46:28.791Z"
-  },
-  "529811398836": {
-    "phoneNumber": "529811398836",
-    "service": {
-      "id": "masaje-con-piedras-calientes",
-      "nombre": "Masaje con Piedras Calientes",
-      "duracionMinutos": 50,
-      "precio": 800
-    },
-    "status": "appointment_started",
-    "offeredAt": "2026-06-24T20:02:56.086Z",
-    "reminderDueAt": "2026-06-24T22:02:56.086Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T20:03:07.704Z"
-  },
-  "5219990000004": {
-    "phoneNumber": "5219990000004",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-18T17:50:24.363Z",
-    "reminderDueAt": "2026-06-18T19:50:24.363Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-18T17:50:53.603Z"
-  },
-  "52199900000041781805080980": {
-    "phoneNumber": "52199900000041781805080980",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-18T17:51:21.009Z",
-    "reminderDueAt": "2026-06-18T19:51:21.009Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-18T17:51:21.014Z"
-  },
-  "52199900000041781805277982": {
-    "phoneNumber": "52199900000041781805277982",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-18T17:54:38.005Z",
-    "reminderDueAt": "2026-06-18T19:54:38.005Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-18T17:54:38.010Z"
-  },
-  "52199900000041781807707621": {
-    "phoneNumber": "52199900000041781807707621",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-18T18:35:07.647Z",
-    "reminderDueAt": "2026-06-18T20:35:07.647Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-18T18:35:07.656Z"
-  },
-  "52199900000041781811013891": {
-    "phoneNumber": "52199900000041781811013891",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-18T19:30:13.917Z",
-    "reminderDueAt": "2026-06-18T21:30:13.917Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-18T19:30:13.922Z"
-  },
-  "52199900000041781811063902": {
-    "phoneNumber": "52199900000041781811063902",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-18T19:31:03.921Z",
-    "reminderDueAt": "2026-06-18T21:31:03.921Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-18T19:31:03.925Z"
-  },
-  "529811057181": {
-    "phoneNumber": "529811057181",
-    "service": {
-      "id": "dermafacial",
-      "nombre": "Dermafacial",
-      "duracionMinutos": 60,
-      "precio": 880
-    },
-    "status": "appointment_started",
-    "offeredAt": "2026-06-18T21:02:12.390Z",
-    "reminderDueAt": "2026-06-18T23:02:12.390Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-18T21:02:58.854Z"
-  },
-  "52199900000041781968925140": {
-    "phoneNumber": "52199900000041781968925140",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T15:22:05.161Z",
-    "reminderDueAt": "2026-06-20T17:22:05.161Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T15:22:05.169Z"
-  },
-  "52199900000041781980072808": {
-    "phoneNumber": "52199900000041781980072808",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T18:27:52.844Z",
-    "reminderDueAt": "2026-06-20T20:27:52.844Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T18:27:52.851Z"
-  },
-  "52199900000041781980616425": {
-    "phoneNumber": "52199900000041781980616425",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T18:36:56.463Z",
-    "reminderDueAt": "2026-06-20T20:36:56.463Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T18:36:56.472Z"
-  },
-  "52199900000041781986893015": {
-    "phoneNumber": "52199900000041781986893015",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T20:21:33.114Z",
-    "reminderDueAt": "2026-06-20T22:21:33.114Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T20:21:33.132Z"
-  },
-  "52199900000041781987408251": {
-    "phoneNumber": "52199900000041781987408251",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T20:30:08.281Z",
-    "reminderDueAt": "2026-06-20T22:30:08.281Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T20:30:08.289Z"
-  },
-  "52199900000041781988098950": {
-    "phoneNumber": "52199900000041781988098950",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T20:41:38.991Z",
-    "reminderDueAt": "2026-06-20T22:41:38.991Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T20:41:39.011Z"
-  },
-  "52199900000041781988399230": {
-    "phoneNumber": "52199900000041781988399230",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T20:46:39.278Z",
-    "reminderDueAt": "2026-06-20T22:46:39.278Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T20:46:39.287Z"
-  },
-  "52199900000041781988676597": {
-    "phoneNumber": "52199900000041781988676597",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T20:51:16.632Z",
-    "reminderDueAt": "2026-06-20T22:51:16.632Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T20:51:16.637Z"
-  },
-  "52199900000041781988729431": {
-    "phoneNumber": "52199900000041781988729431",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-20T20:52:09.453Z",
-    "reminderDueAt": "2026-06-20T22:52:09.453Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-20T20:52:09.460Z"
-  },
-  "52199900000041782139200009": {
-    "phoneNumber": "52199900000041782139200009",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T14:40:00.034Z",
-    "reminderDueAt": "2026-06-22T16:40:00.034Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T14:40:00.040Z"
-  },
-  "52199900000041782140476735": {
-    "phoneNumber": "52199900000041782140476735",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T15:01:16.752Z",
-    "reminderDueAt": "2026-06-22T17:01:16.752Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T15:01:16.758Z"
-  },
-  "52199900000041782141640066": {
-    "phoneNumber": "52199900000041782141640066",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T15:20:40.101Z",
-    "reminderDueAt": "2026-06-22T17:20:40.101Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T15:20:40.110Z"
-  },
-  "52199900000041782142390430": {
-    "phoneNumber": "52199900000041782142390430",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T15:33:10.455Z",
-    "reminderDueAt": "2026-06-22T17:33:10.455Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T15:33:10.461Z"
-  },
-  "52199900000041782142633508": {
-    "phoneNumber": "52199900000041782142633508",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T15:37:13.519Z",
-    "reminderDueAt": "2026-06-22T17:37:13.519Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T15:37:13.522Z"
-  },
-  "52199900000041782142849318": {
-    "phoneNumber": "52199900000041782142849318",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T15:40:49.339Z",
-    "reminderDueAt": "2026-06-22T17:40:49.339Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T15:40:49.345Z"
-  },
-  "52199900000041782150114277": {
-    "phoneNumber": "52199900000041782150114277",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T17:41:54.399Z",
-    "reminderDueAt": "2026-06-22T19:41:54.399Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T17:41:54.514Z"
-  },
-  "52199900000041782150422188": {
-    "phoneNumber": "52199900000041782150422188",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T17:47:02.232Z",
-    "reminderDueAt": "2026-06-22T19:47:02.232Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T17:47:02.263Z"
-  },
-  "52199900000041782150569054": {
-    "phoneNumber": "52199900000041782150569054",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T17:49:29.180Z",
-    "reminderDueAt": "2026-06-22T19:49:29.180Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T17:49:29.188Z"
-  },
-  "52199900000041782152406865": {
-    "phoneNumber": "52199900000041782152406865",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T18:20:06.893Z",
-    "reminderDueAt": "2026-06-22T20:20:06.893Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T18:20:06.901Z"
-  },
-  "52199900000041782152989791": {
-    "phoneNumber": "52199900000041782152989791",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T18:29:49.997Z",
-    "reminderDueAt": "2026-06-22T20:29:49.997Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T18:29:50.036Z"
-  },
-  "52199900000041782153178311": {
-    "phoneNumber": "52199900000041782153178311",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T18:32:58.402Z",
-    "reminderDueAt": "2026-06-22T20:32:58.402Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T18:32:58.416Z"
-  },
-  "52199900000041782155561042": {
-    "phoneNumber": "52199900000041782155561042",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T19:12:41.333Z",
-    "reminderDueAt": "2026-06-22T21:12:41.333Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T19:12:41.408Z"
-  },
-  "52199900000041782157922396": {
-    "phoneNumber": "52199900000041782157922396",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T19:52:02.511Z",
-    "reminderDueAt": "2026-06-22T21:52:02.511Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T19:52:02.518Z"
-  },
-  "52199900000041782158425044": {
-    "phoneNumber": "52199900000041782158425044",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T20:00:25.065Z",
-    "reminderDueAt": "2026-06-22T22:00:25.065Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T20:00:25.072Z"
-  },
-  "52199900000041782158727587": {
-    "phoneNumber": "52199900000041782158727587",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T20:05:27.753Z",
-    "reminderDueAt": "2026-06-22T22:05:27.753Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T20:05:27.759Z"
-  },
-  "52199900000041782160689689": {
-    "phoneNumber": "52199900000041782160689689",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T20:38:09.730Z",
-    "reminderDueAt": "2026-06-22T22:38:09.730Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T20:38:09.739Z"
-  },
-  "52199900000041782162371398": {
-    "phoneNumber": "52199900000041782162371398",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T21:06:11.438Z",
-    "reminderDueAt": "2026-06-22T23:06:11.438Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T21:06:11.446Z"
-  },
-  "52199900000041782163772283": {
-    "phoneNumber": "52199900000041782163772283",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T21:29:32.319Z",
-    "reminderDueAt": "2026-06-22T23:29:32.319Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T21:29:32.328Z"
-  },
-  "52199900000041782165558104": {
-    "phoneNumber": "52199900000041782165558104",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T21:59:18.164Z",
-    "reminderDueAt": "2026-06-22T23:59:18.164Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T21:59:18.255Z"
-  },
-  "52199900000041782166382078": {
-    "phoneNumber": "52199900000041782166382078",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T22:13:02.101Z",
-    "reminderDueAt": "2026-06-23T00:13:02.101Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T22:13:02.111Z"
-  },
-  "52199900000041782167919881": {
-    "phoneNumber": "52199900000041782167919881",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T22:38:39.928Z",
-    "reminderDueAt": "2026-06-23T00:38:39.928Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T22:38:39.936Z"
-  },
-  "52199900000041782168175738": {
-    "phoneNumber": "52199900000041782168175738",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-22T22:42:55.770Z",
-    "reminderDueAt": "2026-06-23T00:42:55.770Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-22T22:42:55.783Z"
-  },
-  "52199900000041782226751025": {
-    "phoneNumber": "52199900000041782226751025",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-23T14:59:11.357Z",
-    "reminderDueAt": "2026-06-23T16:59:11.357Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-23T14:59:11.382Z"
-  },
-  "52199900000041782245134604": {
-    "phoneNumber": "52199900000041782245134604",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-23T20:05:34.628Z",
-    "reminderDueAt": "2026-06-23T22:05:34.628Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-23T20:05:34.634Z"
-  },
-  "52199900000041782245358310": {
-    "phoneNumber": "52199900000041782245358310",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-23T20:09:18.352Z",
-    "reminderDueAt": "2026-06-23T22:09:18.352Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-23T20:09:18.363Z"
-  },
-  "52199900000041782245923812": {
-    "phoneNumber": "52199900000041782245923812",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-23T20:18:43.890Z",
-    "reminderDueAt": "2026-06-23T22:18:43.890Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-23T20:18:43.927Z"
-  },
-  "52199900000041782246329449": {
-    "phoneNumber": "52199900000041782246329449",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-23T20:25:29.487Z",
-    "reminderDueAt": "2026-06-23T22:25:29.487Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-23T20:25:29.497Z"
-  },
-  "52199900000041782247039111": {
-    "phoneNumber": "52199900000041782247039111",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-23T20:37:19.177Z",
-    "reminderDueAt": "2026-06-23T22:37:19.177Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-23T20:37:19.207Z"
-  },
-  "52199900000041782247580036": {
-    "phoneNumber": "52199900000041782247580036",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-23T20:46:20.082Z",
-    "reminderDueAt": "2026-06-23T22:46:20.082Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-23T20:46:20.090Z"
-  },
-  "52199900000041782248551395": {
-    "phoneNumber": "52199900000041782248551395",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-23T21:02:31.432Z",
-    "reminderDueAt": "2026-06-23T23:02:31.432Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-23T21:02:31.439Z"
-  },
-  "52199900000041782317069065": {
-    "phoneNumber": "52199900000041782317069065",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-24T16:04:29.089Z",
-    "reminderDueAt": "2026-06-24T18:04:29.089Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T16:04:29.097Z"
-  },
-  "52199900000041782317177442": {
-    "phoneNumber": "52199900000041782317177442",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-24T16:06:17.506Z",
-    "reminderDueAt": "2026-06-24T18:06:17.506Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T16:06:17.516Z"
-  },
-  "52199900000041782321014979": {
-    "phoneNumber": "52199900000041782321014979",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-24T17:10:15.004Z",
-    "reminderDueAt": "2026-06-24T19:10:15.004Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T17:10:15.010Z"
-  },
-  "52199900000041782321815451": {
-    "phoneNumber": "52199900000041782321815451",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-24T17:23:35.492Z",
-    "reminderDueAt": "2026-06-24T19:23:35.492Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T17:23:35.501Z"
-  },
-  "52199900000041782333821843": {
-    "phoneNumber": "52199900000041782333821843",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-24T20:43:42.054Z",
-    "reminderDueAt": "2026-06-24T22:43:42.054Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T20:43:42.141Z"
-  },
-  "52199900000041782335453344": {
-    "phoneNumber": "52199900000041782335453344",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-24T21:10:53.403Z",
-    "reminderDueAt": "2026-06-24T23:10:53.403Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T21:10:53.413Z"
-  },
-  "52199900000041782335513912": {
-    "phoneNumber": "52199900000041782335513912",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-24T21:11:53.939Z",
-    "reminderDueAt": "2026-06-24T23:11:53.939Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T21:11:53.946Z"
-  },
-  "52199900000041782336457448": {
-    "phoneNumber": "52199900000041782336457448",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-24T21:27:37.515Z",
-    "reminderDueAt": "2026-06-24T23:27:37.515Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-24T21:27:37.528Z"
-  },
-  "52199900000041782496491145": {
-    "phoneNumber": "52199900000041782496491145",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-26T17:54:51.247Z",
-    "reminderDueAt": "2026-06-26T19:54:51.247Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-26T17:54:51.274Z"
-  },
-  "52199900000041782498724972": {
-    "phoneNumber": "52199900000041782498724972",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-26T18:32:05.037Z",
-    "reminderDueAt": "2026-06-26T20:32:05.037Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-26T18:32:05.123Z"
-  },
-  "52199900000041782499485152": {
-    "phoneNumber": "52199900000041782499485152",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-26T18:44:45.239Z",
-    "reminderDueAt": "2026-06-26T20:44:45.239Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-26T18:44:45.256Z"
-  },
-  "52199900000041782499658318": {
-    "phoneNumber": "52199900000041782499658318",
-    "service": {
-      "id": "depilacion-laser-manos",
-      "nombre": "Depilación Láser - Manos",
-      "duracionMinutos": 25,
-      "precio": 250
-    },
-    "status": "objection_asked",
-    "offeredAt": "2026-06-26T18:47:38.413Z",
-    "reminderDueAt": "2026-06-26T20:47:38.413Z",
-    "reminderSentAt": null,
-    "updatedAt": "2026-06-26T18:47:38.450Z"
-  },
-  "52199900000041782499989752": {
-    "phoneNumber": "52199900000041782499989752",
-    "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-06-26T18:53:09.819Z",
-    "reminderDueAt": "2026-06-26T20:53:09.819Z",
+    "offeredAt": "2026-08-06T16:35:39.074Z",
+    "reminderDueAt": "2026-08-06T18:35:39.074Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-06-26T18:53:09.829Z"
+    "updatedAt": "2026-08-06T16:35:39.080Z"
   },
-  "52199900000041782500399735": {
-    "phoneNumber": "52199900000041782500399735",
+  "52199900000041786114372603": {
+    "phoneNumber": "52199900000041786114372603",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-06-26T18:59:59.847Z",
-    "reminderDueAt": "2026-06-26T20:59:59.847Z",
+    "offeredAt": "2026-08-07T14:52:52.633Z",
+    "reminderDueAt": "2026-08-07T16:52:52.633Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-06-26T18:59:59.880Z"
+    "updatedAt": "2026-08-07T14:52:52.648Z"
   },
-  "52199900000041782500826226": {
-    "phoneNumber": "52199900000041782500826226",
+  "52199900000041786114461209": {
+    "phoneNumber": "52199900000041786114461209",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-06-26T19:07:06.303Z",
-    "reminderDueAt": "2026-06-26T21:07:06.303Z",
+    "offeredAt": "2026-08-07T14:54:21.235Z",
+    "reminderDueAt": "2026-08-07T16:54:21.235Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-06-26T19:07:06.310Z"
+    "updatedAt": "2026-08-07T14:54:21.241Z"
   },
-  "52199900000041782501398502": {
-    "phoneNumber": "52199900000041782501398502",
+  "52199900000041786114506688": {
+    "phoneNumber": "52199900000041786114506688",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-06-26T19:16:38.584Z",
-    "reminderDueAt": "2026-06-26T21:16:38.584Z",
+    "offeredAt": "2026-08-07T14:55:06.707Z",
+    "reminderDueAt": "2026-08-07T16:55:06.707Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-06-26T19:16:38.597Z"
+    "updatedAt": "2026-08-07T14:55:06.713Z"
   },
-  "52199900000041782917395505": {
-    "phoneNumber": "52199900000041782917395505",
+  "52199900000041786115035456": {
+    "phoneNumber": "52199900000041786115035456",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T14:49:55.533Z",
-    "reminderDueAt": "2026-07-01T16:49:55.533Z",
+    "offeredAt": "2026-08-07T15:03:55.478Z",
+    "reminderDueAt": "2026-08-07T17:03:55.478Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T14:49:55.539Z"
+    "updatedAt": "2026-08-07T15:03:55.484Z"
   },
-  "52199900000041782917929674": {
-    "phoneNumber": "52199900000041782917929674",
+  "52199900000041786115426686": {
+    "phoneNumber": "52199900000041786115426686",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T14:58:49.703Z",
-    "reminderDueAt": "2026-07-01T16:58:49.703Z",
+    "offeredAt": "2026-08-07T15:10:26.721Z",
+    "reminderDueAt": "2026-08-07T17:10:26.721Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T14:58:49.710Z"
+    "updatedAt": "2026-08-07T15:10:26.730Z"
   },
-  "52199900000041782918254628": {
-    "phoneNumber": "52199900000041782918254628",
+  "52199900000041786116680806": {
+    "phoneNumber": "52199900000041786116680806",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T15:04:14.659Z",
-    "reminderDueAt": "2026-07-01T17:04:14.659Z",
+    "offeredAt": "2026-08-07T15:31:20.823Z",
+    "reminderDueAt": "2026-08-07T17:31:20.823Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T15:04:14.663Z"
+    "updatedAt": "2026-08-07T15:31:20.829Z"
   },
-  "52199900000041782921091247": {
-    "phoneNumber": "52199900000041782921091247",
+  "52199900000041786117466137": {
+    "phoneNumber": "52199900000041786117466137",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T15:51:31.298Z",
-    "reminderDueAt": "2026-07-01T17:51:31.298Z",
+    "offeredAt": "2026-08-07T15:44:26.155Z",
+    "reminderDueAt": "2026-08-07T17:44:26.155Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T15:51:31.331Z"
+    "updatedAt": "2026-08-07T15:44:26.160Z"
   },
-  "52199900000041782922035721": {
-    "phoneNumber": "52199900000041782922035721",
+  "52199900000041786119268408": {
+    "phoneNumber": "52199900000041786119268408",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T16:07:15.739Z",
-    "reminderDueAt": "2026-07-01T18:07:15.739Z",
+    "offeredAt": "2026-08-07T16:14:28.466Z",
+    "reminderDueAt": "2026-08-07T18:14:28.466Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T16:07:15.744Z"
+    "updatedAt": "2026-08-07T16:14:28.473Z"
   },
-  "52199900000041782922530807": {
-    "phoneNumber": "52199900000041782922530807",
+  "52199900000041786123152841": {
+    "phoneNumber": "52199900000041786123152841",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T16:15:30.830Z",
-    "reminderDueAt": "2026-07-01T18:15:30.830Z",
+    "offeredAt": "2026-08-07T17:19:12.859Z",
+    "reminderDueAt": "2026-08-07T19:19:12.859Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T16:15:30.839Z"
+    "updatedAt": "2026-08-07T17:19:12.864Z"
   },
-  "52199900000041782922676461": {
-    "phoneNumber": "52199900000041782922676461",
+  "52199900000041786123711834": {
+    "phoneNumber": "52199900000041786123711834",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T16:17:56.484Z",
-    "reminderDueAt": "2026-07-01T18:17:56.484Z",
+    "offeredAt": "2026-08-07T17:28:31.877Z",
+    "reminderDueAt": "2026-08-07T19:28:31.877Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T16:17:56.492Z"
+    "updatedAt": "2026-08-07T17:28:31.884Z"
   },
-  "52199900000041782922819045": {
-    "phoneNumber": "52199900000041782922819045",
+  "52199900000041786124720378": {
+    "phoneNumber": "52199900000041786124720378",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T16:20:19.069Z",
-    "reminderDueAt": "2026-07-01T18:20:19.069Z",
+    "offeredAt": "2026-08-07T17:45:20.394Z",
+    "reminderDueAt": "2026-08-07T19:45:20.394Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T16:20:19.075Z"
+    "updatedAt": "2026-08-07T17:45:20.398Z"
   },
-  "52199900000041782926357550": {
-    "phoneNumber": "52199900000041782926357550",
+  "52199900000041786125867804": {
+    "phoneNumber": "52199900000041786125867804",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T17:19:17.567Z",
-    "reminderDueAt": "2026-07-01T19:19:17.567Z",
+    "offeredAt": "2026-08-07T18:04:27.824Z",
+    "reminderDueAt": "2026-08-07T20:04:27.824Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T17:19:17.571Z"
+    "updatedAt": "2026-08-07T18:04:27.829Z"
   },
-  "52199900000041782928174461": {
-    "phoneNumber": "52199900000041782928174461",
+  "52199900000041786127949523": {
+    "phoneNumber": "52199900000041786127949523",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T17:49:34.482Z",
-    "reminderDueAt": "2026-07-01T19:49:34.482Z",
+    "offeredAt": "2026-08-07T18:39:09.543Z",
+    "reminderDueAt": "2026-08-07T20:39:09.543Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T17:49:34.488Z"
+    "updatedAt": "2026-08-07T18:39:09.548Z"
   },
-  "52199900000041782928760438": {
-    "phoneNumber": "52199900000041782928760438",
+  "52199900000041786133383673": {
+    "phoneNumber": "52199900000041786133383673",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T17:59:20.457Z",
-    "reminderDueAt": "2026-07-01T19:59:20.457Z",
+    "offeredAt": "2026-08-07T20:09:43.698Z",
+    "reminderDueAt": "2026-08-07T22:09:43.698Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T17:59:20.461Z"
+    "updatedAt": "2026-08-07T20:09:43.706Z"
   },
-  "52199900000041782929213572": {
-    "phoneNumber": "52199900000041782929213572",
+  "52199900000041786133596234": {
+    "phoneNumber": "52199900000041786133596234",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T18:06:53.592Z",
-    "reminderDueAt": "2026-07-01T20:06:53.592Z",
+    "offeredAt": "2026-08-07T20:13:16.250Z",
+    "reminderDueAt": "2026-08-07T22:13:16.250Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T18:06:53.599Z"
+    "updatedAt": "2026-08-07T20:13:16.256Z"
   },
-  "52199900000041782932090949": {
-    "phoneNumber": "52199900000041782932090949",
+  "52199900000041786199696870": {
+    "phoneNumber": "52199900000041786199696870",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T18:54:50.977Z",
-    "reminderDueAt": "2026-07-01T20:54:50.977Z",
+    "offeredAt": "2026-08-08T14:34:56.886Z",
+    "reminderDueAt": "2026-08-08T16:34:56.886Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T18:54:50.982Z"
+    "updatedAt": "2026-08-08T14:34:56.890Z"
   },
-  "52199900000041782932579903": {
-    "phoneNumber": "52199900000041782932579903",
+  "52199900000041786200317303": {
+    "phoneNumber": "52199900000041786200317303",
     "service": {
       "id": "depilacion-laser-manos",
       "nombre": "Depilación Láser - Manos",
       "duracionMinutos": 25,
-      "precio": 250
+      "precio": 250,
+      "preciosPersonas": [
+        {
+          "personas": 1,
+          "precio": 250,
+          "exclusivo": false,
+          "nota": ""
+        }
+      ]
     },
     "status": "objection_asked",
-    "offeredAt": "2026-07-01T19:02:59.930Z",
-    "reminderDueAt": "2026-07-01T21:02:59.930Z",
+    "offeredAt": "2026-08-08T14:45:17.315Z",
+    "reminderDueAt": "2026-08-08T16:45:17.315Z",
     "reminderSentAt": null,
-    "updatedAt": "2026-07-01T19:02:59.936Z"
+    "updatedAt": "2026-08-08T14:45:17.319Z"
   }
 }
