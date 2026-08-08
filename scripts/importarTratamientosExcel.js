@@ -2,9 +2,17 @@ require('dotenv').config();
 const XLSX = require('xlsx');
 const CatalogStore = require('../models/serviceCatalogStore');
 
-if (process.argv[2] && process.argv[3] && !process.env.SUPABASE_URL) {
+if (process.argv[2] && process.argv[3]) {
     process.env.SUPABASE_URL = process.argv[2];
     process.env.SUPABASE_SERVICE_ROLE_KEY = process.argv[3];
+}
+
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error('\n❌ Faltan las credenciales de Supabase (SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY) en tu archivo .env local.');
+    console.error('Para ejecutar la importación localmente, agrega ambas claves a tu archivo .env o ejecuta el comando pasando las credenciales:');
+    console.error('\n👉 Ejemplo:');
+    console.error('   node scripts/importarTratamientosExcel.js "https://tu-proyecto.supabase.co" "tu-service-role-key"\n');
+    process.exit(1);
 }
 
 const excelPath = 'C:\\Users\\Soporte TI Junior\\Desktop\\TRATAMIENTOS THESSA (2).xlsx';

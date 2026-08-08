@@ -132,6 +132,28 @@ const handleMessage = async (phoneNumber, message, suppliedFlow = null) => {
     }
 
     if(flow.waitingFor === STEPS.SELECT_DATE) {
+        const datesPageMatch = String(message || '').match(/^appt_dates_page_(\d+)$/);
+        if(datesPageMatch) {
+            const page = Number(datesPageMatch[1]);
+            flow.data.datesPage = page;
+            await saveFlow(phoneNumber, flow);
+            return sendAvailableDayButtons(
+                phoneNumber,
+                { ...flow.data, appointmentId: flow.data.appointmentId },
+                page
+            );
+        }
+        const normalizedMsg = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if(/(ver\s+)?m[a]s\s+fechas|(otras?\s+fechas)/.test(normalizedMsg)) {
+            const page = (flow.data?.datesPage || 1) + 1;
+            flow.data.datesPage = page;
+            await saveFlow(phoneNumber, flow);
+            return sendAvailableDayButtons(
+                phoneNumber,
+                { ...flow.data, appointmentId: flow.data.appointmentId },
+                page
+            );
+        }
         const dateMatch = String(message || '').match(/^appt_date_(\d{4}-\d{2}-\d{2})$/);
         return handleDate(phoneNumber, flow, dateMatch?.[1]);
     }

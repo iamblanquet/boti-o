@@ -251,6 +251,9 @@ const formatPayloadText = (text) => {
   if (str.startsWith('appt_cancel_')) {
     return 'Cancelar Cita';
   }
+  if (str.startsWith('appt_dates_page_')) {
+    return 'Ver más fechas disponibles';
+  }
 
   // Date payloads (appt_date_YYYY-MM-DD)
   const dateMatch = str.match(/^appt_date_(.+)$/);

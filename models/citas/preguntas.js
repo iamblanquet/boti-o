@@ -99,7 +99,9 @@ const sendServiceButtonsByCategory = async (phoneNumber, categoryId) => {
     return true;
 }
 
-const sendAvailableDayButtons = async (phoneNumber, data) => {
+const PAGE_SIZE_PER_DATE_LIST = 9;
+
+const sendAvailableDayButtons = async (phoneNumber, data, page = 1) => {
     try {
         const days = await findAvailableDaysThisWeek(data);
         if(!days.length) {
@@ -110,25 +112,36 @@ const sendAvailableDayButtons = async (phoneNumber, data) => {
             return true;
         }
 
-        const MAX_ROWS_PER_LIST = 10;
-        const totalPages = Math.ceil(days.length / MAX_ROWS_PER_LIST);
+        const requestedPage = Math.max(1, Number(page) || 1);
+        const startIndex = (requestedPage - 1) * PAGE_SIZE_PER_DATE_LIST;
 
-        for(let index = 0; index < days.length; index += MAX_ROWS_PER_LIST) {
-            const chunk = days.slice(index, index + MAX_ROWS_PER_LIST);
-            const page = Math.floor(index / MAX_ROWS_PER_LIST) + 1;
+        const actualPage = startIndex >= days.length ? 1 : requestedPage;
+        const actualStartIndex = (actualPage - 1) * PAGE_SIZE_PER_DATE_LIST;
+        const endIndex = actualStartIndex + PAGE_SIZE_PER_DATE_LIST;
+        const chunk = days.slice(actualStartIndex, endIndex);
+        const hasNextPage = days.length > endIndex;
 
-            await sendListMessage(phoneNumber, {
-                body: page === 1
-                    ? getMessage('date_select_intro', { service: getServiceLabel(data) })
-                    : `Fechas adicionales disponibles para tu cita de ${getServiceLabel(data)}:`,
-                button: totalPages > 1 ? `Ver fechas ${page}/${totalPages}` : 'Ver fechas',
-                sectionTitle: totalPages > 1 ? `Fechas dispon. ${page}/${totalPages}` : 'Fechas disponibles',
-                rows: chunk.map((day) => ({
-                    id: `appt_date_${day.date}`,
-                    title: day.title
-                }))
+        const rows = chunk.map((day) => ({
+            id: `appt_date_${day.date}`,
+            title: day.title
+        }));
+
+        if(hasNextPage) {
+            rows.push({
+                id: `appt_dates_page_${actualPage + 1}`,
+                title: 'Ver más fechas dispon.',
+                description: 'Desplegar más fechas del mes'
             });
         }
+
+        await sendListMessage(phoneNumber, {
+            body: actualPage === 1
+                ? getMessage('date_select_intro', { service: getServiceLabel(data) })
+                : `Fechas adicionales disponibles para tu cita de ${getServiceLabel(data)}:`,
+            button: 'Ver fechas',
+            sectionTitle: 'Fechas disponibles',
+            rows
+        });
         return true;
     } catch (error) {
         console.error('Available days error:', error.message);
@@ -177,9 +190,9 @@ const sendPeopleButtons = async (phoneNumber, data = {}) => {
     return true;
 }
 
-const askForField = async (phoneNumber, field, data = {}) => {
+const askForField = async (phoneNumber, field, data = {}, page = 1) => {
     if(field === 'service') return sendServiceButtons(phoneNumber);
-    if(field === 'date') return sendAvailableDayButtons(phoneNumber, data);
+    if(field === 'date') return sendAvailableDayButtons(phoneNumber, data, data.datesPage || page);
     if(field === 'time') return sendAvailableTimeButtons(phoneNumber, data);
     if(field === 'people') return sendPeopleButtons(phoneNumber, data);
     if(field === 'participantNames') {

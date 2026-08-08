@@ -114,6 +114,22 @@ const continuarFlujoCita = async (phoneNumber, message, flow) => {
     if(flow.waitingFor === 'service' && appointmentButtonPayload.categoryId) {
         return sendServiceButtonsByCategory(phoneNumber, appointmentButtonPayload.categoryId);
     }
+    if(flow.waitingFor === 'date') {
+        if(appointmentButtonPayload.datesPage) {
+            flow.data.datesPage = appointmentButtonPayload.datesPage;
+            await saveFlow(phoneNumber, flow);
+            const { sendAvailableDayButtons } = require('./preguntas');
+            return sendAvailableDayButtons(phoneNumber, flow.data, appointmentButtonPayload.datesPage);
+        }
+        const normalizedMsg = String(message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if(/(ver\s+)?m[a]s\s+fechas|(otras?\s+fechas)/.test(normalizedMsg)) {
+            const nextPage = (flow.data.datesPage || 1) + 1;
+            flow.data.datesPage = nextPage;
+            await saveFlow(phoneNumber, flow);
+            const { sendAvailableDayButtons } = require('./preguntas');
+            return sendAvailableDayButtons(phoneNumber, flow.data, nextPage);
+        }
+    }
 
     if(flow.mode === FLOW_MODE_PENDING_CONFIRMATION) {
         const { confirmAppointmentId, cancelAppointmentId } = parseAppointmentActionPayload(message);

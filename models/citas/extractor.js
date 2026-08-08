@@ -20,12 +20,14 @@ const parseAppointmentButtonPayload = (message) => {
     const dateMatch = value.match(/^appt_date_(\d{4}-\d{2}-\d{2})$/);
     const timeMatch = value.match(/^appt_time_(\d{2})-(\d{2})$/);
     const peopleMatch = value.match(/^appt_people_(\d+)$/);
+    const datesPageMatch = value.match(/^appt_dates_page_(\d+)$/);
 
     return {
         serviceId: serviceMatch ? serviceMatch[1] : null,
         date: dateMatch ? dateMatch[1] : null,
         time: timeMatch ? `${timeMatch[1]}:${timeMatch[2]}` : null,
-        people: peopleMatch ? Number(peopleMatch[1]) : null
+        people: peopleMatch ? Number(peopleMatch[1]) : null,
+        datesPage: datesPageMatch ? Number(datesPageMatch[1]) : null
     };
 }
 
